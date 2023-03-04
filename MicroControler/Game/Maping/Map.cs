@@ -1,4 +1,4 @@
-﻿using MicroControler.Game.Text;
+﻿using MicroControler.Game.InputOutput;
 using MicroControler.Game.Entity;
 using MicroControler.Shapes;
 using SFML.Graphics;

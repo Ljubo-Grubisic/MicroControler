@@ -101,11 +101,12 @@
   <ItemGroup>
     <Compile Include="GameLooping\GameLoop.cs" />
     <Compile Include="GameLooping\GameTime.cs" />
+    <Compile Include="Game\InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />
     <Compile Include="Game\RayCasting\RayCastEable.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
-    <Compile Include="Game\Text\MessegeManager.cs" />
+    <Compile Include="Game\InputOutput\MessegeManager.cs" />
     <Compile Include="Game\Entity\Player.cs" />
     <Compile Include="PortComunication\Serial.cs" />
     <Compile Include="Shapes\Line.cs" />

@@ -9,7 +9,7 @@ using SFML.Graphics;
 using SFML.System;
 using MicroControler.GameLooping;
 
-namespace MicroControler.Game.Text
+namespace MicroControler.Game.InputOutput
 {
     public static class MessegeManager
     {
