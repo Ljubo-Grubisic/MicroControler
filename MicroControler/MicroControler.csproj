@@ -118,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Resources\Fonts\arial.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -133,53 +136,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="csfml-audio-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-graphics-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-network-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-system-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-window-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="glfw3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="libsndfile-1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="openal32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OpenTK.Compatibility.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OpenTK.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sfmlnet-audio-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sfmlnet-graphics-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sfmlnet-system-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sfmlnet-window-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\DLL-s\csfml-audio-2.dll" />
+    <Content Include="Resources\DLL-s\csfml-graphics-2.dll" />
+    <Content Include="Resources\DLL-s\csfml-network-2.dll" />
+    <Content Include="Resources\DLL-s\csfml-system-2.dll" />
+    <Content Include="Resources\DLL-s\csfml-window-2.dll" />
+    <Content Include="Resources\DLL-s\glfw3.dll" />
+    <Content Include="Resources\DLL-s\libsndfile-1.dll" />
+    <Content Include="Resources\DLL-s\openal32.dll" />
+    <Content Include="Resources\DLL-s\OpenTK.Compatibility.dll" />
+    <Content Include="Resources\DLL-s\OpenTK.dll" />
+    <Content Include="Resources\DLL-s\sfmlnet-audio-2.dll" />
+    <Content Include="Resources\DLL-s\sfmlnet-graphics-2.dll" />
+    <Content Include="Resources\DLL-s\sfmlnet-system-2.dll" />
+    <Content Include="Resources\DLL-s\sfmlnet-window-2.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>xcopy /y /f "$(ProjectDir)Resources/DLL-s/*.dll" "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

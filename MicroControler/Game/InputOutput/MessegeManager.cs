@@ -13,7 +13,7 @@ namespace MicroControler.Game.InputOutput
 {
     public static class MessegeManager
     {
-        public const string CONSOLE_FONT_PATH = "Fonts/arial.ttf";
+        public const string CONSOLE_FONT_PATH = "Resources/Fonts/arial.ttf";
         public static Font consoleFont;
 
         public static void LoadContent()
