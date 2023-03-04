@@ -1,4 +1,5 @@
-﻿using MicroControler.Game.Entity;
+﻿using MicroControler.Game.Text;
+using MicroControler.Game.Entity;
 using MicroControler.Shapes;
 using SFML.Graphics;
 using SFML.System;
@@ -14,18 +15,21 @@ namespace MicroControler.Game.Maping
         public Vector2i DataSize { get; private set; }
         public int SquareSize { get; set; }
 
+        public Window MinimapWindow;
+        public Window MapWindow;
+
+        #region Chunks
         public Vector2i ChunkWithPlayer;
+        public Vector2i ChunkWithPlayerOnScreen;
         public Vector2i ChunkNum;
-        public Vector2i ChunkSize = new Vector2i(4, 4);
+        public Vector2i ChunkSize;
         /// <summary>
-        /// Left, right, top, bottom
+        /// Left 0, right 1, top 2, bottom 3
         /// </summary>
         private int[] ChunksAroundMain = new int[4];
         private Vector2i ChunksOnScreen;
         private Vector2i SquareStarting;
-
-        public Window MinimapWindow;
-        public Window MapWindow;
+        #endregion
         #endregion
 
         #region Private variables
@@ -54,9 +58,10 @@ namespace MicroControler.Game.Maping
             this.SquareSize = squareSize;
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
+            CalculateChunkSize();
             ChunkNum.X = DataSize.X / ChunkSize.X;
             ChunkNum.Y = DataSize.Y / ChunkSize.Y;
-            ChunkWithPlayer = new Vector2i(3, 3);
+            ChunkWithPlayer = new Vector2i(0, 0);
             ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
             UpdateChunksOnScreen();
 
@@ -104,22 +109,25 @@ namespace MicroControler.Game.Maping
 
         public void CheckMapBorder(Player player, RenderWindow window)
         {
-            if (player.Position.X > (ChunksAroundMain[0] + 1) * ChunkSize.Y * SquareSize && ChunkWithPlayer.Y < ChunkNum.Y)
+            ChunkWithPlayerOnScreen.X = (int)player.Position.Y / (ChunkSize.X * SquareSize);
+            ChunkWithPlayerOnScreen.Y = (int)player.Position.X / (ChunkSize.Y * SquareSize);
+
+            if (ChunkWithPlayerOnScreen.Y > ChunksAroundMain[0] && ChunkWithPlayer.Y + ChunkWithPlayerOnScreen.Y < ChunkNum.Y - ChunksAroundMain[1] + 1)
             {
                 player.PositionX -= ChunkSize.Y * SquareSize;
                 ChunkWithPlayer.Y++;
             }
-            if (player.Position.X < ChunksAroundMain[0] * ChunkSize.Y * SquareSize && ChunkWithPlayer.Y > 0)
-            {
-                player.PositionX += ChunkSize.Y * SquareSize;
-                ChunkWithPlayer.Y--;
-            }
-            if (player.PositionY > (ChunksAroundMain[2] + 1) * ChunkSize.X * SquareSize && ChunkWithPlayer.X < ChunkNum.X)
+            if (ChunkWithPlayerOnScreen.X > ChunksAroundMain[2] && ChunkWithPlayer.X + ChunkWithPlayerOnScreen.X < ChunkNum.X - ChunksAroundMain[3] + 1)
             {
                 player.PositionY -= ChunkSize.X * SquareSize;
                 ChunkWithPlayer.X++;
             }
-            if (player.PositionY < ChunksAroundMain[2] * ChunkSize.X * SquareSize && ChunkWithPlayer.X > 0)
+            if (ChunkWithPlayerOnScreen.Y < ChunksAroundMain[0] && ChunkWithPlayer.Y > 0)
+            {
+                player.PositionX += ChunkSize.Y * SquareSize;
+                ChunkWithPlayer.Y--;
+            }
+            if (ChunkWithPlayerOnScreen.X < ChunksAroundMain[2] && ChunkWithPlayer.X > 0)
             {
                 player.PositionY += ChunkSize.X * SquareSize;
                 ChunkWithPlayer.X--;
@@ -187,7 +195,8 @@ namespace MicroControler.Game.Maping
             }
         }
 
-        public void RoundMapWindowSize()
+        #region Private Functions
+        private void RoundMapWindowSize()
         {
             if (MapWindow.Size != (MapWindow.Size / SquareSize) * SquareSize)
             {
@@ -198,7 +207,7 @@ namespace MicroControler.Game.Maping
         /// <summary>
         /// Checks if the map window size is larger then the map data size and adjusts it
         /// </summary>
-        public void CheckIfMapWindowLarger()
+        private void CheckIfMapWindowLarger()
         {
             if (MapWindow.Size.X > SquareSize * DataSize.Y)
             {
@@ -236,6 +245,37 @@ namespace MicroControler.Game.Maping
             }
         }
 
+        private void CalculateChunkSize()
+        {
+            ChunkSize = new Vector2i(-1, -1);
+            for (int i = 3; i < 10; i++)
+            {
+                if (DataSize.X % i == 0)
+                {
+                    ChunkSize.X = i;
+                    break;
+                }
+            }
+            for (int i = 3; i < 10; i++)
+            {
+                if (DataSize.Y % 2 == 0)
+                {
+                    ChunkSize.Y = i;
+                    break;
+                }
+            }
+            if (ChunkSize.X == -1)
+            {
+                ChunkSize.X = 5;
+            }
+            if (ChunkSize.Y == -1)
+            {
+                ChunkSize.Y = 5;
+            }
+        }
+        #endregion
+
+        #region Public Helper Functions
         public static byte[,] GenerateMapWithWall(Vector2i size)
         {
             byte[,] map = new byte[size.X, size.Y];
@@ -319,7 +359,7 @@ namespace MicroControler.Game.Maping
 
             return Data[row, col];
         }
-
+        #endregion
     }
     public struct Window
     {

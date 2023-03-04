@@ -105,7 +105,7 @@
     <Compile Include="Game\RayCasting\RayCastEable.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
-    <Compile Include="Game\Debug\DebugUtility.cs" />
+    <Compile Include="Game\Text\MessegeManager.cs" />
     <Compile Include="Game\Entity\Player.cs" />
     <Compile Include="PortComunication\Serial.cs" />
     <Compile Include="Shapes\Line.cs" />
@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -146,6 +147,9 @@
     <Content Include="csfml-window-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="glfw3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="libsndfile-1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -159,7 +163,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

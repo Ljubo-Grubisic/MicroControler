@@ -20,8 +20,8 @@ namespace MicroControler.Game.Entity
         public float Rotation { get; set; } = -(float)Math.PI/2;
         public float DeltaScale { get; set; } = 25;
 
-        public Rectangle Rectangle { get; set; }
-        public Line FacingLine { get; set; }
+        private Rectangle Rectangle { get; set; }
+        private Line FacingLine { get; set; }
         
         public Vector2f Position
         {

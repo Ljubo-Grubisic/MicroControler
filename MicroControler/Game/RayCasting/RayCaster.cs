@@ -50,6 +50,11 @@ namespace MicroControler.Game.RayCasting
         /// Turns off or on the drawing off the map rays
         /// </summary>
         public bool DrawMapRays;
+        /// <summary>
+        /// Turns off or on the drawing off the 3D window
+        /// </summary>
+        public bool Draw3D = true;
+
 
         /// <summary>
         /// The thickness of the line in the 3D render, value should not be changed
@@ -274,28 +279,31 @@ namespace MicroControler.Game.RayCasting
                     LineMap.Draw(window);
                 }
 
-                // Draw 3D rays
-                CameraAngle = rayCastingObject.Rotation - Ray.Angle;
-                if (CameraAngle < 0)
+                if (Draw3D)
                 {
-                    CameraAngle += 2 * (float)Math.PI;
+                    // Draw 3D rays
+                    CameraAngle = rayCastingObject.Rotation - Ray.Angle;
+                    if (CameraAngle < 0)
+                    {
+                        CameraAngle += 2 * (float)Math.PI;
+                    }
+                    if (CameraAngle > 2 * (float)Math.PI)
+                    {
+                        CameraAngle -= 2 * (float)Math.PI;
+                    }
+                    Ray.Lenght = Ray.Lenght * (float)Math.Cos(CameraAngle);
+                    LineHeight3D = (Map.SquareSize * WindowSize.Y) / Ray.Lenght;
+                    if (LineHeight3D > WindowSize.Y)
+                    {
+                        LineHeight3D = WindowSize.Y;
+                    }
+                    LineOffset3D = (WindowPosition.Y + WindowSize.Y / 2) - LineHeight3D / 2;
+                    Line3D.Position0X = i * RayThickness + WindowPosition.X + RayThickness;
+                    Line3D.Position0Y = LineOffset3D + WindowPosition.Y;
+                    Line3D.Position1X = i * RayThickness + WindowPosition.X + RayThickness;
+                    Line3D.Position1Y = LineHeight3D + LineOffset3D;
+                    Line3D.Draw(window);
                 }
-                if (CameraAngle > 2 * (float)Math.PI)
-                {
-                    CameraAngle -= 2 * (float)Math.PI;
-                }
-                Ray.Lenght = Ray.Lenght * (float)Math.Cos(CameraAngle);
-                LineHeight3D = (Map.SquareSize * WindowSize.Y) / Ray.Lenght;
-                if (LineHeight3D > WindowSize.Y)
-                {
-                    LineHeight3D = WindowSize.Y;
-                }
-                LineOffset3D = (WindowPosition.Y + WindowSize.Y / 2) - LineHeight3D / 2;
-                Line3D.Position0X = i * RayThickness + WindowPosition.X + RayThickness;
-                Line3D.Position0Y = LineOffset3D + WindowPosition.Y;
-                Line3D.Position1X = i * RayThickness + WindowPosition.X + RayThickness;
-                Line3D.Position1Y = LineHeight3D + LineOffset3D;
-                Line3D.Draw(window);
 
 
                 Ray.Angle += MathHelper.DegreesToRadians(AngleSpacingRay);
