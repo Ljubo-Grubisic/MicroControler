@@ -11,8 +11,8 @@ namespace MicroControler
     {
         static void Main(string[] args)
         {
-            Game.Game tutoGame = new Game.Game(1024, 512, "Test");
-            tutoGame.Run();
+            Game.Game game = new Game.Game(1024, 512, "MicroControler");
+            game.Run();
         }
     }
 }

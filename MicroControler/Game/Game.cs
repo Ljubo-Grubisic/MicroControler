@@ -14,16 +14,15 @@ namespace MicroControler.Game
 {
     public partial class Game : GameLoop
     {
-        
-        public uint WindowWidth = 1080;
-        public uint WindowHeight = 720;
-        public string WindowTitle = "Tutorial Game";
+        private uint WindowWidth = 1080;
+        private uint WindowHeight = 720;
+        private string WindowTitle;
 
-        public RayCaster rayCaster;
-        
-        public Player player;
-        public Serial serial;
-        public Map map;
+        private RayCaster rayCaster;
+
+        private Player player;
+        private Serial serial;
+        private Map map;
 
         private int WindowState = 0;
 
@@ -38,11 +37,6 @@ namespace MicroControler.Game
         #region Setup
         public override void Initialize()
         {
-        }
-
-        public override void LoadContent()
-        {
-            MessegeManager.LoadContent();
             map = new Map(Map.GenerateMapWithWall(100, 100), 20, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
@@ -56,6 +50,11 @@ namespace MicroControler.Game
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
+        }
+
+        public override void LoadContent()
+        {
+            MessegeManager.LoadContent();
         }
         #endregion
 
