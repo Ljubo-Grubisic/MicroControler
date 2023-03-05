@@ -1,11 +1,9 @@
-﻿using MicroControler.InputOutput;
-using MicroControler.Game.Entity;
+﻿using MicroControler.Game.Entity;
 using MicroControler.Shapes;
 using SFML.Graphics;
 using SFML.System;
 using System;
-using System.Threading;
-using System.Security.Policy;
+using System.Runtime.InteropServices;
 
 namespace MicroControler.Game.Maping
 {
@@ -14,11 +12,13 @@ namespace MicroControler.Game.Maping
         #region Public variables
         private byte[,] data;
         public Vector2i DataSize { get; private set; }
-        public int SquareSize { get; set; }
+        public int SquareSize;
 
         public Window MinimapWindow;
         public Window MapWindow;
 
+        public Color Image0FillColor = Color.White;
+        public Color Image1FillColor = new Color(15, 15, 15, 255);
         #region Chunks
         public Vector2i ChunkWithPlayer;
         public Vector2i ChunkWithPlayerOnScreen;
@@ -36,8 +36,6 @@ namespace MicroControler.Game.Maping
         #region Private variables
         private readonly Rectangle ChunkRectangle = new Rectangle(0f, 0f, 0f, 0f) { FillColor = Color.Transparent, OutlineColor = Color.Red, OutlineThickness = 2f };
 
-        private string Image0Path = "Resources/Imgs/square0.png";
-        private string Image1Path = "Resources/Imgs/square1.png";
         private Image Image0;
         private Image Image1;
         private Texture Texture;
@@ -70,8 +68,9 @@ namespace MicroControler.Game.Maping
             ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
             UpdateChunksOnScreen();
 
-            this.Image0 = new Image(Image0Path);
-            this.Image1 = new Image(Image1Path);
+            this.Image0 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
+            this.Image1 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
+
             this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
             this.Sprite = new Sprite(Texture);
         }
@@ -89,8 +88,8 @@ namespace MicroControler.Game.Maping
             ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
             UpdateChunksOnScreen();
 
-            this.Image0 = new Image(Image0Path);
-            this.Image1 = new Image(Image1Path);
+            this.Image0 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
+            this.Image1 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
 
             this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
             this.Sprite = new Sprite(Texture);
@@ -148,7 +147,8 @@ namespace MicroControler.Game.Maping
             RoundMapWindowSize();
             CheckIfMapWindowLarger();
             UpdateChunksOnScreen();
-            Updatetexture();
+            UpdateTextureSize();
+            UpdateImage();
 
             SquareStarting.X = ChunkWithPlayer.X * ChunkSize.X;
             SquareStarting.Y = ChunkWithPlayer.Y * ChunkSize.Y;
@@ -169,30 +169,43 @@ namespace MicroControler.Game.Maping
                 SquareStarting.Y = 0;
             }
 
-
+            UpdateMapTexture(MapWindow.Size, SquareStarting, SquareSize);
             Sprite.Position = (Vector2f)MapWindow.Position;
-            for (int Row = 0; Row < MapWindow.Size.Y / SquareSize; Row++)
-            {
-                for (int Column = 0; Column < MapWindow.Size.X / SquareSize; Column++)
-                {
-                    uint xPos = (uint)(Column * SquareSize);
-                    uint yPos = (uint)(Row * SquareSize);
-
-                    switch (Data[Row + SquareStarting.X, Column + SquareStarting.Y])
-                    {
-                        case 0:
-                            Sprite.Texture.Update(Image0, xPos, yPos);
-                            break;
-                        case 1:
-                            Sprite.Texture.Update(Image1, xPos, yPos);
-                            break;
-                    }
-                }
-            }
             window.Draw(Sprite, new RenderStates(Texture));
         }
 
         #region Private Functions
+        private Vector2i OldWindowSize = new Vector2i(-1, -1);
+        private Vector2i OldSquareStarting = new Vector2i(-1, -1);
+        private int OldSquareSize = -1;
+        private void UpdateMapTexture(Vector2i windowSize, Vector2i squareStarting, int squareSize)
+        {
+            if (OldWindowSize != windowSize || OldSquareStarting != squareStarting || OldSquareSize != squareSize)
+            {
+                for (int Row = 0; Row < MapWindow.Size.Y / SquareSize; Row++)
+                {
+                    for (int Column = 0; Column < MapWindow.Size.X / SquareSize; Column++)
+                    {
+                        uint xPos = (uint)(Column * SquareSize);
+                        uint yPos = (uint)(Row * SquareSize);
+
+                        switch (Data[Row + SquareStarting.X, Column + SquareStarting.Y])
+                        {
+                            case 0:
+                                Sprite.Texture.Update(Image0, xPos, yPos);
+                                break;
+                            case 1:
+                                Sprite.Texture.Update(Image1, xPos, yPos);
+                                break;
+                        }
+                    }
+                }
+                OldWindowSize = windowSize;
+                OldSquareStarting = squareStarting;
+                OldSquareSize = squareSize;
+            }
+        }
+
         private void RoundMapWindowSize()
         {
             if (MapWindow.Size != (MapWindow.Size / SquareSize) * SquareSize)
@@ -201,7 +214,19 @@ namespace MicroControler.Game.Maping
             }
         }
 
-        private void Updatetexture()
+        private void UpdateImage()
+        {
+            if (this.Image0.Size.X != SquareSize || this.Image0.Size.Y != SquareSize)
+            {
+                this.Image0 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
+            }
+            if (this.Image1.Size.X != SquareSize || this.Image1.Size.Y != SquareSize)
+            {
+                this.Image1 = ImageManager.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
+            }
+        }
+
+        private void UpdateTextureSize()
         {
             if (Texture.Size != (Vector2u)MapWindow.Size)
             {

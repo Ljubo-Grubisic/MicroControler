@@ -72,6 +72,8 @@ namespace MicroControler.Game
             KeyboardManager.OpenCloseMap(ref rayCaster, ref WindowState);
             KeyboardManager.PlayerMovment(ref player, ref gameTime);
             map.CheckMapBorder(player, Window);
+
+            map.SquareSize = 4;
         }
 
         public override void Draw(GameTime gameTime)
