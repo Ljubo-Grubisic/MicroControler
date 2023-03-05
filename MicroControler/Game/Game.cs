@@ -1,14 +1,13 @@
-﻿using System;
-using SFML.Graphics;
-using SFML.Window;
-using SFML.System;
-using MicroControler.Mathematics;
-using MicroControler.Game.InputOutput;
-using MicroControler.Game.RayCasting;
-using MicroControler.PortComunication;
-using MicroControler.Game.Entity;
-using MicroControler.GameLooping;
+﻿using MicroControler.Game.Entity;
+using MicroControler.InputOutput;
+using MicroControler.InputOutput.PortComunication;
 using MicroControler.Game.Maping;
+using MicroControler.Game.RayCasting;
+using MicroControler.GameLooping;
+using MicroControler.Mathematics;
+using SFML.Graphics;
+using SFML.System;
+using SFML.Window;
 
 namespace MicroControler.Game
 {
@@ -26,7 +25,7 @@ namespace MicroControler.Game
 
         private int WindowState = 0;
 
-        public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, 
+        public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title,
             new Color(MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f)))
         {
             WindowWidth = windowWidth;
@@ -37,7 +36,7 @@ namespace MicroControler.Game
         #region Setup
         public override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWall(100, 100), 20, new Maping.Window
+            map = new Map(Map.GenerateMapWithWallRandom(100, 100), 32, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
@@ -78,7 +77,7 @@ namespace MicroControler.Game
         public override void Draw(GameTime gameTime)
         {
             MessegeManager.DrawPerformanceData(this, Color.White);
-            
+
             switch (WindowState)
             {
                 case 0:

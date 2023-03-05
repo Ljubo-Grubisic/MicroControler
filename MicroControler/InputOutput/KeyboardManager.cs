@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroControler.Game.InputOutput
+namespace MicroControler.InputOutput
 {
     public static class KeyboardManager
     {
         private static bool[] KeyHandlers =  new bool[32];
 
-        internal static void OpenCloseMap(ref RayCaster rayCaster, ref int windowState)
+        public static void OpenCloseMap(ref RayCaster rayCaster, ref int windowState)
         {
             if (!Keyboard.IsKeyPressed(Keyboard.Key.M))
             {
@@ -27,7 +27,7 @@ namespace MicroControler.Game.InputOutput
                     if (windowState == 0)
                     {
                         windowState++;
-                        rayCaster.DrawMapRays = true;
+                        rayCaster.DrawMapRays = false;
                         rayCaster.Draw3D = false;
                     }
                     else if (windowState == 1)
@@ -41,7 +41,7 @@ namespace MicroControler.Game.InputOutput
             }
         }
 
-        internal static void PlayerMovment(ref Player player, ref GameTime gameTime)
+        public static void PlayerMovment(ref Player player, ref GameTime gameTime)
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
             {

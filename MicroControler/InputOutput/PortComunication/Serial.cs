@@ -8,7 +8,7 @@ using System.Threading;
 using System.Security.Permissions;
 using System.Runtime.InteropServices;
 
-namespace MicroControler.PortComunication
+namespace MicroControler.InputOutput.PortComunication
 {
     public class Serial
     {

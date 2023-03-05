@@ -1,10 +1,11 @@
-﻿using MicroControler.Game.InputOutput;
+﻿using MicroControler.InputOutput;
 using MicroControler.Game.Entity;
 using MicroControler.Shapes;
 using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Threading;
+using System.Security.Policy;
 
 namespace MicroControler.Game.Maping
 {
@@ -33,10 +34,14 @@ namespace MicroControler.Game.Maping
         #endregion
 
         #region Private variables
-        private Color OutLineColor = new Color(240, 240, 240);
-        private readonly Rectangle EmptySquare;
-        private readonly Rectangle FullSquare;
         private readonly Rectangle ChunkRectangle = new Rectangle(0f, 0f, 0f, 0f) { FillColor = Color.Transparent, OutlineColor = Color.Red, OutlineThickness = 2f };
+
+        private string Image0Path = "Resources/Imgs/square0.png";
+        private string Image1Path = "Resources/Imgs/square1.png";
+        private Image Image0;
+        private Image Image1;
+        private Texture Texture;
+        private Sprite Sprite;
         #endregion
 
         #region Getters and Setters
@@ -65,46 +70,35 @@ namespace MicroControler.Game.Maping
             ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
             UpdateChunksOnScreen();
 
-            this.EmptySquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = Color.Black, OutlineColor = OutLineColor, OutlineThickness = 1f };
-            this.FullSquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = Color.White, OutlineColor = OutLineColor, OutlineThickness = 1f };
-        }
-        public Map(byte[,] data, int squareSize, Window mapWindow, Color emptySquareColor, Color fullSquareColor)
-        {
-            this.Data = data;
-            this.MapWindow = mapWindow;
-            this.SquareSize = squareSize;
-            CheckIfMapWindowLarger();
-            RoundMapWindowSize();
-
-            this.EmptySquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = emptySquareColor, OutlineColor = OutLineColor, OutlineThickness = 1f };
-            this.FullSquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = fullSquareColor, OutlineColor = OutLineColor, OutlineThickness = 1f };
+            this.Image0 = new Image(Image0Path);
+            this.Image1 = new Image(Image1Path);
+            this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+            this.Sprite = new Sprite(Texture);
         }
         public Map(byte[,] data, int squareSize, Vector2i mapWindowPosition)
         {
             this.Data = data;
             this.SquareSize = squareSize;
             this.MapWindow = new Window { Position = mapWindowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
+            CheckIfMapWindowLarger();
+            RoundMapWindowSize();
+            CalculateChunkSize();
+            ChunkNum.X = DataSize.X / ChunkSize.X;
+            ChunkNum.Y = DataSize.Y / ChunkSize.Y;
+            ChunkWithPlayer = new Vector2i(0, 0);
+            ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
+            UpdateChunksOnScreen();
 
-            this.EmptySquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = Color.Black, OutlineColor = OutLineColor, OutlineThickness = 1f };
-            this.FullSquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = Color.White, OutlineColor = OutLineColor, OutlineThickness = 1f };
-        }
-        public Map(byte[,] data, int squareSize, Vector2i mapWindowPosition, Color emptySquareColor, Color fullSquareColor)
-        {
-            this.Data = data;
-            this.SquareSize = squareSize;
-            this.MapWindow = new Window { Position = mapWindowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
+            this.Image0 = new Image(Image0Path);
+            this.Image1 = new Image(Image1Path);
 
-            this.EmptySquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = emptySquareColor, OutlineColor = OutLineColor, OutlineThickness = 1f };
-            this.FullSquare = new Rectangle(0f, 0f, SquareSize, SquareSize) { FillColor = fullSquareColor, OutlineColor = OutLineColor, OutlineThickness = 1f };
+            this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+            this.Sprite = new Sprite(Texture);
         }
 
         public void SquareFillWindow()
         {
             this.SquareSize = MapWindow.Size.X / DataSize.Y;
-            this.EmptySquare.Width = this.SquareSize;
-            this.EmptySquare.Height = this.SquareSize;
-            this.FullSquare.Width = this.SquareSize;
-            this.FullSquare.Height = this.SquareSize;
         }
 
         public void CheckMapBorder(Player player, RenderWindow window)
@@ -154,6 +148,7 @@ namespace MicroControler.Game.Maping
             RoundMapWindowSize();
             CheckIfMapWindowLarger();
             UpdateChunksOnScreen();
+            Updatetexture();
 
             SquareStarting.X = ChunkWithPlayer.X * ChunkSize.X;
             SquareStarting.Y = ChunkWithPlayer.Y * ChunkSize.Y;
@@ -174,25 +169,27 @@ namespace MicroControler.Game.Maping
                 SquareStarting.Y = 0;
             }
 
+
+            Sprite.Position = (Vector2f)MapWindow.Position;
             for (int Row = 0; Row < MapWindow.Size.Y / SquareSize; Row++)
             {
                 for (int Column = 0; Column < MapWindow.Size.X / SquareSize; Column++)
                 {
+                    uint xPos = (uint)(Column * SquareSize);
+                    uint yPos = (uint)(Row * SquareSize);
+
                     switch (Data[Row + SquareStarting.X, Column + SquareStarting.Y])
                     {
                         case 0:
-                            EmptySquare.PositionX = Column * SquareSize + MapWindow.Position.X;
-                            EmptySquare.PositionY = Row * SquareSize + MapWindow.Position.Y;
-                            window.Draw(EmptySquare);
+                            Sprite.Texture.Update(Image0, xPos, yPos);
                             break;
                         case 1:
-                            FullSquare.PositionX = Column * SquareSize + MapWindow.Position.X;
-                            FullSquare.PositionY = Row * SquareSize + MapWindow.Position.Y;
-                            window.Draw(FullSquare);
+                            Sprite.Texture.Update(Image1, xPos, yPos);
                             break;
                     }
                 }
             }
+            window.Draw(Sprite, new RenderStates(Texture));
         }
 
         #region Private Functions
@@ -201,6 +198,16 @@ namespace MicroControler.Game.Maping
             if (MapWindow.Size != (MapWindow.Size / SquareSize) * SquareSize)
             {
                 MapWindow.Size = (MapWindow.Size / SquareSize) * SquareSize;
+            }
+        }
+
+        private void Updatetexture()
+        {
+            if (Texture.Size != (Vector2u)MapWindow.Size)
+            {
+                this.Texture.Dispose();
+                this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+                this.Sprite = new Sprite(this.Texture);
             }
         }
 

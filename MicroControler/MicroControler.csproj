@@ -101,14 +101,14 @@
   <ItemGroup>
     <Compile Include="GameLooping\GameLoop.cs" />
     <Compile Include="GameLooping\GameTime.cs" />
-    <Compile Include="Game\InputOutput\KeyboardManager.cs" />
+    <Compile Include="InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />
     <Compile Include="Game\RayCasting\RayCastEable.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
-    <Compile Include="Game\InputOutput\MessegeManager.cs" />
+    <Compile Include="InputOutput\MessegeManager.cs" />
     <Compile Include="Game\Entity\Player.cs" />
-    <Compile Include="PortComunication\Serial.cs" />
+    <Compile Include="InputOutput\PortComunication\Serial.cs" />
     <Compile Include="Shapes\Line.cs" />
     <Compile Include="Shapes\Rectangle.cs" />
     <Compile Include="Game\Game.cs" />
@@ -136,6 +136,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Imgs\square0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Imgs\square1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\DLL-s\csfml-audio-2.dll" />
     <Content Include="Resources\DLL-s\csfml-graphics-2.dll" />
     <Content Include="Resources\DLL-s\csfml-network-2.dll" />
