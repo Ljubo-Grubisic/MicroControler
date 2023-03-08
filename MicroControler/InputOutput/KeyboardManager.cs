@@ -1,4 +1,4 @@
-﻿using MicroControler.Game.Entity;
+﻿using MicroControler.Game.Entities;
 using MicroControler.Game.RayCasting;
 using MicroControler.GameLooping;
 using SFML.Window;
@@ -14,65 +14,40 @@ namespace MicroControler.InputOutput
     {
         private static bool[] KeyHandlers =  new bool[32];
 
-        public static void OpenCloseMap(ref RayCaster rayCaster, ref int windowState)
+        /// <summary>
+        /// Returns true only on key press and not if you hold it
+        /// </summary>
+        /// <param name="key">The key you want to check</param>
+        /// <param name="id">Index of the KeyHandler can range from 0 to 32 always give a unique id</param>
+        /// <returns></returns>
+        public static bool OnKeyPress(Keyboard.Key key, int id)
         {
-            if (!Keyboard.IsKeyPressed(Keyboard.Key.M))
+            if (!Keyboard.IsKeyPressed(key))
             {
-                KeyHandlers[0] = true;
+                KeyHandlers[id] = true;
+                return false;
             }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.M))
+            else if (Keyboard.IsKeyPressed(key))
             {
-                if (KeyHandlers[0])
+                if (KeyHandlers[id])
                 {
-                    if (windowState == 0)
-                    {
-                        windowState++;
-                        rayCaster.DrawMapRays = false;
-                        rayCaster.Draw3D = false;
-                    }
-                    else if (windowState == 1)
-                    {
-                        windowState--;
-                        rayCaster.DrawMapRays = false;
-                        rayCaster.Draw3D = true;
-                    }
-                    KeyHandlers[0] = false;
+                    KeyHandlers[id] = false;
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public static void PlayerMovment(ref Player player, ref GameTime gameTime)
-        {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-            {
-                player.Rotation -= 0.05f * gameTime.DeltaTime * 100;
-                if (player.Rotation < 0)
-                {
-                    player.Rotation += 2f * (float)Math.PI;
-                }
-                player.DeltaPositionX = (float)(Math.Cos(player.Rotation));
-                player.DeltaPositionY = (float)(Math.Sin(player.Rotation));
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-            {
-                player.Rotation += 0.05f * gameTime.DeltaTime * 75;
-                if (player.Rotation > 2f * (float)Math.PI)
-                {
-                    player.Rotation -= 2f * (float)Math.PI;
-                }
-                player.DeltaPositionX = (float)(Math.Cos(player.Rotation));
-                player.DeltaPositionY = (float)(Math.Sin(player.Rotation));
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-            {
-                player.PositionX += player.DeltaPosition.X * gameTime.DeltaTime * 150;
-                player.PositionY += player.DeltaPosition.Y * gameTime.DeltaTime * 150;
-            }
-            if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-            {
-                player.PositionX -= player.DeltaPosition.X * gameTime.DeltaTime * 150;
-                player.PositionY -= player.DeltaPosition.Y * gameTime.DeltaTime * 150;
-            }
+        public static bool IsKeyPressed(Keyboard.Key key) 
+        { 
+            return Keyboard.IsKeyPressed(key);
         }
     }
 }

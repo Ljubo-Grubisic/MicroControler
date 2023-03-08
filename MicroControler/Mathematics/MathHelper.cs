@@ -89,6 +89,10 @@ namespace MicroControler.Mathematics
         {
             return (angle * (float)Math.PI) / 180;
         }
+        public static float RadiansToDegrees(float angle)
+        {
+            return (angle * 180) / (float)Math.PI;
+        }
 
         public static float Map(float inputMin, float inputMax, float outputMin, float outputMax, float value)
         {

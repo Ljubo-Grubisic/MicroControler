@@ -9,8 +9,11 @@ using MicroControler.Shapes;
 using MicroControler.Mathematics;
 using MicroControler.Game.RayCasting;
 using MicroControler.Game.Maping;
+using MicroControler.InputOutput;
+using MicroControler.GameLooping;
+using SFML.Window;
 
-namespace MicroControler.Game.Entity
+namespace MicroControler.Game.Entities
 {
     public class Player : RayCastEable
     {
@@ -123,6 +126,40 @@ namespace MicroControler.Game.Entity
             FacingLine.Position0 -= (Vector2f)map.MapWindow.Position;
             FacingLine.Position1 -= (Vector2f)map.MapWindow.Position;
             Rectangle.Position -= (Vector2f)map.MapWindow.Position;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (KeyboardManager.IsKeyPressed(Keyboard.Key.A))
+            {
+                this.Rotation -= 0.05f * gameTime.DeltaTime * 100;
+                if (this.Rotation < 0)
+                {
+                    this.Rotation += 2f * (float)Math.PI;
+                }
+                this.DeltaPositionX = (float)(Math.Cos(this.Rotation));
+                this.DeltaPositionY = (float)(Math.Sin(this.Rotation));
+            }
+            if (KeyboardManager.IsKeyPressed(Keyboard.Key.D))
+            {
+                this.Rotation += 0.05f * gameTime.DeltaTime * 100;
+                if (this.Rotation > 2f * (float)Math.PI)
+                {
+                    this.Rotation -= 2f * (float)Math.PI;
+                }
+                this.DeltaPositionX = (float)(Math.Cos(this.Rotation));
+                this.DeltaPositionY = (float)(Math.Sin(this.Rotation));
+            }
+            if (KeyboardManager.IsKeyPressed(Keyboard.Key.W))
+            {
+                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * 150;
+                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * 150;
+            }
+            if (KeyboardManager.IsKeyPressed(Keyboard.Key.S))
+            {
+                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * 150;
+                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * 150;
+            }
         }
 
         public void PositionChanged()

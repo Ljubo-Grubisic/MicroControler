@@ -1,0 +1,146 @@
+﻿using SFML.Graphics;
+using SFML.System;
+using System;
+
+namespace MicroControler.Shapes
+{
+    public class OLDRectangle : ConvexShape
+    {
+        private Vector2f position;
+        private float width;
+        private float height;
+        private float rotation = 0;
+
+        public new Vector2f Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+                DataChanged();
+            }
+        }
+        public float PositionX
+        {
+            get { return position.X; }
+            set
+            {
+                position.X = value;
+                DataChanged();
+            }
+        }
+        public float PositionY
+        {
+            get { return position.Y; }
+            set
+            {
+                position.Y = value;
+                DataChanged();
+            }
+        }
+        public float Width
+        {
+            get { return width; }
+            set
+            {
+                width = value;
+                DataChanged();
+            }
+        }
+        public float Height
+        {
+            get { return height; }
+            set
+            {
+                height = value;
+                DataChanged();
+            }
+        }
+        public new float Rotation
+        {
+            get { return rotation; }
+            set
+            {
+                rotation = value;
+                DataChanged();
+            }
+        }
+
+        public OLDRectangle(Vector2f position, float width, float height) : base(4)
+        {
+            Position = position;
+            Width = width;
+            Height = height;
+            DataChanged();
+        }
+        public OLDRectangle(Vector2f position, Vector2f size) : base(4)
+        {
+            Position = position;
+            Width = size.X;
+            Height = size.Y;
+            DataChanged();
+        }
+        public OLDRectangle(float positionX, float positionY, Vector2f size) : base(4)
+        {
+            Position = new Vector2f(positionX, positionY);
+            Width = size.X;
+            Height = size.Y;
+            DataChanged();
+        }
+        public OLDRectangle(float positionX, float positionY, float width, float height) : base(4)
+        {
+            Position = new Vector2f(positionX, positionY);
+            Width = width;
+            Height = height;
+            DataChanged();
+        }
+
+        public void Draw(RenderWindow window)
+        {
+            window.Draw(this);
+        }
+
+        private Vector2f[] PointsARotation = new Vector2f[4]
+        {
+            new Vector2f(0, 0),
+            new Vector2f(0, 0),
+            new Vector2f(0, 0),
+            new Vector2f(0, 0)
+        };
+        private Vector2f[] PointsCentered = new Vector2f[4]
+        {
+            new Vector2f(0, 0),
+            new Vector2f(0, 0),
+            new Vector2f(0, 0),
+            new Vector2f(0, 0)
+        };
+        private Vector2f SizeHalf = new Vector2f();
+        private void DataChanged()
+        {
+            float sin = (float)Math.Sin(Rotation);
+            float cos = (float)Math.Cos(Rotation);
+            SizeHalf.X = Width / 2;
+            SizeHalf.Y = Height / 2;
+            PointsCentered[0].X = -SizeHalf.X;
+            PointsCentered[0].Y = -SizeHalf.Y;
+            PointsCentered[1].X = SizeHalf.X;
+            PointsCentered[1].Y = -SizeHalf.Y;
+            PointsCentered[2].X = -SizeHalf.X;
+            PointsCentered[2].Y = SizeHalf.Y;
+            PointsCentered[3].X = SizeHalf.X;
+            PointsCentered[3].Y = SizeHalf.Y;
+
+            for (int i = 0; i < 4; i++)
+            {
+                PointsARotation[i].X = ((PointsCentered[i].X * cos) - (PointsCentered[i].Y * sin));
+                PointsARotation[i].Y = (PointsCentered[i].X * sin) + (PointsCentered[i].Y * cos);
+            }
+
+            this.SetPoint(0, PointsARotation[0] + Position + SizeHalf);
+            this.SetPoint(1, PointsARotation[1] + Position + SizeHalf);
+            this.SetPoint(3, PointsARotation[2] + Position + SizeHalf);
+            this.SetPoint(2, PointsARotation[3] + Position + SizeHalf);
+        }
+    }
+}
+

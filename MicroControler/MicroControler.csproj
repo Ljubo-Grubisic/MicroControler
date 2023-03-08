@@ -101,20 +101,22 @@
   <ItemGroup>
     <Compile Include="GameLooping\GameLoop.cs" />
     <Compile Include="GameLooping\GameTime.cs" />
-    <Compile Include="SFML Helper\ImageManager.cs" />
+    <Compile Include="Game\Entities\Camera.cs" />
+    <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="SFML Helper\ImageHelper.cs" />
     <Compile Include="InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />
     <Compile Include="Game\RayCasting\RayCastEable.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
     <Compile Include="InputOutput\MessegeManager.cs" />
-    <Compile Include="Game\Entity\Player.cs" />
+    <Compile Include="Game\Entities\Player.cs" />
     <Compile Include="InputOutput\PortComunication\Serial.cs" />
     <Compile Include="Shapes\Line.cs" />
-    <Compile Include="Shapes\Rectangle.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shapes\Rectangle.cs" />
     <Compile Include="Shapes\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +139,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Game\RayCasting\OldRayCaster.txt" />
+    <Content Include="Resources\Imgs\Camera.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\DLL-s\csfml-audio-2.dll" />
     <Content Include="Resources\DLL-s\csfml-graphics-2.dll" />
     <Content Include="Resources\DLL-s\csfml-network-2.dll" />
@@ -151,6 +157,7 @@
     <Content Include="Resources\DLL-s\sfmlnet-graphics-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-system-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-window-2.dll" />
+    <Content Include="Shapes\OldRectangle.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

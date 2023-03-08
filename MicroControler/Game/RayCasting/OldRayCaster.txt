@@ -1,4 +1,4 @@
-public void DrawRays3D()
+﻿public void DrawRays3D()
         {
             int mx, my, mp, dof; float rx = 0, ry = 0, ra, xo = 0, yo = 0, disT = 0;
             ra = player.Rotation - MathHelper.DegreesToRadians(fov/2); if(ra < 0) { ra += 2f * (float)Math.PI; } if(ra > 2 * (float)Math.PI) { ra -= 2 * (float)Math.PI; }

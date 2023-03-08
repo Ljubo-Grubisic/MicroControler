@@ -1,100 +1,88 @@
-﻿using SFML.Graphics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SFML.Graphics;
 using SFML.System;
 
 namespace MicroControler.Shapes
 {
-    public class Rectangle : ConvexShape
+    public class Rectangle : RectangleShape
     {
-        private Vector2f position;
-        private float width;
-        private float height;
-
-        public new Vector2f Position
-        {
-            get { return position; }
-            set
-            {
-                position = value;
-                DataChanged();
-            }
-        }
+        private Vector2f Buffer = new Vector2f(0, 0);
         public float PositionX
         {
-            get { return position.X; }
-            set
+            get { return Position.X; }
+            set 
             {
-                position.X = value;
-                DataChanged();
+                Buffer.X = value;
+                Buffer.Y = 0;
+                Position += Buffer; 
             }
         }
         public float PositionY
         {
-            get { return position.Y; }
-            set
+            get { return Position.Y; }
+            set 
             {
-                position.Y = value;
-                DataChanged();
-            }
-        }
-        public float Width
-        {
-            get { return width; }
-            set
-            {
-                width = value;
-                DataChanged();
-            }
-        }
-        public float Height
-        {
-            get { return height; }
-            set
-            {
-                height = value;
-                DataChanged();
+                Buffer.X = 0;
+                Buffer.Y = value;
+                Position += Buffer; 
             }
         }
 
-        public Rectangle(Vector2f position, float width, float height) : base(4)
+        public float SizeX
         {
-            Position = position;
-            Width = width;
-            Height = height;
-            DataChanged();
+            get { return Size.X; }
+            set 
+            { 
+                Buffer.X = value;
+                Buffer.Y = 0;
+                Size += Buffer; 
+            }
         }
-        public Rectangle(Vector2f position, Vector2f size) : base(4)
+        public float SizeY
         {
-            Position = position;
-            Width = size.X;
-            Height = size.Y;
-            DataChanged();
+            get { return Size.Y; }
+            set 
+            { 
+                Buffer.X = 0;
+                Buffer.Y = value;
+                Size += Buffer; 
+            }
         }
-        public Rectangle(float positionX, float positionY, Vector2f size) : base(4)
-        {
-            Position = new Vector2f(positionX, positionY);
-            Width = size.X;
-            Height = size.Y;
-            DataChanged();
+
+        public Rectangle(Vector2f position, Vector2f size) : base()
+        { 
+            this.Position = position;
+            this.Size = size;
         }
-        public Rectangle(float positionX, float positionY, float width, float height) : base(4)
+        public Rectangle(Vector2f position, Vector2f size, Texture texture) : base()
         {
-            Position = new Vector2f(positionX, positionY);
-            Width = width;
-            Height = height;
-            DataChanged();
+            this.Position = position;
+            this.Size = size;
+            this.Texture = texture;
+        }
+        public Rectangle(Vector2f position, float sizeX, float sizeY) : base()
+        {
+            this.Position = position;
+            this.Size = new Vector2f(sizeX, sizeY);
+        }
+        public Rectangle(float positionX, float positionY, Vector2f size) : base()
+        {
+            this.Position = new Vector2f(positionX, positionY);
+            this.Size = size;
+        }
+        public Rectangle(float positionX, float positionY, float sizeX, float sizeY) : base()
+        {
+            this.Position = new Vector2f(positionX, positionY);
+            this.Size = new Vector2f(sizeX, sizeY);
         }
 
         public void Draw(RenderWindow window)
         {
-            window.Draw(this);
-        }
-
-        private void DataChanged()
-        {
-            this.SetPoint(0, new Vector2f(PositionX, PositionY));
-            this.SetPoint(1, new Vector2f(PositionX + Width, PositionY));
-            this.SetPoint(3, new Vector2f(PositionX, PositionY + Height));
-            this.SetPoint(2, new Vector2f(PositionX + Width, PositionY + Height));
+            this.Draw(window, RenderStates.Default);
         }
     }
 }
