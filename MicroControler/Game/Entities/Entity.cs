@@ -14,24 +14,31 @@ namespace MicroControler.Game.Entities
     public class Entity : RayCastEable
     {
         private Vector2f position;
-        public float Rotation { get; set; } = -(float)Math.PI / 2;
+        private float rotation = -(float)Math.PI / 2;
 
         public virtual Vector2f Position
         {
             get { return position; }
-            set { position = value; }
+            set { position = value; OnPositionChange(); }
         }
         public virtual float PositionX
         {
             get { return position.X; }
-            set { position.X = value; }
+            set { position.X = value; OnPositionChange(); }
         }
         public virtual float PositionY
         {
             get { return position.Y; }
-            set { position.Y = value; }
+            set { position.Y = value; OnPositionChange(); }
         }
 
-        protected virtual
+        public virtual float Rotation
+        {
+            get { return rotation; }
+            set { rotation = value; OnRotationChange(); }
+        }
+
+        protected virtual void OnPositionChange() { }
+        protected virtual void OnRotationChange() { }
     }
 }
