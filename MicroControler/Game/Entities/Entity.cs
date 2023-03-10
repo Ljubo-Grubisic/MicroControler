@@ -31,5 +31,7 @@ namespace MicroControler.Game.Entities
             get { return position.Y; }
             set { position.Y = value; }
         }
+
+        protected virtual
     }
 }
