@@ -20,7 +20,6 @@ namespace MicroControler.Game
 
         private RayCaster rayCaster;
 
-        private Player player;
         private Serial serial;
         private Map map;
         private Camera camera;
@@ -36,7 +35,12 @@ namespace MicroControler.Game
         }
 
         #region Setup
-        public override void Initialize()
+        protected override void LoadContent()
+        {
+            MessegeManager.LoadContent();
+        }
+
+        protected override void Initialize()
         {
             map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 16, new Maping.Window
             {
@@ -45,38 +49,24 @@ namespace MicroControler.Game
             });
 
             rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 1000, windowPosition: new Vector2i(0, 0), 
-                windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight),
-                rayMapColor: Color.Red, horizontalColor: new Color(MathHelper.FloatToByte(0.5f), MathHelper.FloatToByte(0.5f), MathHelper.FloatToByte(0.1f)),
-                verticalColor: new Color(MathHelper.FloatToByte(0.7f), MathHelper.FloatToByte(0.4f), MathHelper.FloatToByte(0.1f)), drawMapRays: false);
+                windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
+                verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f));
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
         }
-
-        public override void LoadContent()
-        {
-            MessegeManager.LoadContent();
-        }
         #endregion
 
         #region Loop
-        public override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
-            if (WindowHeight != Window.Size.Y || WindowWidth != Window.Size.X)
-            {
-                WindowHeight = Window.Size.Y;
-                WindowWidth = Window.Size.X;
-                View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
-                rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
-                map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
-                Window.SetView(view);
-            }
+            ResizeWindow();
             camera.Update(gameTime, map);
             OpenCloseMap();
         }
 
-        public override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             MessegeManager.DrawPerformanceData(this, Color.White);
 
@@ -91,15 +81,26 @@ namespace MicroControler.Game
                     camera.Draw(this.Window);
                     break;
             }
-            
-           
+
             MessegeManager.Message(this, serial.Info, Color.Red, 1);
 
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }
 
+        private void ResizeWindow()
+        {
+            if (WindowHeight != Window.Size.Y || WindowWidth != Window.Size.X)
+            {
+                WindowHeight = Window.Size.Y;
+                WindowWidth = Window.Size.X;
+                View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
+                rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
+                map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
+                Window.SetView(view);
+            }
+        }
 
-        public void OpenCloseMap()
+        private void OpenCloseMap()
         {
             if (KeyboardManager.OnKeyPress(Keyboard.Key.M, 0))
             {

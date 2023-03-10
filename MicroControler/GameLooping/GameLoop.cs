@@ -12,8 +12,8 @@ namespace MicroControler.GameLooping
 {
     public abstract class GameLoop
     {
-        public const int TARGET_FPS = 300;
-        public const float TIME_UNTIL_UPDATE = 1f/TARGET_FPS;
+        protected const int TARGET_FPS = 300;
+        protected const float TIME_UNTIL_UPDATE = 1f/TARGET_FPS;
 
         public RenderWindow Window { get; protected set; }
         public GameTime GameTime { get; protected set; }
@@ -65,10 +65,10 @@ namespace MicroControler.GameLooping
             }
         }
 
-        public abstract void LoadContent();
-        public abstract void Initialize();
-        public abstract void Update(GameTime gameTime);
-        public abstract void Draw(GameTime gameTime);
+        protected abstract void LoadContent();
+        protected abstract void Initialize();
+        protected abstract void Update(GameTime gameTime);
+        protected abstract void Draw(GameTime gameTime);
 
         private void WindowClosed(object sender, EventArgs e)
         {

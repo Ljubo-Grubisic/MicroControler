@@ -110,7 +110,7 @@
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
     <Compile Include="InputOutput\MessegeManager.cs" />
-    <Compile Include="Game\Entities\Player.cs" />
+    <Content Include="Game\Entities\Player.txt" />
     <Compile Include="InputOutput\PortComunication\Serial.cs" />
     <Compile Include="Shapes\Line.cs" />
     <Compile Include="Game\Game.cs" />
