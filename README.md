@@ -1,4 +1,4 @@
-# MicroControler
+# MicroController
 Projekt za mikroupravljače
 Poanta ovog projekta je spojiti vatrogasno vozilo, koje je igračka sa senzorima i mikrokontrolerom u pravom svijetu,
 sa "virtualnim" svijetom unutar kojem možemo raditi logiku za navigaciju i druge sisteme tog vatrogasnog vozila koji će se koristiti
