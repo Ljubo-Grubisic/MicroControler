@@ -7,6 +7,8 @@ using MicroController.GameLooping;
 using MicroController.InputOutput;
 using SFML.Window;
 using MicroController.Game.Maping;
+using MicroController.SFMLHelper;
+using System.Data;
 
 namespace MicroController.Game.Entities
 {
@@ -40,7 +42,9 @@ namespace MicroController.Game.Entities
 
         public void Update(GameTime gameTime, Map map)
         {
-            this.Rectangle.Position = this.Position + (Vector2f)map.MapWindow.Position;
+            base.Update(map);
+
+            this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 180;
 

@@ -42,13 +42,13 @@ namespace MicroController.Game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 16, new Maping.Window
+            map = new Map(Map.GenerateMapWithWall(1000, 1000), 10, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
             });
 
-            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 1000, windowPosition: new Vector2i(0, 0), 
+            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 10, windowPosition: new Vector2i(0, 0), 
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f));
@@ -63,6 +63,7 @@ namespace MicroController.Game
         {
             ResizeWindow();
             camera.Update(gameTime, map);
+            map.Update(camera, GameTime);
             OpenCloseMap();
         }
 
@@ -107,7 +108,7 @@ namespace MicroController.Game
                 if (WindowState == 0)
                 {
                     WindowState++;
-                    rayCaster.DrawMapRays = true;
+                    rayCaster.DrawMapRays = false;
                     rayCaster.Draw3D = false;
                 }
                 else if (WindowState == 1)

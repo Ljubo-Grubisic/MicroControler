@@ -4,6 +4,7 @@ using SFML.Graphics;
 using SFML.System;
 using System;
 using MicroController.Game.Maping;
+using MicroController.Game.Entities;
 
 namespace MicroController.Game.RayCasting
 {
@@ -153,7 +154,7 @@ namespace MicroController.Game.RayCasting
             this.VerticalRay = new sRay { };
         }
 
-        public void Draw(RenderWindow window, ref Map Map, RayCastEable rayCastingObject)
+        public void Draw(RenderWindow window, ref Map Map, Entity rayCastingObject)
         {
             Ray.Angle = rayCastingObject.Rotation - MathHelper.DegreesToRadians(Fov / 2);
             if (Ray.Angle < 0)
@@ -274,8 +275,9 @@ namespace MicroController.Game.RayCasting
                 }
                 if (DrawMapRays)
                 {
-                    LineMap.Position0 = rayCastingObject.Position + (Vector2f)Map.MapWindow.Position;
-                    LineMap.Position1 = Ray.Position + (Vector2f)Map.MapWindow.Position;
+                    LineMap.Position0 = rayCastingObject.DrawingPosition;
+                    LineMap.Position1X = Ray.Position.X + Map.MapWindow.Position.X - Map.SquareStarting.Y * Map.SquareSize;
+                    LineMap.Position1Y = Ray.Position.Y + Map.MapWindow.Position.Y - Map.SquareStarting.X * Map.SquareSize;
                     LineMap.Draw(window);
                 }
 

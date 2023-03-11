@@ -1,19 +1,14 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MicroController.Shapes;
-using System.Data.SqlTypes;
-using MicroController.Game.RayCasting;
+using MicroController.Game.Maping;
 
 namespace MicroController.Game.Entities
 {
-    public class Entity : RayCastEable
+    public class Entity
     {
         private Vector2f position;
+        public Vector2f DrawingPosition;
         private float rotation = -(float)Math.PI / 2;
 
         public virtual Vector2f Position
@@ -40,5 +35,16 @@ namespace MicroController.Game.Entities
 
         protected virtual void OnPositionChange() { }
         protected virtual void OnRotationChange() { }
+
+        protected void Update(Map map)
+        {
+            UpdateDrawingPosition(map);
+        }
+
+        private void UpdateDrawingPosition(Map map)
+        {
+            this.DrawingPosition.X = this.Position.X + map.MapWindow.Position.X - map.SquareStarting.Y * map.SquareSize;
+            this.DrawingPosition.Y = this.Position.Y + map.MapWindow.Position.Y - map.SquareStarting.X * map.SquareSize;
+        }
     }
 }

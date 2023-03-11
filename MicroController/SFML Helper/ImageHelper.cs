@@ -3,7 +3,7 @@ using SFML.System;
 using System;
 using System.Runtime.Versioning;
 
-namespace MicroController
+namespace MicroController.SFMLHelper
 {
     public static class ImageHelper
     {

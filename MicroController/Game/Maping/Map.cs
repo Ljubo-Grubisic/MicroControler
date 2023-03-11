@@ -1,9 +1,10 @@
-﻿  using MicroController.Game.Entities;
-using MicroController.Shapes;
+﻿using MicroController.Game.Entities;
 using SFML.Graphics;
 using SFML.System;
 using System;
-using System.Runtime.InteropServices;
+using MicroController.InputOutput;
+using MicroController.SFMLHelper;
+using MicroController.GameLooping;
 
 namespace MicroController.Game.Maping
 {
@@ -19,22 +20,11 @@ namespace MicroController.Game.Maping
 
         public Color Image0FillColor = Color.White;
         public Color Image1FillColor = new Color(15, 15, 15, 255);
-        #region Chunks
-        public Vector2i ChunkWithPlayer;
-        public Vector2i ChunkWithPlayerOnScreen;
-        public Vector2i ChunkNum;
-        public Vector2i ChunkSize;
-        /// <summary>
-        /// Left 0, right 1, top 2, bottom 3
-        /// </summary>
-        private int[] ChunksAroundMain = new int[4];
-        private Vector2i ChunksOnScreen;
-        private Vector2i SquareStarting;
-        #endregion
+
+        public Vector2i SquareStarting;
         #endregion
 
         #region Private variables
-        private readonly Rectangle ChunkRectangle = new Rectangle(0f, 0f, 0f, 0f) { FillColor = Color.Transparent, OutlineColor = Color.Red, OutlineThickness = 2f };
 
         private Image Image0;
         private Image Image1;
@@ -61,12 +51,6 @@ namespace MicroController.Game.Maping
             this.SquareSize = squareSize;
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
-            CalculateChunkSize();
-            ChunkNum.X = DataSize.X / ChunkSize.X;
-            ChunkNum.Y = DataSize.Y / ChunkSize.Y;
-            ChunkWithPlayer = new Vector2i(0, 0);
-            ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
-            UpdateChunksOnScreen();
 
             this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
             this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
@@ -81,12 +65,6 @@ namespace MicroController.Game.Maping
             this.MapWindow = new Window { Position = mapWindowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
-            CalculateChunkSize();
-            ChunkNum.X = DataSize.X / ChunkSize.X;
-            ChunkNum.Y = DataSize.Y / ChunkSize.Y;
-            ChunkWithPlayer = new Vector2i(0, 0);
-            ChunksOnScreen = new Vector2i(MapWindow.Size.Y / SquareSize / ChunkSize.X, MapWindow.Size.X / SquareSize / ChunkSize.Y);
-            UpdateChunksOnScreen();
 
             this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
             this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
@@ -100,83 +78,22 @@ namespace MicroController.Game.Maping
             this.SquareSize = MapWindow.Size.X / DataSize.Y;
         }
 
-        public void ChunkSizeToWindow()
+        public void Update(Entity entity, GameTime time)
         {
-            this.ChunkSize.X = MapWindow.Size.Y / SquareSize;
-            this.ChunkSize.Y = MapWindow.Size.X / SquareSize;
-        }
+            RoundMapWindowSize();
+            CheckIfMapWindowLarger();
+            UpdateTextureSize();
+            UpdateSquareImages();
 
-        /*
-        public void CheckMapBorder(Player player, RenderWindow window)
-        {
-            ChunkWithPlayerOnScreen.X = (int)player.Position.Y / (ChunkSize.X * SquareSize);
-            ChunkWithPlayerOnScreen.Y = (int)player.Position.X / (ChunkSize.Y * SquareSize);
+            TrackEntityPosition(entity);
+            KeyBoardInput(time);
+            CheckSquareStarting();
 
-            if (ChunkWithPlayerOnScreen.Y > ChunksAroundMain[0] && ChunkWithPlayer.Y + ChunkWithPlayerOnScreen.Y < ChunkNum.Y - ChunksAroundMain[1] + 1)
-            {
-                player.PositionX -= ChunkSize.Y * SquareSize;
-                ChunkWithPlayer.Y++;
-            }
-            if (ChunkWithPlayerOnScreen.X > ChunksAroundMain[2] && ChunkWithPlayer.X + ChunkWithPlayerOnScreen.X < ChunkNum.X - ChunksAroundMain[3] + 1)
-            {
-                player.PositionY -= ChunkSize.X * SquareSize;
-                ChunkWithPlayer.X++;
-            }
-            if (ChunkWithPlayerOnScreen.Y < ChunksAroundMain[0] && ChunkWithPlayer.Y > 0)
-            {
-                player.PositionX += ChunkSize.Y * SquareSize;
-                ChunkWithPlayer.Y--;
-            }
-            if (ChunkWithPlayerOnScreen.X < ChunksAroundMain[2] && ChunkWithPlayer.X > 0)
-            {
-                player.PositionY += ChunkSize.X * SquareSize;
-                ChunkWithPlayer.X--;
-            }
-        }*/
-
-        public void DrawChunks(RenderWindow window)
-        {
-            for (int Row = 0; Row < ChunkNum.X && Row < ChunksOnScreen.X; Row++)
-            {
-                for (int Column = 0; Column < ChunkNum.Y && Column < ChunksOnScreen.Y; Column++)
-                {
-                    ChunkRectangle.PositionX = (Column * ChunkSize.Y * SquareSize) + MapWindow.Position.X;
-                    ChunkRectangle.PositionY = (Row * ChunkSize.X * SquareSize) + MapWindow.Position.Y;
-                    ChunkRectangle.SizeX = ChunkSize.Y * SquareSize;
-                    ChunkRectangle.SizeY = ChunkSize.X * SquareSize;
-                    ChunkRectangle.Draw(window);
-                }
-            }
+            UpdateMapTexture(MapWindow.Size, SquareStarting, SquareSize);
         }
 
         public void DrawMap(RenderWindow window)
         {
-            RoundMapWindowSize();
-            CheckIfMapWindowLarger();
-            UpdateChunksOnScreen();
-            UpdateTextureSize();
-            UpdateSquareImages();
-
-            SquareStarting.X = ChunkWithPlayer.X * ChunkSize.X;
-            SquareStarting.Y = ChunkWithPlayer.Y * ChunkSize.Y;
-            if (SquareStarting.X > DataSize.X - MapWindow.Size.Y / SquareSize)
-            {
-                SquareStarting.X = DataSize.X - MapWindow.Size.Y / SquareSize;
-            }
-            if (SquareStarting.X < 0)
-            {
-                SquareStarting.X = 0;
-            }
-            if (SquareStarting.Y > DataSize.Y - MapWindow.Size.X / SquareSize)
-            {
-                SquareStarting.Y = DataSize.Y - MapWindow.Size.X / SquareSize;
-            }
-            if (SquareStarting.Y < 0)
-            {
-                SquareStarting.Y = 0;
-            }
-
-            UpdateMapTexture(MapWindow.Size, SquareStarting, SquareSize);
             Sprite.Position = (Vector2f)MapWindow.Position;
             window.Draw(Sprite, new RenderStates(Texture));
         }
@@ -262,59 +179,84 @@ namespace MicroController.Game.Maping
         }
         #endregion
 
-        #region Chunk Functions
-        private void UpdateChunksOnScreen()
+        #region SquareStarting
+        private void TrackEntityPosition(Entity entity)
         {
-            ChunksOnScreen.X = MapWindow.Size.Y / SquareSize / ChunkSize.X;
-            ChunksOnScreen.Y = MapWindow.Size.X / SquareSize / ChunkSize.Y;
-            if (ChunksOnScreen.X % 2 == 1)
+            // Checking the left border
+            if (entity.DrawingPosition.X - MapWindow.Position.X < 0)
             {
-                ChunksAroundMain[2] = ChunksOnScreen.X / 2;
-                ChunksAroundMain[3] = ChunksAroundMain[2] + 1;
+                SquareStarting.Y -= (MapWindow.Size.X / SquareSize) / 2;
             }
-            else
+            // Checking the right border
+            if (entity.DrawingPosition.X - MapWindow.Position.X > MapWindow.Size.X)
             {
-                ChunksAroundMain[2] = ChunksOnScreen.X / 2;
-                ChunksAroundMain[3] = ChunksAroundMain[2] - 1;
+                SquareStarting.Y += (MapWindow.Size.X / SquareSize) / 2;
             }
-            if (ChunksOnScreen.Y % 2 == 1)
+            // Checking the top border
+            if (entity.DrawingPosition.Y - MapWindow.Position.Y < 0)
             {
-                ChunksAroundMain[0] = ChunksOnScreen.Y / 2;
-                ChunksAroundMain[1] = ChunksAroundMain[0] + 1;
+                SquareStarting.X -= (MapWindow.Size.Y / SquareSize) / 2;
             }
-            else
+            // Checking the bottom border
+            if (entity.DrawingPosition.Y - MapWindow.Position.Y > MapWindow.Size.Y)
             {
-                ChunksAroundMain[0] = ChunksOnScreen.Y / 2;
-                ChunksAroundMain[1] = ChunksAroundMain[0] - 1;
+                SquareStarting.X += (MapWindow.Size.Y / SquareSize) / 2;
             }
         }
-
-        private void CalculateChunkSize()
+        private void CheckSquareStarting()
         {
-            ChunkSize = new Vector2i(-1, -1);
-            for (int i = 3; i < 10; i++)
+            if (SquareStarting.X > DataSize.X - MapWindow.Size.Y / SquareSize)
             {
-                if (DataSize.X % i == 0)
-                {
-                    ChunkSize.X = i;
-                    break;
-                }
+                SquareStarting.X = DataSize.X - MapWindow.Size.Y / SquareSize;
             }
-            for (int i = 3; i < 10; i++)
+            if (SquareStarting.X < 0)
             {
-                if (DataSize.Y % 2 == 0)
-                {
-                    ChunkSize.Y = i;
-                    break;
-                }
+                SquareStarting.X = 0;
             }
-            if (ChunkSize.X == -1)
+            if (SquareStarting.Y > DataSize.Y - MapWindow.Size.X / SquareSize)
             {
-                ChunkSize.X = 5;
+                SquareStarting.Y = DataSize.Y - MapWindow.Size.X / SquareSize;
             }
-            if (ChunkSize.Y == -1)
+            if (SquareStarting.Y < 0)
             {
-                ChunkSize.Y = 5;
+                SquareStarting.Y = 0;
+            }
+        }
+        private void KeyBoardInput(GameTime time)
+        {
+            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Left, 1))
+            {
+                SquareStarting.Y--;
+            }
+            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Right, 2))
+            {
+                SquareStarting.Y++;
+            }
+            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Up, 3))
+            {
+                SquareStarting.X--;
+            }
+            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Down, 4))
+            {
+                SquareStarting.X++;
+            }
+
+
+            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Left, time, 0, 1))
+            {
+                SquareStarting.Y--;
+            }
+            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Right, time, 1, 1))
+            {
+                SquareStarting.Y++;
+            }
+            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Up, time, 2, 1))
+            {
+                SquareStarting.X--;
+            }
+            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Down, time, 3, 1))
+            {
+                SquareStarting.X++;
             }
         }
         #endregion

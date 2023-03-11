@@ -106,7 +106,6 @@
     <Compile Include="SFML Helper\ImageHelper.cs" />
     <Compile Include="InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />
-    <Compile Include="Game\RayCasting\RayCastEable.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
     <Compile Include="InputOutput\MessegeManager.cs" />
