@@ -127,6 +127,14 @@ namespace MicroController.Mathematics
         {
             return new Vector2f(positionX - (size.X / 2), positionY - (size.Y / 2));
         }
+        public static Vector2f CenterRectangle(Vector2f position, float sizeX, float sizeY)
+        {
+            return new Vector2f(position.X - (sizeX / 2), position.Y - (sizeY / 2));
+        }
+        public static Vector2f CenterRectangle(float positionX, float positionY, float sizeX, float sizeY)
+        {
+            return new Vector2f(positionX - (sizeX / 2), positionY - (sizeY / 2));
+        }
 
         public static Vector2f AddDeltaPosition(Vector2f position, Vector2f delta, float scale)
         {

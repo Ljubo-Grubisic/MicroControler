@@ -5,6 +5,7 @@ using SFML.System;
 using System;
 using MicroController.Game.Maping;
 using MicroController.Game.Entities;
+using System.Linq.Expressions;
 
 namespace MicroController.Game.RayCasting
 {
@@ -56,6 +57,7 @@ namespace MicroController.Game.RayCasting
         /// </summary>
         public bool Draw3D = true;
 
+        public int RenderDistance = 50;
 
         /// <summary>
         /// The thickness of the line in the 3D render, value should not be changed
@@ -272,7 +274,7 @@ namespace MicroController.Game.RayCasting
                     Ray.Position = HorizontalRay.Position;
                     Ray.Lenght = HorizontalRay.Lenght;
                     Line3D.OutlineColor = HorizontalColor;
-                }
+                 }
                 if (DrawMapRays)
                 {
                     LineMap.Position0 = rayCastingObject.DrawingPosition;

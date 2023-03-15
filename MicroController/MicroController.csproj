@@ -103,6 +103,9 @@
     <Compile Include="GameLooping\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\Slider.cs" />
+    <Compile Include="GUI\TextBox.cs" />
     <Compile Include="SFML Helper\ImageHelper.cs" />
     <Compile Include="InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />
@@ -124,6 +127,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Resources\Fonts\courier.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">

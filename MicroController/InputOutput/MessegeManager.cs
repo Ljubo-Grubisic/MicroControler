@@ -8,22 +8,26 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 using MicroController.GameLooping;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace MicroController.InputOutput
 {
     public static class MessegeManager
     {
-        public const string CONSOLE_FONT_PATH = "Resources/Fonts/arial.ttf";
-        public static Font consoleFont;
+        private const string Arial_FONT_PATH = "Resources/Fonts/arial.ttf";
+        private const string Courier_FONT_PATH = "Resources/Fonts/courier.ttf";
+        public static Font Arial;
+        public static Font Courier;
 
         public static void LoadContent()
         {
-            consoleFont = new Font(CONSOLE_FONT_PATH);
+            Arial = new Font(Arial_FONT_PATH);
+            Courier = new Font(Courier_FONT_PATH);
         }
 
         public static void DrawPerformanceData(GameLoop gameLoop, Color fontColor)
         {
-            if (consoleFont ==  null)
+            if (Arial ==  null)
                 return;
 
             string totalTimeElapsedStr = gameLoop.GameTime.TotalTimeElapsed.ToString("0.000");
@@ -31,15 +35,15 @@ namespace MicroController.InputOutput
             float fps = 1f / gameLoop.GameTime.DeltaTime;
             string fpsStr = fps.ToString("0.00");
 
-            SFML.Graphics.Text textTotalTimeElapsed = new SFML.Graphics.Text(totalTimeElapsedStr, consoleFont, 14);
+            SFML.Graphics.Text textTotalTimeElapsed = new SFML.Graphics.Text(totalTimeElapsedStr, Arial, 14);
             textTotalTimeElapsed.Position = new Vector2f(4f, 8f);
             textTotalTimeElapsed.Color = fontColor;
 
-            SFML.Graphics.Text textDeltaTime = new SFML.Graphics.Text(deltaTimeStr, consoleFont, 14);
+            SFML.Graphics.Text textDeltaTime = new SFML.Graphics.Text(deltaTimeStr, Arial, 14);
             textDeltaTime.Position = new Vector2f(4f, 28f);
             textDeltaTime.Color = fontColor;
 
-            SFML.Graphics.Text textFps = new SFML.Graphics.Text(fpsStr, consoleFont, 14);
+            SFML.Graphics.Text textFps = new SFML.Graphics.Text(fpsStr, Arial, 14);
             textFps.Position = new Vector2f(4f, 48f);
             textFps.Color = fontColor;
 
@@ -47,69 +51,36 @@ namespace MicroController.InputOutput
             gameLoop.Window.Draw(textDeltaTime);
             gameLoop.Window.Draw(textFps);
         }
-        public static void Message(GameLoop gameLoop, string textStr, Color fontColor, int messegeNumber)
+        public static void Message(RenderWindow window, string textStr, Font font, Vector2f position, Color fontColor, uint fontSize = 14)
         {
-            if (consoleFont == null)
+            if (Arial == null)
                 return;
 
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(4f, 68f + 20 * (messegeNumber - 1));
-            text.Color = fontColor;
-
-            gameLoop.Window.Draw(text);
-        }
-        public static void Message(GameLoop gameLoop, string textStr)
-        {
-            if (consoleFont == null)
-                return;
-
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(4f, 68f);
-            text.Color = Color.White;
-
-            gameLoop.Window.Draw(text);
-        }
-        public static void Message(GameLoop gameLoop, string textStr, Vector2f postion)
-        {
-            if (consoleFont == null)
-                return;
-
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(postion.X, postion.Y);
-            text.Color = Color.White;
-
-            gameLoop.Window.Draw(text);
-        }
-        public static void Message(RenderWindow window, string textStr, Color fontColor, int messegeNumber)
-        {
-            if (consoleFont == null)
-                return;
-
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(4f, 68f + 20 * (messegeNumber - 1));
+            Text text = new Text(textStr, font, fontSize);
+            text.Position = new Vector2f(position.X, position.Y);
             text.Color = fontColor;
 
             window.Draw(text);
         }
-        public static void Message(RenderWindow window, string textStr)
+        public static void Message(RenderWindow window, string textStr, Font font, Vector2f position, uint fontSize = 14)
         {
-            if (consoleFont == null)
+            if (Arial == null)
                 return;
 
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(4f, 68f);
-            text.Color = Color.White;
+            Text text = new Text(textStr, font, fontSize);
+            text.Position = new Vector2f(position.X, position.Y);
+            text.Color = Color.Black;
 
             window.Draw(text);
         }
-        public static void Message(RenderWindow window, string textStr, Vector2f postion)
+        public static void Message(RenderWindow window, string textStr, Vector2f position, uint fontSize = 14)
         {
-            if (consoleFont == null)
+            if (Arial == null)
                 return;
 
-            SFML.Graphics.Text text = new SFML.Graphics.Text(textStr, consoleFont, 14);
-            text.Position = new Vector2f(postion.X, postion.Y);
-            text.Color = Color.White;
+            Text text = new Text(textStr, Arial, fontSize);
+            text.Position = new Vector2f(position.X, position.Y);
+            text.Color = Color.Black;
 
             window.Draw(text);
         }

@@ -8,6 +8,8 @@ using MicroController.Mathematics;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using System;
+using MicroController.GUI;
 using MicroController.Shapes;
 
 namespace MicroController.Game
@@ -17,17 +19,18 @@ namespace MicroController.Game
         private uint WindowWidth = 1080;
         private uint WindowHeight = 720;
         private string WindowTitle;
+        public static Color WindowFillColor = new Color(MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f));
 
         private RayCaster rayCaster;
 
         private Serial serial;
         private Map map;
         private Camera camera;
+        private Button button;
 
         private int WindowState = 0;
 
-        public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title,
-            new Color(MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f)))
+        public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, WindowFillColor)
         {
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
@@ -38,6 +41,7 @@ namespace MicroController.Game
         protected override void LoadContent()
         {
             MessegeManager.LoadContent();
+            
         }
 
         protected override void Initialize()
@@ -48,13 +52,22 @@ namespace MicroController.Game
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
             });
 
-            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 10, windowPosition: new Vector2i(0, 0), 
+            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 100, windowPosition: new Vector2i(0, 0), 
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f));
 
+            button = new Button(new Vector2f(500, 410), new Vector2f(150, 50), "TextLargeButton");
+            button.ButtonClicked += Button_ButtonClicked;
+
             serial = new Serial("COM3", 9600);
             serial.StartReading();
+
+        }
+
+        private void Button_ButtonClicked(object source, EventArgs args)
+        {
+            Console.WriteLine(1);
         }
         #endregion
 
@@ -65,12 +78,12 @@ namespace MicroController.Game
             camera.Update(gameTime, map);
             map.Update(camera, GameTime);
             OpenCloseMap();
+            button.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            MessegeManager.DrawPerformanceData(this, Color.White);
-
+            WindowState = 8;
             switch (WindowState)
             {
                 case 0:
@@ -82,10 +95,14 @@ namespace MicroController.Game
                     camera.Draw(this.Window);
                     break;
             }
+            MessegeManager.Message(Window, "BUTTON", MessegeManager.Courier, new Vector2f(10, 10), 20);
+            Line line = new Line(new Vector2f(10, 10), new Vector2f(10 + (20 * 6), 10));
+            line.Draw(Window);
 
-            MessegeManager.Message(this, serial.Info, Color.Red, 1);
+            //button.Draw(Window);
+            //MessegeManager.Message(this, serial.Info, Color.Red, 1);
 
-            MessegeManager.DrawPerformanceData(this, Color.Red);
+            //MessegeManager.DrawPerformanceData(this, Color.Red);
         }
 
         private void ResizeWindow()
@@ -100,6 +117,7 @@ namespace MicroController.Game
                 Window.SetView(view);
             }
         }
+        
 
         private void OpenCloseMap()
         {
@@ -108,7 +126,7 @@ namespace MicroController.Game
                 if (WindowState == 0)
                 {
                     WindowState++;
-                    rayCaster.DrawMapRays = false;
+                    rayCaster.DrawMapRays = true;
                     rayCaster.Draw3D = false;
                 }
                 else if (WindowState == 1)
