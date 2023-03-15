@@ -1,9 +1,13 @@
-﻿using SFML.System;
+﻿using MicroController.Shapes;
+using SFML.Graphics;
+using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Management.Instrumentation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -156,6 +160,17 @@ namespace MicroController.Mathematics
         public static float DistanceTriangleHypotenuse(float ax, float ay, float bx, float by)
         {
             return (float)Math.Sqrt(Math.Pow((bx - ax), 2) + Math.Pow((by - ay), 2));
+        }
+
+        private static Vector2f Buffer = new Vector2f();
+        public static Vector2f CenterTextInRectangle(Vector2f rectanglePosition, Vector2f rectangleSize, FloatRect textRect, RenderWindow window)
+        {
+            Buffer.X = rectanglePosition.X + (rectangleSize.X / 2);
+            Buffer.Y = rectanglePosition.Y + (rectangleSize.Y / 2);
+
+            Buffer = CenterRectangle(Buffer, textRect.Width, textRect.Height) - new Vector2f(0f, textRect.Top);
+
+            return Buffer;
         }
     }
 }

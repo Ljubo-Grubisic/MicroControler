@@ -11,6 +11,7 @@ using SFML.Window;
 using System;
 using MicroController.GUI;
 using MicroController.Shapes;
+using System.Diagnostics;
 
 namespace MicroController.Game
 {
@@ -27,6 +28,7 @@ namespace MicroController.Game
         private Map map;
         private Camera camera;
         private Button button;
+        private Button button2;
 
         private int WindowState = 0;
 
@@ -60,6 +62,8 @@ namespace MicroController.Game
             button = new Button(new Vector2f(500, 410), new Vector2f(150, 50), "TextLargeButton");
             button.ButtonClicked += Button_ButtonClicked;
 
+            button2 = new Button(new Vector2f(100, 100), new Vector2f(450, 300), "BUtton");
+
             serial = new Serial("COM3", 9600);
             serial.StartReading();
 
@@ -79,6 +83,7 @@ namespace MicroController.Game
             map.Update(camera, GameTime);
             OpenCloseMap();
             button.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
+            button2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
         }
 
         protected override void Draw(GameTime gameTime)
@@ -95,11 +100,10 @@ namespace MicroController.Game
                     camera.Draw(this.Window);
                     break;
             }
-            MessegeManager.Message(Window, "BUTTON", MessegeManager.Courier, new Vector2f(10, 10), 20);
-            Line line = new Line(new Vector2f(10, 10), new Vector2f(10 + (20 * 6), 10));
-            line.Draw(Window);
+            button2.FontSize = 100;
 
-            //button.Draw(Window);
+            button.Draw(Window);
+            button2.Draw(Window);
             //MessegeManager.Message(this, serial.Info, Color.Red, 1);
 
             //MessegeManager.DrawPerformanceData(this, Color.Red);

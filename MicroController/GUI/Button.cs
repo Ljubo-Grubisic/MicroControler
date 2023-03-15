@@ -43,7 +43,8 @@ namespace MicroController.GUI
         public void Draw(RenderWindow window)
         {
             Rectangle.Draw(window);
-            MessegeManager.Message(window, Text, MessegeManager.Courier, Rectangle.Position, TextColor);
+            MessegeManager.Message(window, Text, MessegeManager.Courier, MathHelper.CenterTextInRectangle(Rectangle.Position, Rectangle.Size, 
+                MessegeManager.GetTextRect(Text, MessegeManager.Courier, FontSize, window), window), TextColor, FontSize);
         }
 
         public void Update(Vector2i mousePos, bool mouseState)

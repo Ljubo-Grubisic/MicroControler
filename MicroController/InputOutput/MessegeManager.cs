@@ -9,6 +9,8 @@ using SFML.Graphics;
 using SFML.System;
 using MicroController.GameLooping;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using MicroController.Mathematics;
+using MicroController.Shapes;
 
 namespace MicroController.InputOutput
 {
@@ -51,6 +53,7 @@ namespace MicroController.InputOutput
             gameLoop.Window.Draw(textDeltaTime);
             gameLoop.Window.Draw(textFps);
         }
+
         public static void Message(RenderWindow window, string textStr, Font font, Vector2f position, Color fontColor, uint fontSize = 14)
         {
             if (Arial == null)
@@ -83,6 +86,11 @@ namespace MicroController.InputOutput
             text.Color = Color.Black;
 
             window.Draw(text);
+        }
+
+        public static FloatRect GetTextRect(string textStr, Font font, uint fontSize, RenderWindow window)
+        {
+            return new Text(textStr, font, fontSize).GetLocalBounds();
         }
     }
 }
