@@ -100,15 +100,23 @@ namespace MicroController.Mathematics
 
         public static float Map(float inputMin, float inputMax, float outputMin, float outputMax, float value)
         {
-            float inputScale = inputMax - outputMin;
+            float inputScale = inputMax - inputMin;
             float outputScale = outputMax - outputMin;
 
             return value / inputScale * outputScale;
         }
+        public static float Map(Vector2f inputScale, Vector2f outputScale, float value)
+        {
+            float inputScaleF = inputScale.Y - inputScale.X;
+            float outputScaleF = outputScale.Y - outputScale.X;
+
+            return value / inputScaleF * outputScaleF;
+        }
+
         public static float[] Map(float inputMin, float inputMax, float outputMin, float outputMax, float[] value)
         {
             float[] exit = new float[value.Length];
-            float inputScale = inputMax - outputMin;
+            float inputScale = inputMax - inputMin;
             float outputScale = outputMax - outputMin;
 
             for (int i = 0; i < value.Length; i++)

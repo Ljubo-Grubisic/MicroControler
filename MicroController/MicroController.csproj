@@ -114,6 +114,7 @@
     <Compile Include="InputOutput\MessegeManager.cs" />
     <Content Include="Game\Entities\Player.txt" />
     <Compile Include="InputOutput\PortComunication\Serial.cs" />
+    <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Line.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Program.cs" />

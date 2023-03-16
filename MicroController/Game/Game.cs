@@ -12,6 +12,7 @@ using System;
 using MicroController.GUI;
 using MicroController.Shapes;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MicroController.Game
 {
@@ -30,6 +31,8 @@ namespace MicroController.Game
         private Button button;
         private Button button2;
 
+        private Slider slider;
+
         private int WindowState = 0;
 
         public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, WindowFillColor)
@@ -43,7 +46,6 @@ namespace MicroController.Game
         protected override void LoadContent()
         {
             MessegeManager.LoadContent();
-            
         }
 
         protected override void Initialize()
@@ -63,10 +65,10 @@ namespace MicroController.Game
             button.ButtonClicked += Button_ButtonClicked;
 
             button2 = new Button(new Vector2f(100, 100), new Vector2f(450, 300), "BUtton");
+            slider = new Slider(new Vector2f(100, 100), new Vector2f(100, 50), new Vector2f(0, 100), 0, 15);
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
-
         }
 
         private void Button_ButtonClicked(object source, EventArgs args)
@@ -100,10 +102,9 @@ namespace MicroController.Game
                     camera.Draw(this.Window);
                     break;
             }
-            button2.FontSize = 100;
 
-            button.Draw(Window);
-            button2.Draw(Window);
+            slider.Draw(Window);
+
             //MessegeManager.Message(this, serial.Info, Color.Red, 1);
 
             //MessegeManager.DrawPerformanceData(this, Color.Red);
