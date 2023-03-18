@@ -28,10 +28,12 @@ namespace MicroController.Game
         private Serial serial;
         private Map map;
         private Camera camera;
+
         private Button button;
         private Button button2;
 
         private Slider slider;
+        private Slider slider2;
 
         private int WindowState = 0;
 
@@ -50,7 +52,7 @@ namespace MicroController.Game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWall(1000, 1000), 10, new Maping.Window
+            map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 10, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
@@ -65,7 +67,8 @@ namespace MicroController.Game
             button.ButtonClicked += Button_ButtonClicked;
 
             button2 = new Button(new Vector2f(100, 100), new Vector2f(450, 300), "BUtton");
-            slider = new Slider(new Vector2f(100, 100), new Vector2f(100, 50), new Vector2f(0, 100), 0, 15);
+            slider = new Slider(new Vector2f(100, 100), new Vector2f(100, 7.5f), new Vector2f(1, 180), 90, 10);
+            slider2 = new Slider(new Vector2f(300, 100), new Vector2f(350, 7.5f), new Vector2f(1, 100), 10, 10);
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
@@ -86,11 +89,12 @@ namespace MicroController.Game
             OpenCloseMap();
             button.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
             button2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
+            slider.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
+            slider2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            WindowState = 8;
             switch (WindowState)
             {
                 case 0:
@@ -103,22 +107,25 @@ namespace MicroController.Game
                     break;
             }
 
+            rayCaster.Fov = slider.Value;
             slider.Draw(Window);
+            map.SquareSize = (int)slider2.Value;
+            slider2.Draw(Window);
 
             //MessegeManager.Message(this, serial.Info, Color.Red, 1);
 
-            //MessegeManager.DrawPerformanceData(this, Color.Red);
+            MessegeManager.DrawPerformanceData(this, Color.Red);
         }
 
         private void ResizeWindow()
         {
+            map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
             if (WindowHeight != Window.Size.Y || WindowWidth != Window.Size.X)
             {
                 WindowHeight = Window.Size.Y;
                 WindowWidth = Window.Size.X;
                 View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
                 rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
-                map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
                 Window.SetView(view);
             }
         }

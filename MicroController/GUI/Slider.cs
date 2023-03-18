@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 using MicroController.Mathematics;
+using System.Security.AccessControl;
+using SFML.Window;
+using System.Diagnostics;
+using MicroController.InputOutput;
+using System.ComponentModel.Design;
 
 namespace MicroController.GUI
 {
@@ -20,16 +25,16 @@ namespace MicroController.GUI
         /// </summary>
         public Vector2f Scale;
         public Vector2f Size;
-        /// <summary>
-        /// The default value the circle will be on
-        /// </summary>
-        public float DefaultValue;
 
         public Rectangle Rectangle;
         public Circle Circle;
 
-        public Color ColorLeft = Color.Black;
-        public Color ColorRight = Color.White;
+        public delegate void SliderEventHandler(object sender, EventArgs args);
+
+        // Animation events
+        public event SliderEventHandler SliderDefaultAnimation;
+        public event SliderEventHandler SliderPressedAnimation;
+        public event SliderEventHandler SliderHoveringAnimation;
 
         public Vector2f Position
         {
@@ -56,26 +61,128 @@ namespace MicroController.GUI
             }
         }
 
+        private bool Clicked;
+        private static uint counter = 0;
+        private uint id;
+
+
         public Slider(Vector2f position, Vector2f size, Vector2f scale, float defaultValue, float radius)
         {
             this.position = position;
             this.Scale = scale;
             this.Size = size;
-            this.DefaultValue = defaultValue;
+            this.Value = defaultValue;
 
             this.Rectangle = new Rectangle(Position, Size) { OutlineThickness = 2f, OutlineColor = Color.Black };
 
             float x = MathHelper.Map(Scale, new Vector2f(PositionX, PositionX + Size.X), Value);
             float y = Size.Y / 2 + Position.Y;
 
-            this.Circle = new Circle(MathHelper.CenterRectangle(x + PositionX, y, radius*2, radius*2), radius) 
+            this.Circle = new Circle(MathHelper.CenterRectangle(x, y, radius*2, radius*2), radius) 
             { OutlineThickness = 2f, OutlineColor = Color.Black };
+
+            this.id = counter;
+            counter++;
+        }
+
+        private Vector2f Buffer = new Vector2f();
+        public void Update(Vector2i mousePos, bool mouseState)
+        {
+            this.Rectangle.Position = this.Position;
+            this.Rectangle.Size = this.Size;
+            this.Value = MathHelper.Map(new Vector2f(0, Size.X), Scale, Circle.Position.X + Circle.Radius - PositionX);
+            CircleOutOfBounds();
+            if (IsMouseInCircle(mousePos) && mouseState)
+            {
+                Clicked = true;
+            }
+            if (!mouseState)
+            {
+                Clicked = false;
+            }
+
+            if (IsMouseInCircle(mousePos))
+            {
+                OnSliderHoveringAnimation();
+            }
+            else
+            {
+                OnSliderDefaultAnimation();
+            }
+            if (Clicked)
+            {
+                Buffer.X = mousePos.X - Circle.Radius;
+                Buffer.Y = Circle.Position.Y;
+                this.Circle.Position = Buffer;
+                OnSliderPressedAnimation();
+            }
+            CircleOutOfBounds();
         }
 
         public void Draw(RenderWindow window)
         {
             Rectangle.Draw(window);
             Circle.Draw(window);
+        }
+
+        private bool IsMouseInCircle(Vector2i mousePos)
+        {
+            double distance = Math.Sqrt(Math.Pow(((Circle.Position.X + Circle.Radius) - mousePos.X), 2) + Math.Pow(((Circle.Position.Y + Circle.Radius) - mousePos.Y), 2));
+            return distance <= Circle.Radius;
+        }
+
+        private void CircleOutOfBounds()
+        {
+            if (Circle.Position.X + Circle.Radius > Position.X + Size.X)
+            {
+                Buffer.X = Position.X + Size.X - Circle.Radius;
+                Buffer.Y = Circle.Position.Y;
+                Circle.Position = Buffer;
+            }
+            if (Circle.Position.X + Circle.Radius < Position.X)
+            {
+                Buffer.X = PositionX - Circle.Radius;
+                Buffer.Y = Circle.Position.Y;
+                Circle.Position = Buffer;
+            }
+        }
+
+        protected virtual void OnSliderDefaultAnimation()
+        {
+            if (SliderDefaultAnimation != null)
+                SliderDefaultAnimation(this, EventArgs.Empty);
+            else
+                DefaultStateAnimation();
+        }
+        protected virtual void OnSliderHoveringAnimation()
+        {
+            if(SliderHoveringAnimation != null)
+                SliderHoveringAnimation(this, EventArgs.Empty);
+            else
+                OnMouseHoverAnimation();
+        }
+        protected virtual void OnSliderPressedAnimation() 
+        {
+            if(SliderPressedAnimation != null)
+                SliderPressedAnimation(this, EventArgs.Empty);
+            else
+                OnMousePressedAnimation();
+        }
+
+        private void DefaultStateAnimation()
+        {
+            Circle.FillColor = Color.White;
+            Circle.OutlineColor = Color.Black;
+        }
+        private void OnMouseHoverAnimation()
+        {
+            Circle.FillColor = Color.Black;
+            Circle.OutlineColor = Color.White;
+        }
+        private void OnMousePressedAnimation()
+        {
+            Circle.FillColor = Color.White;
+            Circle.OutlineColor = Color.Blue;
         }
     }
 }

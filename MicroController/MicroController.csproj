@@ -106,6 +106,7 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Slider.cs" />
     <Compile Include="GUI\TextBox.cs" />
+    <Compile Include="InputOutput\MouseManager.cs" />
     <Compile Include="SFML Helper\ImageHelper.cs" />
     <Compile Include="InputOutput\KeyboardManager.cs" />
     <Compile Include="Game\Maping\Map.cs" />

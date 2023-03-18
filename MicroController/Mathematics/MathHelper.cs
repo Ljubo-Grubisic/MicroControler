@@ -100,17 +100,33 @@ namespace MicroController.Mathematics
 
         public static float Map(float inputMin, float inputMax, float outputMin, float outputMax, float value)
         {
-            float inputScale = inputMax - inputMin;
-            float outputScale = outputMax - outputMin;
+            // Calculate the input range and output range
+            float inputRange = inputMax - inputMin;
+            float outputRange = outputMax - outputMin;
 
-            return value / inputScale * outputScale;
+            // Calculate the normalized value of the input
+            float normalizedValue = (value - inputMin) / inputRange;
+
+            // Scale the normalized value to the output range
+            float scaledValue = outputMin + (normalizedValue * outputRange);
+
+            // Return the scaled value
+            return scaledValue;
         }
         public static float Map(Vector2f inputScale, Vector2f outputScale, float value)
         {
-            float inputScaleF = inputScale.Y - inputScale.X;
-            float outputScaleF = outputScale.Y - outputScale.X;
+            // Calculate the input range and output range
+            float inputRange = inputScale.Y - inputScale.X;
+            float outputRange = outputScale.Y - outputScale.X;
 
-            return value / inputScaleF * outputScaleF;
+            // Calculate the normalized value of the input
+            float normalizedValue = (value - inputScale.X) / inputRange;
+
+            // Scale the normalized value to the output range
+            float scaledValue = outputScale.X + (normalizedValue * outputRange);
+
+            // Return the scaled value
+            return scaledValue;
         }
 
         public static float[] Map(float inputMin, float inputMax, float outputMin, float outputMax, float[] value)
