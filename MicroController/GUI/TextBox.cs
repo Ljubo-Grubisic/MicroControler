@@ -30,18 +30,19 @@ namespace MicroController.GUI
         private bool Clicked = false;
         private uint id;
         private static uint counter = 0;
-        private int OldTextLenght = 0;
 
         public TextBox(Vector2f position, Vector2f size, uint fontSize, Font font) : base(position, size)
         {
             this.OutlineThickness = 2f;
             this.OutlineColor = Color.Black;
-            this.Text = new Text("Te", font, fontSize);
+            this.Text = new Text("", font, fontSize);
             this.Text.Color = Color.Black;
-            this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - Text.GetLocalBounds().Height) / 2));
-            this.Cursor = new Cursor(position, Color.Black, 1f, fontSize + 2f, 12f);
+            this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", font, fontSize).Height) / 2));
+            this.Cursor = new Cursor(position, Color.Black, 0.5f, fontSize + 2f, 12f);
+            this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
 
-            this.id = counter += 3;
+            this.id = counter;
+            counter += 3;
             if (counter == 99)
                 counter = 0;
         }
@@ -58,17 +59,23 @@ namespace MicroController.GUI
 
         public void Update(Vector2i mousePos )
         {
-            UpdateIndex();
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - Text.GetLocalBounds().Height) / 2) - Text.GetLocalBounds().Top);
-            
-            if (Index == TextString.Length - 1)
+
+            UpdateIndexBounds();
+
+            if (Index == TextString.Length && TextString.Length != 0)
             {
                 this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect(TextString, Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
             }
-            else if(TextString != "")
+            else if (TextString != "")
             {
-                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect(TextString.Remove(Index + 1), Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
+                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect(TextString.Remove(Index), Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
             }
+            else if(Index == 0)
+            {
+                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
+            }
+            Console.WriteLine(Index);
 
             bool mouseState = MouseManager.OnMouseDown(Mouse.Button.Left, id);
 
@@ -81,30 +88,37 @@ namespace MicroController.GUI
                 this.Clicked = true;
             }
 
-            if(Clicked)
+            if (Clicked)
             {
-                UpdateIndex();
-                this.TextString = KeyboardManager.ReadInput(TextString);
-                
-                if (this.TextString.Contains("BackSpace"))
+                UpdateIndexKeys();
+                UpdateIndexBounds();
+
+                string input = KeyboardManager.ReadInput("");
+
+                if (input != "")
                 {
-                    this.TextString = this.TextString.Replace("BackSpace", "");
-                    try
+                    if (input.Contains("BackSpace"))
                     {
-                        this.TextString = this.TextString.Remove(Index, 1);
-                        OldTextLenght = TextString.Length;
+                        input = input.Replace("BackSpace", "");
+                        try
+                        {
+                            this.TextString = this.TextString.Remove(Index - 1, 1);
+                            Index--;
+                        }
+                        catch { }
                     }
-                    catch{}
-                }
-                if (TextString.Length > OldTextLenght)
-                {
-                    Index = TextString.Length;
-                    OldTextLenght = TextString.Length;
+                    if (input.Contains("Space"))
+                    {
+                        input = input = input.Replace("Space", " ");
+                    }
+
+                    this.TextString = this.TextString.Insert(Index, input);
+                    Index += input.Length;
                 }
             }
         }
 
-        private void UpdateIndex()
+        private void UpdateIndexKeys()
         {
             if (KeyboardManager.OnKeyPressTextBoxOnly(Keyboard.Key.Left, (int)id + 1))
             {
@@ -114,13 +128,16 @@ namespace MicroController.GUI
             {
                 Index++;
             }
+        }
+        private void UpdateIndexBounds()
+        {
             if (Index < 0)
             {
                 Index = 0;
             }
-            if (Index > TextString.Length - 1 && TextString.Length != 0)
+            if (Index > TextString.Length && TextString.Length != 0)
             {
-                Index = TextString.Length - 1;
+                Index = TextString.Length;
             }
         }
 

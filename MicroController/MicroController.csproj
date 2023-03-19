@@ -103,8 +103,8 @@
     <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
-    <Compile Include="Game\GameLoop.cs" />
-    <Compile Include="Game\GameSetup.cs" />
+    <Compile Include="Game\Game\GameLoop.cs" />
+    <Compile Include="Game\Game\GameSetup.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Cursor.cs" />
     <Compile Include="GUI\Slider.cs" />
@@ -119,7 +119,7 @@
     <Compile Include="InputOutput\PortComunication\Serial.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Line.cs" />
-    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\Game\Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Rectangle.cs" />

@@ -6,6 +6,8 @@ using MicroController.InputOutput;
 using MicroController.InputOutput.PortComunication;
 using SFML.Graphics;
 using SFML.System;
+using System;
+
 namespace MicroController.Game
 {
     public partial class Game
@@ -28,14 +30,14 @@ namespace MicroController.Game
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f));
 
-            button = new Button(new Vector2f(500, 410), new Vector2f(150, 50), "TextLargeButton");
+            button = new Button(new Vector2f(500, 410), new Vector2f(150, 50), "TextLargeButton", MessegeManager.Arial, 16);
 
             button2 = new Button(new Vector2f(100, 100), new Vector2f(450, 300), "BUtton");
             slider = new Slider(new Vector2f(100, 100), new Vector2f(100, 7.5f), new Vector2f(1, 180), 90, 10);
             slider2 = new Slider(new Vector2f(300, 100), new Vector2f(350, 7.5f), new Vector2f(1, 100), 10, 10);
 
             textBox = new TextBox(new Vector2f(100, 450), new Vector2f(100, 50), 16, MessegeManager.Arial);
-            textBox2 = new TextBox(new Vector2f(450, 100), new Vector2f(300, 70), 16, MessegeManager.Courier);
+            textBox2 = new TextBox(new Vector2f(450, 100), new Vector2f(300, 70), 16, MessegeManager.Arial);
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
