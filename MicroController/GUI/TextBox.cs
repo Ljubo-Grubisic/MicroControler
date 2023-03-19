@@ -75,7 +75,6 @@ namespace MicroController.GUI
             {
                 this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
             }
-            Console.WriteLine(Index);
 
             bool mouseState = MouseManager.OnMouseDown(Mouse.Button.Left, id);
 
