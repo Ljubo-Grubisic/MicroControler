@@ -10,8 +10,8 @@ namespace MicroController.GUI
 {
     public class Button
     {
-        public string Text;
-        public uint FontSize = 14;
+        public string TextStr;
+        public Text Text;
         public Rectangle Rectangle;
 
         public Color TextColor;
@@ -36,19 +36,29 @@ namespace MicroController.GUI
         public Button(Vector2f position, Vector2f size, string text)
         {
             this.Rectangle = new Rectangle(position, size) { OutlineColor = Color.Black, OutlineThickness = 2f };
-            this.Text = text;
+            this.TextStr = text;
             this.TextColor = BaseTextColor;
+            this.Text = new Text(text, MessegeManager.Courier, 14);
+        }
+        public Button(Vector2f position, Vector2f size, string text, Font font, uint fontSize)
+        {
+            this.Rectangle = new Rectangle(position, size) { OutlineColor = Color.Black, OutlineThickness = 2f };
+            this.TextStr = text;
+            this.TextColor = BaseTextColor;
+            this.Text = new Text(text, font, fontSize);
         }
 
         public void Draw(RenderWindow window)
         {
             Rectangle.Draw(window);
-            MessegeManager.Message(window, Text, MessegeManager.Courier, MathHelper.CenterTextInRectangle(Rectangle.Position, Rectangle.Size, 
-                MessegeManager.GetTextRect(Text, MessegeManager.Courier, FontSize, window), window), TextColor, FontSize);
+            window.Draw(Text);
         }
 
         public void Update(Vector2i mousePos, bool mouseState)
         {
+            Text.Position = MathHelper.CenterTextInRectangle(Rectangle.Position, Rectangle.Size,
+                MessegeManager.GetTextRect(TextStr, MessegeManager.Courier, Text.CharacterSize));
+            Text.Color = TextColor;
             OnButtonDefalutAnimation();
             if (IsMouseInBtn(mousePos))
             {

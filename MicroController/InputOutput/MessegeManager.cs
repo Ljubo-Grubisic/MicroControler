@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection.Emit;
-using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
@@ -88,7 +87,7 @@ namespace MicroController.InputOutput
             window.Draw(text);
         }
 
-        public static FloatRect GetTextRect(string textStr, Font font, uint fontSize, RenderWindow window)
+        public static FloatRect GetTextRect(string textStr, Font font, uint fontSize)
         {
             return new Text(textStr, font, fontSize).GetLocalBounds();
         }

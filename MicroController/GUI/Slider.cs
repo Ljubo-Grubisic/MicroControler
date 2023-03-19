@@ -1,17 +1,8 @@
 ﻿using MicroController.Shapes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 using MicroController.Mathematics;
-using System.Security.AccessControl;
-using SFML.Window;
-using System.Diagnostics;
-using MicroController.InputOutput;
-using System.ComponentModel.Design;
 
 namespace MicroController.GUI
 {
@@ -62,9 +53,6 @@ namespace MicroController.GUI
         }
 
         private bool Clicked;
-        private static uint counter = 0;
-        private uint id;
-
 
         public Slider(Vector2f position, Vector2f size, Vector2f scale, float defaultValue, float radius)
         {
@@ -80,9 +68,6 @@ namespace MicroController.GUI
 
             this.Circle = new Circle(MathHelper.CenterRectangle(x, y, radius*2, radius*2), radius) 
             { OutlineThickness = 2f, OutlineColor = Color.Black };
-
-            this.id = counter;
-            counter++;
         }
 
         private Vector2f Buffer = new Vector2f();

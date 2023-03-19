@@ -104,6 +104,7 @@
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\Cursor.cs" />
     <Compile Include="GUI\Slider.cs" />
     <Compile Include="GUI\TextBox.cs" />
     <Compile Include="InputOutput\MouseManager.cs" />

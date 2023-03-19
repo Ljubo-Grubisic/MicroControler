@@ -187,12 +187,12 @@ namespace MicroController.Mathematics
         }
 
         private static Vector2f Buffer = new Vector2f();
-        public static Vector2f CenterTextInRectangle(Vector2f rectanglePosition, Vector2f rectangleSize, FloatRect textRect, RenderWindow window)
+        public static Vector2f CenterTextInRectangle(Vector2f rectanglePosition, Vector2f rectangleSize, FloatRect textRect)
         {
             Buffer.X = rectanglePosition.X + (rectangleSize.X / 2);
             Buffer.Y = rectanglePosition.Y + (rectangleSize.Y / 2);
 
-            Buffer = CenterRectangle(Buffer, textRect.Width, textRect.Height) - new Vector2f(0f, textRect.Top);
+            Buffer = CenterRectangle(Buffer, textRect.Width - textRect.Left, textRect.Height - textRect.Top) - new Vector2f(0f, textRect.Top);
 
             return Buffer;
         }

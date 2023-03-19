@@ -85,6 +85,9 @@ namespace MicroController.Shapes
             this.OutlineThickness = 1f;
             DataChanged();
         }
+        public Line() : base(4)
+        {
+        }
 
         public void Draw(RenderWindow window)
         {

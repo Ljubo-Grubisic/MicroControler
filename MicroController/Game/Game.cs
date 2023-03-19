@@ -35,6 +35,9 @@ namespace MicroController.Game
         private Slider slider;
         private Slider slider2;
 
+        private TextBox textBox;
+        private TextBox textBox2;
+
         private int WindowState = 0;
 
         public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, WindowFillColor)
@@ -70,6 +73,9 @@ namespace MicroController.Game
             slider = new Slider(new Vector2f(100, 100), new Vector2f(100, 7.5f), new Vector2f(1, 180), 90, 10);
             slider2 = new Slider(new Vector2f(300, 100), new Vector2f(350, 7.5f), new Vector2f(1, 100), 10, 10);
 
+            textBox = new TextBox(new Vector2f(100, 450), new Vector2f(100, 50), 16, MessegeManager.Arial);
+            textBox2 = new TextBox(new Vector2f(450, 100), new Vector2f(300, 70), 16, MessegeManager.Courier);
+
             serial = new Serial("COM3", 9600);
             serial.StartReading();
         }
@@ -91,10 +97,14 @@ namespace MicroController.Game
             button2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
             slider.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
             slider2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
+
+            textBox.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30));
+            textBox2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30));
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            WindowState = 8;
             switch (WindowState)
             {
                 case 0:
@@ -112,8 +122,13 @@ namespace MicroController.Game
             map.SquareSize = (int)slider2.Value;
             slider2.Draw(Window);
 
-            //MessegeManager.Message(this, serial.Info, Color.Red, 1);
+            button.Draw(Window);
 
+            textBox.Draw(Window);
+            textBox2.Draw(Window);
+
+            //MessegeManager.Message(this, serial.Info, Color.Red, 1);
+            
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }
 
