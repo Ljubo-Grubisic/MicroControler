@@ -4,7 +4,7 @@ using SFML.System;
 using System;
 using MicroController.InputOutput;
 using MicroController.SFMLHelper;
-using MicroController.GameLooping;
+using MicroController.MainLooping;
 
 namespace MicroController.Game.Maping
 {

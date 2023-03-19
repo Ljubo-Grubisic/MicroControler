@@ -8,9 +8,9 @@ using SFML.Window;
 using SFML.System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace MicroController.GameLooping
+namespace MicroController.MainLooping
 {
-    public abstract class GameLoop
+    public abstract class MainLoop
     {
         protected const int TARGET_FPS = 300;
         protected const float TIME_UNTIL_UPDATE = 1f/TARGET_FPS;
@@ -19,7 +19,7 @@ namespace MicroController.GameLooping
         public GameTime GameTime { get; protected set; }
         public Color WindowClearColor { get; protected set; }
 
-        protected GameLoop(uint windowWidth, uint windowHeight, string windowTitle, Color windowClearColor)
+        protected MainLoop(uint windowWidth, uint windowHeight, string windowTitle, Color windowClearColor)
         {
             this.WindowClearColor = windowClearColor;
             this.Window = new RenderWindow(new VideoMode(windowWidth, windowHeight), windowTitle);

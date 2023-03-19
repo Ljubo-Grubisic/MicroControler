@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
-using MicroController.GameLooping;
+using MicroController.MainLooping;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using MicroController.Mathematics;
 using MicroController.Shapes;
@@ -26,7 +26,7 @@ namespace MicroController.InputOutput
             Courier = new Font(Courier_FONT_PATH);
         }
 
-        public static void DrawPerformanceData(GameLoop gameLoop, Color fontColor)
+        public static void DrawPerformanceData(MainLoop gameLoop, Color fontColor)
         {
             if (Arial ==  null)
                 return;

@@ -99,10 +99,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameLooping\GameLoop.cs" />
-    <Compile Include="GameLooping\GameTime.cs" />
+    <Compile Include="MainLoop\MainLoop.cs" />
+    <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
+    <Compile Include="Game\GameLoop.cs" />
+    <Compile Include="Game\GameSetup.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Cursor.cs" />
     <Compile Include="GUI\Slider.cs" />
@@ -114,7 +116,6 @@
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
     <Compile Include="InputOutput\MessegeManager.cs" />
-    <Content Include="Game\Entities\Player.txt" />
     <Compile Include="InputOutput\PortComunication\Serial.cs" />
     <Compile Include="Shapes\Circle.cs" />
     <Compile Include="Shapes\Line.cs" />
@@ -147,7 +148,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Game\RayCasting\OldRayCaster.txt" />
     <Content Include="Resources\Imgs\Camera.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -165,7 +165,6 @@
     <Content Include="Resources\DLL-s\sfmlnet-graphics-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-system-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-window-2.dll" />
-    <Content Include="Shapes\OldRectangle.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

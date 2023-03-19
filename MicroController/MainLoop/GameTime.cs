@@ -1,4 +1,4 @@
-﻿namespace MicroController.GameLooping
+﻿namespace MicroController.MainLooping
 {
     public class GameTime
     {

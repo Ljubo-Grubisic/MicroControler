@@ -1,4 +1,4 @@
-﻿using MicroController.GameLooping;
+﻿using MicroController.MainLooping;
 using SFML.Graphics;
 using SFML.Window;
 using System.IO;

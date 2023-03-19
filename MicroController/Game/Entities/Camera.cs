@@ -3,7 +3,7 @@ using MicroController.Shapes;
 using SFML.System;
 using SFML.Graphics;
 using System;
-using MicroController.GameLooping;
+using MicroController.MainLooping;
 using MicroController.InputOutput;
 using SFML.Window;
 using MicroController.Game.Maping;
