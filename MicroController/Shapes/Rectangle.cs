@@ -17,8 +17,8 @@ namespace MicroController.Shapes
             set 
             {
                 Buffer.X = value;
-                Buffer.Y = 0;
-                Position += Buffer; 
+                Buffer.Y = PositionY;
+                Position = Buffer; 
             }
         }
         public float PositionY
@@ -26,9 +26,9 @@ namespace MicroController.Shapes
             get { return Position.Y; }
             set 
             {
-                Buffer.X = 0;
+                Buffer.X = PositionX;
                 Buffer.Y = value;
-                Position += Buffer; 
+                Position = Buffer; 
             }
         }
 
@@ -38,8 +38,8 @@ namespace MicroController.Shapes
             set 
             { 
                 Buffer.X = value;
-                Buffer.Y = 0;
-                Size += Buffer; 
+                Buffer.Y = SizeY;
+                Size = Buffer; 
             }
         }
         public float SizeY
@@ -47,9 +47,9 @@ namespace MicroController.Shapes
             get { return Size.Y; }
             set 
             { 
-                Buffer.X = 0;
+                Buffer.X = SizeX;
                 Buffer.Y = value;
-                Size += Buffer; 
+                Size = Buffer; 
             }
         }
 

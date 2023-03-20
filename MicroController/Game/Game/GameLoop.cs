@@ -16,21 +16,21 @@ namespace MicroController.Game
         protected override void Update(GameTime gameTime)
         {
             ResizeWindow();
-            camera.Update(gameTime, map);
-            map.Update(camera, GameTime);
-            OpenCloseMap();
-            button.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
-            button2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
-            slider.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
-            slider2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30), Mouse.IsButtonPressed(Mouse.Button.Left));
-
-            textBox.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30));
-            textBox2.Update(Mouse.GetPosition() - Window.Position - new Vector2i(8, 30));
+            if (!IsGamePaused)
+            {
+                camera.Update(gameTime, map);
+                map.Update(camera, GameTime);
+                OpenCloseMap();
+            }
+            else
+            {
+                PauseMenu.Update(this);
+            }
+            PauseMenu.OpenClosePauseMenu(this);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            WindowState = 8;
             switch (WindowState)
             {
                 case 0:
@@ -42,18 +42,12 @@ namespace MicroController.Game
                     camera.Draw(this.Window);
                     break;
             }
+            if (IsGamePaused)
+            {
+                PauseMenu.Draw(this.Window);
+            }
 
-            rayCaster.Fov = slider.Value;
-            slider.Draw(Window);
-            map.SquareSize = (int)slider2.Value;
-            slider2.Draw(Window);
-
-            button.Draw(Window);
-
-            textBox.Draw(Window);
-            textBox2.Draw(Window);
-
-            //MessegeManager.Message(this, serial.Info, Color.Red, 1);
+            //MessegeManager.Message(Window, serial.Info, MessegeManager.Arial, new Vector2f(15, 15));
 
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }

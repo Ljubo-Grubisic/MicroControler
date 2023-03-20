@@ -99,6 +99,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Game\PauseMenu.cs" />
+    <Compile Include="Game\Settings\CameraSettings.cs" />
+    <Compile Include="Game\Settings\MapSettings.cs" />
+    <Compile Include="Game\Settings\RayCasterSettings.cs" />
+    <Compile Include="Game\Settings\Settings.cs" />
     <Compile Include="MainLoop\MainLoop.cs" />
     <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />

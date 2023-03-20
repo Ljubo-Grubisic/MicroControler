@@ -1,4 +1,5 @@
-﻿using SFML.Window;
+﻿using SFML.System;
+using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace MicroController.InputOutput
 {
     public static class MouseManager
     {
+        public static Vector2i MouseOffSet = new Vector2i(8, 30);
         private static bool[] KeyHandlersPress = new bool[100];
 
         public static bool OnMouseDown(Mouse.Button button, uint id)

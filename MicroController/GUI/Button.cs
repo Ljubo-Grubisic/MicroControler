@@ -8,11 +8,10 @@ using MicroController.Mathematics;
 
 namespace MicroController.GUI
 {
-    public class Button
+    public class Button : Rectangle
     {
         public string TextStr;
         public Text Text;
-        public Rectangle Rectangle;
 
         public Color TextColor;
         public Color BaseTextColor = new Color(Color.Black);
@@ -33,31 +32,32 @@ namespace MicroController.GUI
 
         private bool Lock;
 
-        public Button(Vector2f position, Vector2f size, string text)
+        public Button(Vector2f position, Vector2f size, string text) : base(position, size)
         {
-            this.Rectangle = new Rectangle(position, size) { OutlineColor = Color.Black, OutlineThickness = 2f };
+            this.OutlineColor = Color.Black;
+            this.OutlineThickness = 2f;
             this.TextStr = text;
             this.TextColor = BaseTextColor;
             this.Text = new Text(text, MessegeManager.Courier, 14);
         }
-        public Button(Vector2f position, Vector2f size, string text, Font font, uint fontSize)
+        public Button(Vector2f position, Vector2f size, string text, Font font, uint fontSize) : base(position, size)
         {
-            this.Rectangle = new Rectangle(position, size) { OutlineColor = Color.Black, OutlineThickness = 2f };
+            this.OutlineColor = Color.Black;
+            this.OutlineThickness = 2f;
             this.TextStr = text;
             this.TextColor = BaseTextColor;
             this.Text = new Text(text, font, fontSize);
         }
 
-        public void Draw(RenderWindow window)
+        public new void Draw(RenderWindow window)
         {
-            Rectangle.Draw(window);
+            base.Draw(window);
             window.Draw(Text);
         }
 
         public void Update(Vector2i mousePos, bool mouseState)
         {
-            Text.Position = MathHelper.CenterTextInRectangle(Rectangle.Position, Rectangle.Size,
-                MessegeManager.GetTextRect(TextStr, MessegeManager.Courier, Text.CharacterSize));
+            Text.Position = MathHelper.CenterTextInRectangle(Position, Size, MessegeManager.GetTextRect(TextStr, MessegeManager.Courier, Text.CharacterSize));
             Text.Color = TextColor;
             OnButtonDefalutAnimation();
             if (IsMouseInBtn(mousePos))
@@ -126,27 +126,27 @@ namespace MicroController.GUI
         #region Default animations
         protected virtual void PressedAnimation()
         {
-            this.Rectangle.FillColor = Color.White;
-            this.Rectangle.OutlineColor = Color.Blue;
+            this.FillColor = Color.White;
+            this.OutlineColor = Color.Blue;
             this.TextColor = this.TextColorOnClick;
         }
         protected virtual void HoveringAnimation()
         {
-            this.Rectangle.FillColor = Color.Black;
+            this.FillColor = Color.Black;
             this.TextColor = this.TextColorOnHover;
         }
         protected virtual void DefaultAnimation()
         {
-            this.Rectangle.FillColor = Color.White;
-            this.Rectangle.OutlineColor = Color.Black;
+            this.FillColor = Color.White;
+            this.OutlineColor = Color.Black;
             this.TextColor = Color.Black;
         }
         #endregion
         
         private bool IsMouseInBtn(Vector2i mousePosition)
         {
-            if (mousePosition.X > Rectangle.PositionX && mousePosition.X < Rectangle.PositionX + Rectangle.SizeX &&
-                mousePosition.Y > Rectangle.PositionY && mousePosition.Y < Rectangle.PositionY + Rectangle.SizeY)
+            if (mousePosition.X > this.PositionX && mousePosition.X < this.PositionX + this.SizeX &&
+                mousePosition.Y > this.PositionY && mousePosition.Y < this.PositionY + this.SizeY)
             {
                 return true;
             }

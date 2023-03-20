@@ -23,22 +23,14 @@ namespace MicroController.Game
         private string WindowTitle;
         public static Color WindowFillColor = new Color(MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f), MathHelper.FloatToByte(0.3f));
 
-        private RayCaster rayCaster;
+        public RayCaster rayCaster;
 
         private Serial serial;
-        private Map map;
-        private Camera camera;
-
-        private Button button;
-        private Button button2;
-
-        private Slider slider;
-        private Slider slider2;
-
-        private TextBox textBox;
-        private TextBox textBox2;
+        public Map map;
+        public Camera camera;
 
         private int WindowState = 0;
+        public bool IsGamePaused = false;
 
         public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, WindowFillColor)
         {
