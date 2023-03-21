@@ -8,7 +8,7 @@ namespace MicroController.InputOutput
 {
     public static class KeyboardManager
     {
-        public static string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpace";
+        public static string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpaceReturn";
 
         private static bool[] KeyHandlersPress = new bool[100];
         private static float[] StartTime = new float[32];

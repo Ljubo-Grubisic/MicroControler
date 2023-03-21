@@ -19,7 +19,7 @@ namespace MicroController.Game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 10, new Maping.Window
+            map = new Map(Map.GenerateMapWithWall(1000, 1000), 10, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)

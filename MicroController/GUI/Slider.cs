@@ -3,6 +3,7 @@ using System;
 using SFML.Graphics;
 using SFML.System;
 using MicroController.Mathematics;
+using MicroController.Game;
 
 namespace MicroController.GUI
 {
@@ -66,15 +67,23 @@ namespace MicroController.GUI
             float x = MathHelper.Map(Scale, new Vector2f(PositionX, PositionX + Size.X), Value);
             float y = Size.Y / 2 + Position.Y;
 
-            this.Circle = new Circle(MathHelper.CenterRectangle(x, y, radius*2, radius*2), radius) 
+            this.Circle = new Circle(MathHelper.CenterRectangle(x, y, radius * 2, radius * 2), radius)
             { OutlineThickness = 2f, OutlineColor = Color.Black };
+            this.SetCircleToValue(Value);
         }
 
+        private bool StartUp = true;
         private Vector2f Buffer = new Vector2f();
         public void Update(Vector2i mousePos, bool mouseState)
         {
+            if (StartUp)
+            {
+                this.SetCircleToValue(Value);
+                StartUp = false;
+            }
             this.Rectangle.Position = this.Position;
             this.Rectangle.Size = this.Size;
+            this.Circle.PositionY = this.PositionY + Size.Y / 2 - Circle.Radius;
             this.Value = MathHelper.Map(new Vector2f(0, Size.X), Scale, Circle.Position.X + Circle.Radius - PositionX);
             CircleOutOfBounds();
             if (IsMouseInCircle(mousePos) && mouseState)
@@ -102,6 +111,15 @@ namespace MicroController.GUI
                 OnSliderPressedAnimation();
             }
             CircleOutOfBounds();
+        }
+
+        public void SetCircleToValue(float value)
+        {
+            if (value < Scale.X || value > Scale.Y)
+            {
+                return;
+            }
+            Circle.PositionX = MathHelper.Map(this.Scale, new Vector2f(0, this.Size.X), value) + PositionX - this.Circle.Radius;
         }
 
         public void Draw(RenderWindow window)

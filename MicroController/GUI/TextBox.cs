@@ -27,11 +27,15 @@ namespace MicroController.GUI
         private int Index = 0;
         private Cursor Cursor;
 
+        public delegate void TextBoxEventHandler(object source, EventArgs args);
+
+        public event TextBoxEventHandler TextBoxEnterPressed;
+
         private bool Clicked = false;
         private uint id;
         private static uint counter = 0;
 
-        public TextBox(Vector2f position, Vector2f size, uint fontSize, Font font) : base(position, size)
+        public TextBox(Vector2f position, Vector2f size, Font font, uint fontSize) : base(position, size)
         {
             this.OutlineThickness = 2f;
             this.OutlineColor = Color.Black;
@@ -39,8 +43,7 @@ namespace MicroController.GUI
             this.Text.Color = Color.Black;
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", font, fontSize).Height) / 2));
             this.Cursor = new Cursor(position, Color.Black, 0.5f, fontSize + 2f, 12f);
-            this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
-
+            
             this.id = counter;
             counter += 3;
             if (counter == 99)
@@ -60,6 +63,8 @@ namespace MicroController.GUI
         public void Update(Vector2i mousePos )
         {
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - Text.GetLocalBounds().Height) / 2) - Text.GetLocalBounds().Top);
+            this.Cursor.SizeCenter = Text.CharacterSize + 2f;
+            this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
 
             UpdateIndexBounds();
 
@@ -108,7 +113,12 @@ namespace MicroController.GUI
                     }
                     if (input.Contains("Space"))
                     {
-                        input = input = input.Replace("Space", " ");
+                        input = input.Replace("Space", " ");
+                    }
+                    if (input.Contains("Return"))
+                    {
+                        input = input.Replace("Return", "");
+                        OnTextBoxEnterPressed();
                     }
 
                     this.TextString = this.TextString.Insert(Index, input);
@@ -138,6 +148,12 @@ namespace MicroController.GUI
             {
                 Index = TextString.Length;
             }
+        }
+
+        protected virtual void OnTextBoxEnterPressed()
+        {
+            if (TextBoxEnterPressed != null)
+                TextBoxEnterPressed(this, EventArgs.Empty);
         }
 
         private bool IsMouseInBtn(Vector2i mousePosition)

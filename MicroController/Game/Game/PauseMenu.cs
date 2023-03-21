@@ -21,7 +21,7 @@ namespace MicroController.Game
 
         private static Game Game;
 
-        private static bool IsSettingsOpen = false;
+        public static bool IsSettingsOpen = false;
 
         public static void Init(Game game)
         {

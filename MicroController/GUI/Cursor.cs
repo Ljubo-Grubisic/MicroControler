@@ -15,8 +15,8 @@ namespace MicroController.GUI
         public Vector2f Position;
      
         private Line[] Lines = new Line[3];
-        private float SizeCenter;
-        private float SizeSides;
+        public float SizeCenter;
+        public float SizeSides;
 
         public Cursor(Vector2f position, Color color, float outlineThickness, float sizeCenter, float sizeSides)
         {

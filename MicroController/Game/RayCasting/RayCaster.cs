@@ -27,7 +27,7 @@ namespace MicroController.Game.RayCasting
         /// <summary>
         /// How far the ray can go / how many check will a ray do
         /// </summary>
-        public float DepthOffFeild;
+        public int DepthOffFeild;
         /// <summary>
         /// The position where the 3D window will show
         /// </summary>
@@ -56,8 +56,6 @@ namespace MicroController.Game.RayCasting
         /// Turns off or on the drawing off the 3D window
         /// </summary>
         public bool Draw3D = true;
-
-        public int RenderDistance = 50;
 
         /// <summary>
         /// The thickness of the line in the 3D render, value should not be changed
@@ -136,7 +134,7 @@ namespace MicroController.Game.RayCasting
         private float LineOffset3D;
         #endregion
 
-        public RayCaster(float fov, float angleSpacingRay, float depthOffFeild, Vector2i windowPosition, Vector2i windowSize, Color rayMapColor, Color horizontalColor, Color verticalColor, bool drawMapRays)
+        public RayCaster(float fov, float angleSpacingRay, int depthOffFeild, Vector2i windowPosition, Vector2i windowSize, Color rayMapColor, Color horizontalColor, Color verticalColor, bool drawMapRays)
         {
             this.fov = fov;
             this.angleSpacingRay = angleSpacingRay;

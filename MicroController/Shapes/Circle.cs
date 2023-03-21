@@ -11,6 +11,28 @@ namespace MicroController.Shapes
 {
     public class Circle : CircleShape
     {
+        Vector2f Buffer = new Vector2f();
+        public float PositionX
+        {
+            get { return Position.X; }
+            set
+            {
+                Buffer.X = value;
+                Buffer.Y = Position.Y;
+                Position = Buffer;
+            }
+        }
+        public float PositionY
+        {
+            get { return Position.Y; }
+            set
+            {
+                Buffer.X = Position.X;
+                Buffer.Y = value;
+                Position = Buffer;
+            }
+        }
+
         public Circle(Vector2f position, float radius, uint pointCount = 100) : base(radius, pointCount)
         { 
             this.Position = position;

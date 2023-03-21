@@ -196,5 +196,15 @@ namespace MicroController.Mathematics
 
             return Buffer;
         }
+
+        public static Vector2f CenterRectangleInRectangle(Rectangle rectangle, Rectangle rectangleCentering)
+        {
+            Buffer.X = rectangle.Position.X + (rectangle.Size.X / 2);
+            Buffer.Y = rectangle.Position.Y + (rectangle.Size.Y / 2);
+
+            Buffer = CenterRectangle(Buffer, rectangleCentering.Size.X - rectangleCentering.Position.X, rectangleCentering.Size.Y - rectangleCentering.Position.Y);
+
+            return Buffer;
+        }
     }
 }
