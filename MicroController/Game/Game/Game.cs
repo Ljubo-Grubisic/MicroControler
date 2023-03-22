@@ -39,17 +39,13 @@ namespace MicroController.Game
             WindowTitle = title;
         }
 
-        private void ResizeWindow()
+        private void Window_Resized(object sender, SizeEventArgs e)
         {
-            map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
-            if (WindowHeight != Window.Size.Y || WindowWidth != Window.Size.X)
-            {
-                WindowHeight = Window.Size.Y;
-                WindowWidth = Window.Size.X;
-                View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
-                rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
-                Window.SetView(view);
-            }
+            WindowHeight = Window.Size.Y;
+            WindowWidth = Window.Size.X;
+            View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
+            rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
+            Window.SetView(view);
         }
 
         private void OpenCloseMap()

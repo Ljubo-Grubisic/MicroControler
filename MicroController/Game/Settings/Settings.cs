@@ -160,6 +160,9 @@ namespace MicroController.Game
             Game.rayCaster.Fov = Fov;
             Game.rayCaster.AngleSpacingRay = AngleSpacingRay;
             Game.rayCaster.DepthOffFeild = DepthOffFeild;
+            Game.rayCaster.RayMapColor = RayMapColor;
+            Game.rayCaster.HorizontalColor = HorizontalColor;
+            Game.rayCaster.VerticalColor = VerticalColor;
         }
     }
 }

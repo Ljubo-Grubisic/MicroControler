@@ -15,10 +15,10 @@ namespace MicroController.Game
     {
         protected override void Update(GameTime gameTime)
         {
-            ResizeWindow();
             if (!IsGamePaused)
             {
                 camera.Update(gameTime, map);
+                map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
                 map.Update(camera, GameTime);
                 OpenCloseMap();
             }
@@ -31,16 +31,19 @@ namespace MicroController.Game
 
         protected override void Draw(GameTime gameTime)
         {
-            switch (WindowState)
+            if (!PauseMenu.IsSettingsOpen)
             {
-                case 0:
-                    rayCaster.Draw(this.Window, ref this.map, camera);
-                    break;
-                case 1:
-                    map.DrawMap(this.Window);
-                    rayCaster.Draw(this.Window, ref this.map, camera);
-                    camera.Draw(this.Window);
-                    break;
+                switch (WindowState)
+                {
+                    case 0:
+                        rayCaster.Draw(this.Window, ref this.map, camera);
+                        break;
+                    case 1:
+                        map.DrawMap(this.Window);
+                        rayCaster.Draw(this.Window, ref this.map, camera);
+                        camera.Draw(this.Window);
+                        break;
+                }
             }
             if (IsGamePaused)
             {

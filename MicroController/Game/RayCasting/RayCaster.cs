@@ -39,7 +39,7 @@ namespace MicroController.Game.RayCasting
         /// <summary>
         /// The Color of the ray in the map
         /// </summary>
-        public Color RayMapColor;
+        private Color rayMapColor;
         /// <summary>
         /// The Color of a strip created by a horizontal ray / the color of horizontal walls
         /// </summary>
@@ -105,6 +105,19 @@ namespace MicroController.Game.RayCasting
                 this.RayThickness = WindowSize.X / ((Fov / AngleSpacingRay) + 1f);
             }
         }
+
+        /// <summary>
+        /// The Color of the ray in the map
+        /// </summary>
+        public Color RayMapColor
+        {
+            get { return rayMapColor; }
+            set
+            {
+                rayMapColor = value;
+                LineMap.OutlineColor = rayMapColor;
+            }
+        }
         #endregion
 
         #region Private Object used for drawing and casting rays
@@ -141,7 +154,7 @@ namespace MicroController.Game.RayCasting
             this.DepthOffFeild = depthOffFeild;
             this.WindowPosition = windowPosition;
             this.windowSize = windowSize;
-            this.RayMapColor = rayMapColor;
+            this.rayMapColor = rayMapColor;
             this.HorizontalColor = horizontalColor;
             this.VerticalColor = verticalColor;
             this.DrawMapRays = drawMapRays;
