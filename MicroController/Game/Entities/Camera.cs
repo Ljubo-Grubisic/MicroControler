@@ -9,19 +9,25 @@ using SFML.Window;
 using MicroController.Game.Maping;
 using MicroController.SFMLHelper;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace MicroController.Game.Entities
 {
     public class Camera : Entity
     {
-        public float Speed = 150;
-        public Vector2f Size { get; set; }
+        public float Speed { get; set; } = 150;
+        private float scale = 0.20f;
 
         private Vector2f DeltaPosition;
         private Rectangle Rectangle { get; set; }
+        private Texture CameraTexture { get; set; }
 
-        private readonly float Scale = 0.20f;
-
+        public float Scale
+        {
+            get { return scale; }
+            set { scale = value; OnScaleChange(); }
+        }
+        
         public Camera(Vector2f position)
         {
             this.Position = position;
@@ -29,10 +35,10 @@ namespace MicroController.Game.Entities
             this.DeltaPosition.X = (float)(Math.Cos(this.Rotation));
             this.DeltaPosition.Y = (float)(Math.Sin(this.Rotation));
 
-            Texture texture = ImageHelper.LoadPngNoBackground("Camera.png");
-            this.Size = (Vector2f)texture.Size * Scale;
+            CameraTexture = ImageHelper.LoadPngNoBackground("Camera.png");
+            this.Size = (Vector2f)CameraTexture.Size * Scale;
 
-            this.Rectangle = new Rectangle(Position, Size, texture);
+            this.Rectangle = new Rectangle(Position, Size, CameraTexture);
         }
 
         public void Draw(RenderWindow window)
@@ -78,6 +84,11 @@ namespace MicroController.Game.Entities
                 this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * this.Speed;
                 this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * this.Speed;
             }
+        }
+
+        private void OnScaleChange()
+        {
+            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale;
         }
     }
 }

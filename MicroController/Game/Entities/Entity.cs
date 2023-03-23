@@ -8,6 +8,7 @@ namespace MicroController.Game.Entities
     public class Entity
     {
         private Vector2f position;
+        private Vector2f size;
         public Vector2f DrawingPosition;
         private float rotation = -(float)Math.PI / 2;
 
@@ -27,6 +28,22 @@ namespace MicroController.Game.Entities
             set { position.Y = value; OnPositionChange(); }
         }
 
+        public virtual Vector2f Size
+        {
+            get { return size; }
+            set { size = value; OnSizeChange(); }
+        }
+        public virtual float SizeX
+        {
+            get { return size.X; }
+            set { size.X = value; OnSizeChange(); }
+        }
+        public virtual float SizeY
+        {
+            get { return size.Y; }
+            set { size.Y = value; OnSizeChange(); }
+        }
+
         public virtual float Rotation
         {
             get { return rotation; }
@@ -35,6 +52,7 @@ namespace MicroController.Game.Entities
 
         protected virtual void OnPositionChange() { }
         protected virtual void OnRotationChange() { }
+        protected virtual void OnSizeChange() { }
 
         protected void Update(Map map)
         {

@@ -63,7 +63,7 @@ namespace MicroController.Game
 
             RayCasterSettingsInit(game);
             MapSettingsInit(game);
-            CameraSettingsInit();
+            CameraSettingsInit(game);
         }
 
 
@@ -131,6 +131,10 @@ namespace MicroController.Game
             {
                 MapSettingsUpdate(game);
             }
+            if (WindowSelected == Windows[2])
+            {
+                CameraSettingsUpdate(game);
+            }
         }
 
         public static void Draw(RenderWindow window)
@@ -144,6 +148,10 @@ namespace MicroController.Game
             if (WindowSelected == Windows[1])
             {
                 MapSettingsDraw(window);
+            }
+            if (WindowSelected == Windows[2])
+            {
+                CameraSettingsDraw(window);
             }
         }
 
@@ -170,6 +178,7 @@ namespace MicroController.Game
         {
             RayCasterWindowResized = true;
             MapWindowResized = true;
+            CameraWindowResized= true;
         }
 
         private static void ApplySettingsButton_ButtonClicked(object source, EventArgs args)
@@ -189,6 +198,10 @@ namespace MicroController.Game
             Game.map.OutlineColor = OutlineColor;
             Game.map.UpdateSquareImagesForce();
             Game.map.UpdateMapTextureForce();
+
+            // Camera
+            Game.camera.Scale = Scale;
+            Game.camera.Speed = Speed;
         }
     }
 }
