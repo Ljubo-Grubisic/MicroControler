@@ -25,7 +25,7 @@ namespace MicroController.Game
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
             });
-
+            
             rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 100, windowPosition: new Vector2i(0, 0),
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);

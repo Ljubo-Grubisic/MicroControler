@@ -86,11 +86,8 @@ namespace MicroController.Game
         private static Text VerticalColorGText;
         private static Text VerticalColorBText;
 
-        private static Color RectangleFillColor = new Color(140, 191, 187);
-        private static Color RectangleOutlineColor = new Color(69, 94, 92);
-
-        private static bool WindowResized = false;
-        private static byte counter = 0;
+        private static bool RayCasterWindowResized = true;
+        private static int RayCasterCounter = 0;
 
         private static void RayCasterSettingsInit(Game game)
         {
@@ -133,7 +130,7 @@ namespace MicroController.Game
 
             // HorizontalColor
             HorizontalColor = game.rayCaster.HorizontalColor;
-            HorizontalColorText = new Text("Map rays Color:", MessegeManager.Courier);
+            HorizontalColorText = new Text("Horiontal walls Color:", MessegeManager.Courier);
             HorizontalColorSliderR = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0, 255), HorizontalColor.R, 10);
             HorizontalColorSliderG = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0, 255), HorizontalColor.G, 10);
             HorizontalColorSliderB = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0, 255), HorizontalColor.B, 10);
@@ -164,8 +161,6 @@ namespace MicroController.Game
             VerticalColorBText = new Text("B: 000", MessegeManager.Courier);
 
             // Events
-            game.Window.Resized += Window_Resized;
-
             FovTextBox.TextBoxEnterPressed += FovTextBox_TextBoxEnterPressed;
             AngleSpacingRayTextBox.TextBoxEnterPressed += AngleSpacingTextBox_TextBoxEnterPressed;
             DepthOffFeildTextBox.TextBoxEnterPressed += DepthOffFeildTextBox_TextBoxEnterPressed;
@@ -210,10 +205,10 @@ namespace MicroController.Game
             FovSlider.PositionY = FovPosition.Y + smallRectangleSizeY / 2 - FovSlider.Size.Y / 2;
             FovSlider.Size.X = smallRectangleSizeX - FovSlider.PositionX;
             FovSlider.Size.Y = 5f;
-            if(WindowResized)
+            if(RayCasterWindowResized)
                 FovSlider.SetCircleToValue(Fov);
             FovSlider.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 Fov = (float)Math.Round(FovSlider.Value);
 
             FovRectangle.Position = FovPosition;
@@ -237,10 +232,10 @@ namespace MicroController.Game
             AngleSpacingRaySlider.PositionY = AngleSpacingPosition.Y + smallRectangleSizeY / 2 - AngleSpacingRaySlider.Size.Y / 2;
             AngleSpacingRaySlider.Size.X = smallRectangleSizeX - AngleSpacingRaySlider.PositionX;
             AngleSpacingRaySlider.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 AngleSpacingRaySlider.SetCircleToValue(AngleSpacingRay);
             AngleSpacingRaySlider.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 AngleSpacingRay = AngleSpacingRaySlider.Value;
 
             AngleSpacingRayRectangle.Position = AngleSpacingPosition;
@@ -264,10 +259,10 @@ namespace MicroController.Game
             DepthOffFeildSlider.PositionY = DepthOffFeildPosition.Y + smallRectangleSizeY / 2 - DepthOffFeildSlider.Size.Y / 2;
             DepthOffFeildSlider.Size.X = smallRectangleSizeX - DepthOffFeildSlider.PositionX;
             DepthOffFeildSlider.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 DepthOffFeildSlider.SetCircleToValue(DepthOffFeild);
             DepthOffFeildSlider.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 DepthOffFeild = (int)Math.Round(DepthOffFeildSlider.Value);
 
             DepthOffFeildRectangle.Position = DepthOffFeildPosition;
@@ -301,10 +296,10 @@ namespace MicroController.Game
             RayMapColorSliderR.PositionY = RayMapColorTextBoxR.PositionY + RayMapColorTextBoxR.SizeY / 2;
             RayMapColorSliderR.Size.X = largeRectangleSizeX - RayMapColorSliderB.PositionX + RayMapColorPosition.X - 10;
             RayMapColorSliderR.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 RayMapColorSliderR.SetCircleToValue(RayMapColor.R);
             RayMapColorSliderR.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 RayMapColor.R = (byte)Math.Round(RayMapColorSliderR.Value);
 
             // Green
@@ -323,14 +318,14 @@ namespace MicroController.Game
             RayMapColorSliderG.PositionY = RayMapColorTextBoxG.PositionY + RayMapColorTextBoxG.SizeY / 2;
             RayMapColorSliderG.Size.X = largeRectangleSizeX - RayMapColorSliderB.PositionX + RayMapColorPosition.X - 10;
             RayMapColorSliderG.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 RayMapColorSliderG.SetCircleToValue(RayMapColor.G);
             RayMapColorSliderG.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 RayMapColor.G = (byte)Math.Round(RayMapColorSliderG.Value);
 
             // Blue
-            RayMapColorBText.DisplayedString = "G: " + RayMapColor.B.ToString("000");
+            RayMapColorBText.DisplayedString = "B: " + RayMapColor.B.ToString("000");
             RayMapColorBText.Position = new Vector2f(RayMapColorPosition.X, RayMapColorTextBoxG.PositionY + RayMapColorTextBoxG.SizeY);
             RayMapColorBText.CharacterSize = characterSize;
 
@@ -345,10 +340,10 @@ namespace MicroController.Game
             RayMapColorSliderB.PositionY = RayMapColorTextBoxB.PositionY + RayMapColorTextBoxB.SizeY / 2;
             RayMapColorSliderB.Size.X = largeRectangleSizeX - RayMapColorSliderB.PositionX + RayMapColorPosition.X - 10;
             RayMapColorSliderB.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 RayMapColorSliderB.SetCircleToValue(RayMapColor.B);
             RayMapColorSliderB.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 RayMapColor.B = (byte)Math.Round(RayMapColorSliderB.Value);
 
             RayMapColorRectangle.Position = RayMapColorPosition;
@@ -383,10 +378,10 @@ namespace MicroController.Game
             HorizontalColorSliderR.PositionY = HorizontalColorTextBoxR.PositionY + HorizontalColorTextBoxR.SizeY / 2;
             HorizontalColorSliderR.Size.X = largeRectangleSizeX - HorizontalColorSliderB.PositionX + HorizontalColorPosition.X - 10;
             HorizontalColorSliderR.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 HorizontalColorSliderR.SetCircleToValue(HorizontalColor.R);
             HorizontalColorSliderR.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 HorizontalColor.R = (byte)Math.Round(HorizontalColorSliderR.Value);
 
             // Green
@@ -405,14 +400,14 @@ namespace MicroController.Game
             HorizontalColorSliderG.PositionY = HorizontalColorTextBoxG.PositionY + HorizontalColorTextBoxG.SizeY / 2;
             HorizontalColorSliderG.Size.X = largeRectangleSizeX - HorizontalColorSliderB.PositionX + HorizontalColorPosition.X - 10;
             HorizontalColorSliderG.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 HorizontalColorSliderG.SetCircleToValue(HorizontalColor.G);
             HorizontalColorSliderG.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 HorizontalColor.G = (byte)Math.Round(HorizontalColorSliderG.Value);
 
             // Blue
-            HorizontalColorBText.DisplayedString = "G: " + HorizontalColor.B.ToString("000");
+            HorizontalColorBText.DisplayedString = "B: " + HorizontalColor.B.ToString("000");
             HorizontalColorBText.Position = new Vector2f(HorizontalColorPosition.X, HorizontalColorTextBoxG.PositionY + HorizontalColorTextBoxG.SizeY);
             HorizontalColorBText.CharacterSize = characterSize;
 
@@ -427,10 +422,10 @@ namespace MicroController.Game
             HorizontalColorSliderB.PositionY = HorizontalColorTextBoxB.PositionY + HorizontalColorTextBoxB.SizeY / 2;
             HorizontalColorSliderB.Size.X = largeRectangleSizeX - HorizontalColorSliderB.PositionX + HorizontalColorPosition.X - 10;
             HorizontalColorSliderB.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 HorizontalColorSliderB.SetCircleToValue(HorizontalColor.B);
             HorizontalColorSliderB.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 HorizontalColor.B = (byte)Math.Round(HorizontalColorSliderB.Value);
 
             HorizontalColorRectangle.Position = HorizontalColorPosition;
@@ -465,10 +460,10 @@ namespace MicroController.Game
             VerticalColorSliderR.PositionY = VerticalColorTextBoxR.PositionY + VerticalColorTextBoxR.SizeY / 2;
             VerticalColorSliderR.Size.X = largeRectangleSizeX - VerticalColorSliderB.PositionX + VerticalColorPosition.X - 10;
             VerticalColorSliderR.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 VerticalColorSliderR.SetCircleToValue(VerticalColor.R);
             VerticalColorSliderR.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 VerticalColor.R = (byte)Math.Round(VerticalColorSliderR.Value);
 
             // Green
@@ -487,14 +482,14 @@ namespace MicroController.Game
             VerticalColorSliderG.PositionY = VerticalColorTextBoxG.PositionY + VerticalColorTextBoxG.SizeY / 2;
             VerticalColorSliderG.Size.X = largeRectangleSizeX - VerticalColorSliderB.PositionX + VerticalColorPosition.X - 10;
             VerticalColorSliderG.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 VerticalColorSliderG.SetCircleToValue(VerticalColor.G);
             VerticalColorSliderG.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 VerticalColor.G = (byte)Math.Round(VerticalColorSliderG.Value);
 
             // Blue
-            VerticalColorBText.DisplayedString = "G: " + VerticalColor.B.ToString("000");
+            VerticalColorBText.DisplayedString = "B: " + VerticalColor.B.ToString("000");
             VerticalColorBText.Position = new Vector2f(VerticalColorPosition.X, VerticalColorTextBoxG.PositionY + VerticalColorTextBoxG.SizeY);
             VerticalColorBText.CharacterSize = characterSize;
 
@@ -509,24 +504,24 @@ namespace MicroController.Game
             VerticalColorSliderB.PositionY = VerticalColorTextBoxB.PositionY + VerticalColorTextBoxB.SizeY / 2;
             VerticalColorSliderB.Size.X = largeRectangleSizeX - VerticalColorSliderB.PositionX + VerticalColorPosition.X - 10;
             VerticalColorSliderB.Size.Y = 5f;
-            if (WindowResized)
+            if (RayCasterWindowResized)
                 VerticalColorSliderB.SetCircleToValue(VerticalColor.B);
             VerticalColorSliderB.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            if (!WindowResized)
+            if (!RayCasterWindowResized)
                 VerticalColor.B = (byte)Math.Round(VerticalColorSliderB.Value);
 
             VerticalColorRectangle.Position = VerticalColorPosition;
             VerticalColorRectangle.SizeX = largeRectangleSizeX;
             VerticalColorRectangle.SizeY = largeRectangleSizeY;
 
-            if (WindowResized)
+            if (RayCasterWindowResized)
             {
-                counter++;
+                RayCasterCounter++;
             }
-            if (counter == 2)
+            if (RayCasterCounter == 3)
             {
-                WindowResized = false;
-                counter = 0;
+                RayCasterWindowResized = false;
+                RayCasterCounter = 0;
             }
         }
 
@@ -587,12 +582,6 @@ namespace MicroController.Game
             VerticalColorSliderB.Draw(window);
         }
 
-
-        private static void Window_Resized(object sender, SizeEventArgs e)
-        {
-            WindowResized = true;
-        }
-
         private static void FovTextBox_TextBoxEnterPressed(object source, EventArgs args)
         {
             try
@@ -602,7 +591,7 @@ namespace MicroController.Game
             }
             catch { }
         }
-        private static void AngleSpacingTextBox_TextBoxEnterPressed(Object source, EventArgs args)
+        private static void AngleSpacingTextBox_TextBoxEnterPressed(object source, EventArgs args)
         {
             try
             {
@@ -611,7 +600,6 @@ namespace MicroController.Game
             }
             catch { }
         }
-
         private static void DepthOffFeildTextBox_TextBoxEnterPressed(object source, EventArgs args)
         {
             try
@@ -622,7 +610,6 @@ namespace MicroController.Game
             catch { }
         }
         
-
         private static void RayMapColorTextBoxR_TextBoxEnterPressed(object source, EventArgs args)
         {
             try

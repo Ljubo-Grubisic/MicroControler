@@ -18,7 +18,7 @@ namespace MicroController.Game
             if (!IsGamePaused)
             {
                 camera.Update(gameTime, map);
-                map.MapWindow.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
+                map.Window.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
                 map.Update(camera, GameTime);
                 OpenCloseMap();
             }

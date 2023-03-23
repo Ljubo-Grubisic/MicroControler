@@ -38,6 +38,9 @@ namespace MicroController.Game
         private static int buttonSpacing = 3;
         private static Vector2f ButtonSize = new Vector2f();
 
+        private static Color RectangleFillColor = new Color(140, 191, 187);
+        private static Color RectangleOutlineColor = new Color(69, 94, 92);
+
         public static void Init(Game game)
         {
             Game = game;
@@ -56,9 +59,10 @@ namespace MicroController.Game
             CameraButton.ButtonClicked += CameraButton_ButtonClicked;
             CloseSettingsButton.ButtonClicked += CloseSettingsButton_ButtonClicked;
             ApplySettingsButton.ButtonClicked += ApplySettingsButton_ButtonClicked;
+            game.Window.Resized += Window_Resized;
 
             RayCasterSettingsInit(game);
-            MapSettingsInit();
+            MapSettingsInit(game);
             CameraSettingsInit();
         }
 
@@ -123,6 +127,10 @@ namespace MicroController.Game
             {
                 RayCasterSettingsUpdate(game);
             }
+            if (WindowSelected == Windows[1])
+            {
+                MapSettingsUpdate(game);
+            }
         }
 
         public static void Draw(RenderWindow window)
@@ -132,6 +140,10 @@ namespace MicroController.Game
             if (WindowSelected == Windows[0])
             {
                 RayCasterSettingsDraw(window);
+            }
+            if (WindowSelected == Windows[1])
+            {
+                MapSettingsDraw(window);
             }
         }
 
@@ -154,15 +166,29 @@ namespace MicroController.Game
         {
             PauseMenu.IsSettingsOpen = false;
         }
+        private static void Window_Resized(object sender, SizeEventArgs e)
+        {
+            RayCasterWindowResized = true;
+            MapWindowResized = true;
+        }
 
         private static void ApplySettingsButton_ButtonClicked(object source, EventArgs args)
         {
+            // RayCaster
             Game.rayCaster.Fov = Fov;
             Game.rayCaster.AngleSpacingRay = AngleSpacingRay;
             Game.rayCaster.DepthOffFeild = DepthOffFeild;
             Game.rayCaster.RayMapColor = RayMapColor;
             Game.rayCaster.HorizontalColor = HorizontalColor;
             Game.rayCaster.VerticalColor = VerticalColor;
+
+            // Map
+            Game.map.SquareSize = SquareSize;
+            Game.map.Image0FillColor = Image0FillColor;
+            Game.map.Image1FillColor = Image1FillColor;
+            Game.map.OutlineColor = OutlineColor;
+            Game.map.UpdateSquareImagesForce();
+            Game.map.UpdateMapTextureForce();
         }
     }
 }

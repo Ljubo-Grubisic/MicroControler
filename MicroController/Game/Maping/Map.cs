@@ -15,17 +15,16 @@ namespace MicroController.Game.Maping
         public Vector2i DataSize { get; private set; }
         public int SquareSize;
 
-        public Window MinimapWindow;
-        public Window MapWindow;
+        public Window Window;
 
         public Color Image0FillColor = Color.White;
         public Color Image1FillColor = new Color(15, 15, 15, 255);
-
+        public Color OutlineColor = Color.Black;
+        
         public Vector2i SquareStarting;
         #endregion
 
         #region Private variables
-
         private Image Image0;
         private Image Image1;
         private Texture Texture;
@@ -33,7 +32,7 @@ namespace MicroController.Game.Maping
         #endregion
 
         #region Getters and Setters
-        public byte[,] Data
+        private byte[,] Data
         {
             get { return data; }
             set
@@ -44,10 +43,10 @@ namespace MicroController.Game.Maping
         }
         #endregion
 
-        public Map(byte[,] data, int squareSize, Window mapWindow)
+        public Map(byte[,] data, int squareSize, Window window)
         {
             this.Data = data;
-            this.MapWindow = mapWindow;
+            this.Window = window;
             this.SquareSize = squareSize;
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
@@ -55,27 +54,27 @@ namespace MicroController.Game.Maping
             this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
             this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
 
-            this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+            this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
             this.Sprite = new Sprite(Texture);
         }
-        public Map(byte[,] data, int squareSize, Vector2i mapWindowPosition)
+        public Map(byte[,] data, int squareSize, Vector2i windowPosition)
         {
             this.Data = data;
             this.SquareSize = squareSize;
-            this.MapWindow = new Window { Position = mapWindowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
+            this.Window = new Window { Position = windowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
 
-            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
-            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
+            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
+            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
 
-            this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+            this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
             this.Sprite = new Sprite(Texture);
         }
 
         public void SquareFillWindow()
         {
-            this.SquareSize = MapWindow.Size.X / DataSize.Y;
+            this.SquareSize = Window.Size.X / DataSize.Y;
         }
 
         public void Update(Entity entity, GameTime time)
@@ -89,12 +88,12 @@ namespace MicroController.Game.Maping
             KeyBoardInput(time);
             CheckSquareStarting();
 
-            UpdateMapTexture(MapWindow.Size, SquareStarting, SquareSize);
+            UpdateMapTexture(Window.Size, SquareStarting, SquareSize);
         }
 
         public void DrawMap(RenderWindow window)
         {
-            Sprite.Position = (Vector2f)MapWindow.Position;
+            Sprite.Position = (Vector2f)Window.Position;
             window.Draw(Sprite, new RenderStates(Texture));
         }
 
@@ -107,27 +106,32 @@ namespace MicroController.Game.Maping
         {
             if (OldWindowSize != windowSize || OldSquareStarting != squareStarting || OldSquareSize != squareSize)
             {
-                for (int Row = 0; Row < MapWindow.Size.Y / SquareSize; Row++)
-                {
-                    for (int Column = 0; Column < MapWindow.Size.X / SquareSize; Column++)
-                    {
-                        uint xPos = (uint)(Column * SquareSize);
-                        uint yPos = (uint)(Row * SquareSize);
+                UpdateMapTextureForce();
 
-                        switch (Data[Row + SquareStarting.X, Column + SquareStarting.Y])
-                        {
-                            case 0:
-                                Sprite.Texture.Update(Image0, xPos, yPos);
-                                break;
-                            case 1:
-                                Sprite.Texture.Update(Image1, xPos, yPos);
-                                break;
-                        }
-                    }
-                }
                 OldWindowSize = windowSize;
                 OldSquareStarting = squareStarting;
                 OldSquareSize = squareSize;
+            }
+        }
+        public void UpdateMapTextureForce()
+        {
+            for (int Row = 0; Row < Window.Size.Y / SquareSize; Row++)
+            {
+                for (int Column = 0; Column < Window.Size.X / SquareSize; Column++)
+                {
+                    uint xPos = (uint)(Column * SquareSize);
+                    uint yPos = (uint)(Row * SquareSize);
+
+                    switch (Data[Row + SquareStarting.X, Column + SquareStarting.Y])
+                    {
+                        case 0:
+                            Sprite.Texture.Update(Image0, xPos, yPos);
+                            break;
+                        case 1:
+                            Sprite.Texture.Update(Image1, xPos, yPos);
+                            break;
+                    }
+                }
             }
         }
 
@@ -135,20 +139,25 @@ namespace MicroController.Game.Maping
         {
             if (this.Image0.Size.X != SquareSize || this.Image0.Size.Y != SquareSize)
             {
-                this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
+                this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
             }
             if (this.Image1.Size.X != SquareSize || this.Image1.Size.Y != SquareSize)
             {
-                this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
+                this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
             }
+        }
+        public void UpdateSquareImagesForce()
+        {
+            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
+            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
         }
 
         private void UpdateTextureSize()
         {
-            if (Texture.Size != (Vector2u)MapWindow.Size)
+            if (Texture.Size != (Vector2u)Window.Size)
             {
                 this.Texture.Dispose();
-                this.Texture = new Texture((uint)MapWindow.Size.X, (uint)MapWindow.Size.Y);
+                this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
                 this.Sprite = new Sprite(this.Texture);
             }
         }
@@ -160,21 +169,21 @@ namespace MicroController.Game.Maping
         /// </summary>
         private void CheckIfMapWindowLarger()
         {
-            if (MapWindow.Size.X > SquareSize * DataSize.Y)
+            if (Window.Size.X > SquareSize * DataSize.Y)
             {
-                MapWindow.Size.X = SquareSize * DataSize.Y;
+                Window.Size.X = SquareSize * DataSize.Y;
             }
-            if (MapWindow.Size.Y > SquareSize * DataSize.X)
+            if (Window.Size.Y > SquareSize * DataSize.X)
             {
-                MapWindow.Size.Y = SquareSize * DataSize.X;
+                Window.Size.Y = SquareSize * DataSize.X;
             }
         }
 
         private void RoundMapWindowSize()
         {
-            if (MapWindow.Size != (MapWindow.Size / SquareSize) * SquareSize)
+            if (Window.Size != (Window.Size / SquareSize) * SquareSize)
             {
-                MapWindow.Size = (MapWindow.Size / SquareSize) * SquareSize;
+                Window.Size = (Window.Size / SquareSize) * SquareSize;
             }
         }
         #endregion
@@ -183,39 +192,39 @@ namespace MicroController.Game.Maping
         private void TrackEntityPosition(Entity entity)
         {
             // Checking the left border
-            if (entity.DrawingPosition.X - MapWindow.Position.X < 0)
+            if (entity.DrawingPosition.X - Window.Position.X < 0)
             {
-                SquareStarting.Y -= (MapWindow.Size.X / SquareSize) / 2;
+                SquareStarting.Y -= (Window.Size.X / SquareSize) / 2;
             }
             // Checking the right border
-            if (entity.DrawingPosition.X - MapWindow.Position.X > MapWindow.Size.X)
+            if (entity.DrawingPosition.X - Window.Position.X > Window.Size.X)
             {
-                SquareStarting.Y += (MapWindow.Size.X / SquareSize) / 2;
+                SquareStarting.Y += (Window.Size.X / SquareSize) / 2;
             }
             // Checking the top border
-            if (entity.DrawingPosition.Y - MapWindow.Position.Y < 0)
+            if (entity.DrawingPosition.Y - Window.Position.Y < 0)
             {
-                SquareStarting.X -= (MapWindow.Size.Y / SquareSize) / 2;
+                SquareStarting.X -= (Window.Size.Y / SquareSize) / 2;
             }
             // Checking the bottom border
-            if (entity.DrawingPosition.Y - MapWindow.Position.Y > MapWindow.Size.Y)
+            if (entity.DrawingPosition.Y - Window.Position.Y > Window.Size.Y)
             {
-                SquareStarting.X += (MapWindow.Size.Y / SquareSize) / 2;
+                SquareStarting.X += (Window.Size.Y / SquareSize) / 2;
             }
         }
         private void CheckSquareStarting()
         {
-            if (SquareStarting.X > DataSize.X - MapWindow.Size.Y / SquareSize)
+            if (SquareStarting.X > DataSize.X - Window.Size.Y / SquareSize)
             {
-                SquareStarting.X = DataSize.X - MapWindow.Size.Y / SquareSize;
+                SquareStarting.X = DataSize.X - Window.Size.Y / SquareSize;
             }
             if (SquareStarting.X < 0)
             {
                 SquareStarting.X = 0;
             }
-            if (SquareStarting.Y > DataSize.Y - MapWindow.Size.X / SquareSize)
+            if (SquareStarting.Y > DataSize.Y - Window.Size.X / SquareSize)
             {
-                SquareStarting.Y = DataSize.Y - MapWindow.Size.X / SquareSize;
+                SquareStarting.Y = DataSize.Y - Window.Size.X / SquareSize;
             }
             if (SquareStarting.Y < 0)
             {
@@ -345,6 +354,24 @@ namespace MicroController.Game.Maping
             int col = position % colCount;
 
             return Data[row, col];
+        }
+        public int GetValueFromData(int row, int column)
+        {
+            if (row < 0 || column < 0 || row > DataSize.X || column > DataSize.Y)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return Data[row, column];
+        }
+        public void SetValueToData(int row, int column, byte value)
+        {
+            if (row < 0 || column < 0 || row > DataSize.X || column > DataSize.Y)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            Data[row, column] = value;
         }
         #endregion
     }

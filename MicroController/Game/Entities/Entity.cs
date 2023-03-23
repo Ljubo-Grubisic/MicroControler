@@ -43,8 +43,8 @@ namespace MicroController.Game.Entities
 
         private void UpdateDrawingPosition(Map map)
         {
-            this.DrawingPosition.X = this.Position.X + map.MapWindow.Position.X - map.SquareStarting.Y * map.SquareSize;
-            this.DrawingPosition.Y = this.Position.Y + map.MapWindow.Position.Y - map.SquareStarting.X * map.SquareSize;
+            this.DrawingPosition.X = this.Position.X + map.Window.Position.X - map.SquareStarting.Y * map.SquareSize;
+            this.DrawingPosition.Y = this.Position.Y + map.Window.Position.Y - map.SquareStarting.X * map.SquareSize;
         }
     }
 }
