@@ -41,11 +41,18 @@ namespace MicroController.Game
 
         private void Window_Resized(object sender, SizeEventArgs e)
         {
-            WindowHeight = Window.Size.Y;
-            WindowWidth = Window.Size.X;
-            View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
-            rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
-            Window.SetView(view);
+            if(Window.Size.X < 765 || Window.Size.Y < 308)
+            {
+                Window.Size = new Vector2u(765, 308);
+            }
+            else
+            {
+                WindowHeight = Window.Size.Y;
+                WindowWidth = Window.Size.X;
+                View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
+                rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
+                Window.SetView(view);
+            }
         }
 
         private void OpenCloseMap()

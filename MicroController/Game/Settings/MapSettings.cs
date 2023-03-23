@@ -77,7 +77,7 @@ namespace MicroController.Game
             // SquareSize
             SquareSize = game.map.SquareSize;
             SquareSizeText = new Text("SquareSize:" + SquareSize.ToString("0000"), MessegeManager.Courier);
-            SquareSizeSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0, 100), SquareSize, 10);
+            SquareSizeSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(1, 100), SquareSize, 10);
             SquareSizeTextBox = new TextBox(new Vector2f(), new Vector2f(), MessegeManager.Courier, 0);
             SquareSizeRectangle = new Rectangle(new Vector2f(), new Vector2f()) { OutlineThickness = 2f, OutlineColor = RectangleOutlineColor, FillColor = RectangleFillColor };
 
@@ -149,7 +149,7 @@ namespace MicroController.Game
         {
             // Universals
             uint characterSize = (uint)ButtonSize.Y / 4;
-            float smallRectangleSizeX = game.Window.Size.X / 2.5f;
+            float smallRectangleSizeX = game.Window.Size.X / 2.07f;
             float smallRectangleSizeY = game.Window.Size.Y / 9;
 
             float largeRectangleSizeX = smallRectangleSizeX;
@@ -432,7 +432,7 @@ namespace MicroController.Game
             {
                 MapCounter++;
             }
-            if (MapCounter == 3)
+            if (MapCounter == 2)
             {
                 MapWindowResized = false;
                 MapCounter = 0;

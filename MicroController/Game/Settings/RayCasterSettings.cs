@@ -108,7 +108,7 @@ namespace MicroController.Game
             // DepthOffFeild
             DepthOffFeild = game.rayCaster.DepthOffFeild;
             DepthOffFeildText = new Text("Depth Off Feild:" + DepthOffFeild.ToString("0000"), MessegeManager.Courier);
-            DepthOffFeildSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(1, 9999), DepthOffFeild, 10);
+            DepthOffFeildSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(10, 9999), DepthOffFeild, 10);
             DepthOffFeildTextBox = new TextBox(new Vector2f(), new Vector2f(), MessegeManager.Courier, 0);
             DepthOffFeildRectangle = new Rectangle(new Vector2f(), new Vector2f()) { OutlineThickness = 2f, OutlineColor = RectangleOutlineColor, FillColor = RectangleFillColor };
 
@@ -182,7 +182,7 @@ namespace MicroController.Game
         {
             // Universals
             uint characterSize = (uint)ButtonSize.Y / 4;
-            float smallRectangleSizeX = game.Window.Size.X / 2.5f;
+            float smallRectangleSizeX = game.Window.Size.X / 2.07f;
             float smallRectangleSizeY = game.Window.Size.Y / 9;
 
             float largeRectangleSizeX = smallRectangleSizeX;
@@ -518,7 +518,7 @@ namespace MicroController.Game
             {
                 RayCasterCounter++;
             }
-            if (RayCasterCounter == 3)
+            if (RayCasterCounter == 2)
             {
                 RayCasterWindowResized = false;
                 RayCasterCounter = 0;

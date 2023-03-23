@@ -22,7 +22,7 @@ namespace MicroController.Game
     {
         private static Game Game;
 
-        private static string[] Windows = new string[] { "RayCaster", "Map", "Camera" };
+        private static readonly string[] Windows = new string[] { "RayCaster", "Map", "Camera" };
         private static string WindowSelected = "RayCaster";
 
         private static Rectangle Rectangle;
@@ -178,7 +178,7 @@ namespace MicroController.Game
         {
             RayCasterWindowResized = true;
             MapWindowResized = true;
-            CameraWindowResized= true;
+            CameraWindowResized = true;
         }
 
         private static void ApplySettingsButton_ButtonClicked(object source, EventArgs args)

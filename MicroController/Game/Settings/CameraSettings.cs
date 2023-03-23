@@ -59,7 +59,7 @@ namespace MicroController.Game
         {
             // Universals
             uint characterSize = (uint)ButtonSize.Y / 4;
-            float smallRectangleSizeX = game.Window.Size.X / 2.5f;
+            float smallRectangleSizeX = game.Window.Size.X / 2.07f;
             float smallRectangleSizeY = game.Window.Size.Y / 9;
 
             // Scale
@@ -120,7 +120,7 @@ namespace MicroController.Game
             {
                 CameraCounter++;
             }
-            if (CameraCounter == 3)
+            if (CameraCounter == 1)
             {
                 CameraWindowResized = false;
                 CameraCounter = 0;
