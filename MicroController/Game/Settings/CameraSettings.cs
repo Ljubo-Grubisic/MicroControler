@@ -39,7 +39,7 @@ namespace MicroController.Game
             // Scale
             Scale = game.camera.Scale;
             ScaleText = new Text("Scale:" + Scale.ToString("000.0000"), MessegeManager.Courier);
-            ScaleSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0.07f, 2), Scale, 10);
+            ScaleSlider = new Slider(new Vector2f(), new Vector2f(), new Vector2f(0.01f, 2), Scale, 10);
             ScaleTextBox = new TextBox(new Vector2f(), new Vector2f(), MessegeManager.Courier, 0);
             ScaleRectangle = new Rectangle(new Vector2f(), new Vector2f()) { OutlineThickness = 2f, OutlineColor = RectangleOutlineColor, FillColor = RectangleFillColor };
 

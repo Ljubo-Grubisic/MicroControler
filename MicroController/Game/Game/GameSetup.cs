@@ -6,6 +6,7 @@ using MicroController.InputOutput;
 using MicroController.InputOutput.PortComunication;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using System;
 
 namespace MicroController.Game
@@ -20,21 +21,22 @@ namespace MicroController.Game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 10, new Maping.Window
+            map = new Map(Map.GenerateMapWithWall(1000, 1000), 10, new Maping.Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
-            });
+            }, this);
             
             rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 100, windowPosition: new Vector2i(0, 0),
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
-            camera = new Camera(new Vector2f(100f, 100f));
+            camera = new Camera(new Vector2f(100f, 100f), this);
 
             serial = new Serial("COM3", 9600);
             serial.StartReading();
 
             PauseMenu.Init(this);
+            Scale.Create(3, map.SquareSize);
         }
     }
 }

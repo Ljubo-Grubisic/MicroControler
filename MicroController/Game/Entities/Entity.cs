@@ -2,6 +2,7 @@
 using SFML.System;
 using System;
 using MicroController.Game.Maping;
+using SFML.Window;
 
 namespace MicroController.Game.Entities
 {
@@ -50,6 +51,13 @@ namespace MicroController.Game.Entities
             set { rotation = value; OnRotationChange(); }
         }
 
+        private bool MouseWheelScrolled;
+
+        protected Entity(Game game)
+        {
+            game.Window.MouseWheelMoved += OnMouseWheelScroll;
+        }
+
         protected virtual void OnPositionChange() { }
         protected virtual void OnRotationChange() { }
         protected virtual void OnSizeChange() { }
@@ -61,8 +69,18 @@ namespace MicroController.Game.Entities
 
         private void UpdateDrawingPosition(Map map)
         {
-            this.DrawingPosition.X = this.Position.X + map.Window.Position.X - map.SquareStarting.Y * map.SquareSize;
-            this.DrawingPosition.Y = this.Position.Y + map.Window.Position.Y - map.SquareStarting.X * map.SquareSize;
+            if (MouseWheelScrolled)
+            {
+                this.position = (this.position / map.OldSquareSize) * map.SquareSize;
+                MouseWheelScrolled = false;
+            }
+            this.DrawingPosition.X = this.position.X + map.Window.Position.X - map.SquareStarting.Y * map.SquareSize;
+            this.DrawingPosition.Y = this.position.Y + map.Window.Position.Y - map.SquareStarting.X * map.SquareSize;
+        }
+
+        private void OnMouseWheelScroll(object sender, MouseWheelEventArgs e)
+        {
+            this.MouseWheelScrolled = true;
         }
     }
 }

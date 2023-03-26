@@ -2,12 +2,6 @@
 using MicroController.MainLooping;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicroController.Game
 {
@@ -21,6 +15,7 @@ namespace MicroController.Game
                 map.Window.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
                 map.Update(camera, GameTime);
                 OpenCloseMap();
+                Scale.Update(map);
             }
             else
             {
@@ -49,8 +44,6 @@ namespace MicroController.Game
             {
                 PauseMenu.Draw(this.Window);
             }
-
-            //MessegeManager.Message(Window, serial.Info, MessegeManager.Arial, new Vector2f(15, 15));
 
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }

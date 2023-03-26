@@ -8,27 +8,55 @@ using MicroController.InputOutput;
 using SFML.Window;
 using MicroController.Game.Maping;
 using MicroController.SFMLHelper;
-using System.Data;
-using System.Runtime.CompilerServices;
+using MicroController.Game;
+using System.Management.Instrumentation;
+using Microsoft.Win32;
 
 namespace MicroController.Game.Entities
 {
     public class Camera : Entity
     {
-        public float Speed { get; set; } = 150;
-        private float scale = 0.20f;
+        public float Speed { get; set; } = 50;
+        private float scale = 0.07f;
 
         private Vector2f DeltaPosition;
-        private Rectangle Rectangle { get; set; }
+        private Rectangle Rectangle { get; set; } = new Rectangle(new Vector2f(), new Vector2f());
         private Texture CameraTexture { get; set; }
 
         public float Scale
         {
             get { return scale; }
-            set { scale = value; OnScaleChange(); }
+            set { scale = value; }
         }
-        
-        public Camera(Vector2f position)
+        public override Vector2f Size
+        {
+            get { return Rectangle.Size; }
+            set
+            {
+                base.Size = value;
+                Rectangle.Size = base.Size;
+            }
+        }
+        public override float SizeX
+        {
+            get { return Rectangle.Size.X; }
+            set
+            {
+                base.SizeX = value;
+                Rectangle.Size = base.Size;
+            }
+        }
+        public override float SizeY
+        {
+            get { return Rectangle.Size.Y; }
+            set
+            {
+                base.SizeY = value;
+                Rectangle.Size = base.Size;
+            }
+        }
+
+        public Camera(Vector2f position, Game game) : base(game)
         {
             this.Position = position;
             
@@ -50,6 +78,8 @@ namespace MicroController.Game.Entities
         {
             base.Update(map);
 
+            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * MicroController.Game.Scale.NumPixelPerCm;
+            this.Size = this.Rectangle.Size;
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 180;
@@ -76,19 +106,14 @@ namespace MicroController.Game.Entities
             }
             if (KeyboardManager.IsKeyPressed(Keyboard.Key.W))
             {
-                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * this.Speed;
-                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * this.Speed;
+                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
             }
             if (KeyboardManager.IsKeyPressed(Keyboard.Key.S))
             {
-                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * this.Speed;
-                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * this.Speed;
+                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
             }
-        }
-
-        private void OnScaleChange()
-        {
-            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale;
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using MicroController.InputOutput;
 using MicroController.SFMLHelper;
 using MicroController.MainLooping;
+using SFML.Window;
 
 namespace MicroController.Game.Maping
 {
@@ -14,6 +15,7 @@ namespace MicroController.Game.Maping
         private byte[,] data;
         public Vector2i DataSize { get; private set; }
         public int SquareSize;
+        public int OldSquareSize;
 
         public Window Window;
 
@@ -43,13 +45,14 @@ namespace MicroController.Game.Maping
         }
         #endregion
 
-        public Map(byte[,] data, int squareSize, Window window)
+        public Map(byte[,] data, int squareSize, Window window, Game game)
         {
             this.Data = data;
             this.Window = window;
             this.SquareSize = squareSize;
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
+            game.Window.MouseWheelMoved += OnMouseWheelScroll;
 
             this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
             this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
@@ -57,13 +60,14 @@ namespace MicroController.Game.Maping
             this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
             this.Sprite = new Sprite(Texture);
         }
-        public Map(byte[,] data, int squareSize, Vector2i windowPosition)
+        public Map(byte[,] data, int squareSize, Vector2i windowPosition, Game game)
         {
             this.Data = data;
             this.SquareSize = squareSize;
             this.Window = new Window { Position = windowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
+            game.Window.MouseWheelMoved += OnMouseWheelScroll;
 
             this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
             this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
@@ -99,18 +103,18 @@ namespace MicroController.Game.Maping
 
         #region Private Functions
         #region Drawing - Image - Texture Functions
-        private Vector2i OldWindowSize = new Vector2i(-1, -1);
-        private Vector2i OldSquareStarting = new Vector2i(-1, -1);
-        private int OldSquareSize = -1;
+        private Vector2i WindowSizeBuffer = new Vector2i(-1, -1);
+        private Vector2i SquareStartingBuffer = new Vector2i(-1, -1);
+        private int SquareSizeBuffer = -1;
         private void UpdateMapTexture(Vector2i windowSize, Vector2i squareStarting, int squareSize)
         {
-            if (OldWindowSize != windowSize || OldSquareStarting != squareStarting || OldSquareSize != squareSize)
+            if (WindowSizeBuffer != windowSize || SquareStartingBuffer != squareStarting || SquareSizeBuffer != squareSize)
             {
                 UpdateMapTextureForce();
 
-                OldWindowSize = windowSize;
-                OldSquareStarting = squareStarting;
-                OldSquareSize = squareSize;
+                WindowSizeBuffer = windowSize;
+                SquareStartingBuffer = squareStarting;
+                SquareSizeBuffer = squareSize;
             }
         }
         public void UpdateMapTextureForce()
@@ -266,6 +270,25 @@ namespace MicroController.Game.Maping
             if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Down, time, 3, 1))
             {
                 SquareStarting.X++;
+            }
+        }
+        #endregion
+
+        #region MouseWheelScroll
+        private void OnMouseWheelScroll(object sender, MouseWheelEventArgs e)
+        {
+            OldSquareSize = SquareSize;
+            if (e.Delta == 1)
+            {
+                SquareSize += 1;
+            }
+            else
+            {
+                SquareSize -= 1;
+            }
+            if (SquareSize < 4)
+            {
+                SquareSize = 4;
             }
         }
         #endregion
