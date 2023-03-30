@@ -99,6 +99,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Entities\Firetruck.cs" />
+    <Compile Include="Game\Entities\Sensors\DHT11.cs" />
+    <Compile Include="Game\Entities\Sensors\FlameSensor.cs" />
+    <Compile Include="Game\Entities\Sensors\HC_SR04.cs" />
     <Compile Include="Game\Game\PauseMenu.cs" />
     <Compile Include="Game\Scale.cs" />
     <Compile Include="Game\Settings\CameraSettings.cs" />
@@ -109,8 +113,6 @@
     <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
-    <Compile Include="Game\Game\GameLoop.cs" />
-    <Compile Include="Game\Game\GameSetup.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Cursor.cs" />
     <Compile Include="GUI\Slider.cs" />
@@ -171,6 +173,15 @@
     <Content Include="Resources\DLL-s\sfmlnet-graphics-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-system-2.dll" />
     <Content Include="Resources\DLL-s\sfmlnet-window-2.dll" />
+    <Content Include="Resources\Imgs\DHT11.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Imgs\FlameSensor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Imgs\HC-SR04.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

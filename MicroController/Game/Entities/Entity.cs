@@ -1,7 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using System;
-using MicroController.Game.Maping;
 using SFML.Window;
 
 namespace MicroController.Game.Entities

@@ -6,9 +6,7 @@ using System;
 using MicroController.MainLooping;
 using MicroController.InputOutput;
 using SFML.Window;
-using MicroController.Game.Maping;
 using MicroController.SFMLHelper;
-using MicroController.Game;
 using System.Management.Instrumentation;
 using Microsoft.Win32;
 
@@ -63,7 +61,7 @@ namespace MicroController.Game.Entities
             this.DeltaPosition.X = (float)(Math.Cos(this.Rotation));
             this.DeltaPosition.Y = (float)(Math.Sin(this.Rotation));
 
-            CameraTexture = ImageHelper.LoadPngNoBackground("Camera.png");
+            this.CameraTexture = ImageHelper.LoadImgNoBackground("Camera.png");
             this.Size = (Vector2f)CameraTexture.Size * Scale;
 
             this.Rectangle = new Rectangle(Position, Size, CameraTexture);

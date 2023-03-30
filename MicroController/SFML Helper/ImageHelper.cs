@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using MicroController.Game.Entities.Sensors;
+using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Runtime.Versioning;
@@ -23,15 +24,56 @@ namespace MicroController.SFMLHelper
             new Color(176, 180, 183),
             new Color(179, 182, 184)
         };
+        private static readonly Color[] DHT11BackgroundColors = new Color[]
+        {
+            new Color(252, 253, 255),
+            new Color(223, 222, 224),
+            new Color(223, 223, 221),
+            new Color(202, 207, 211),
+            new Color(223, 220, 221),
+            new Color(221, 222, 220),
+            new Color(222, 223, 223),
+            new Color(222, 220, 221),
+            new Color(220, 221, 224)
+        };
+        private static readonly Color[] FlameSensorBackgroundColors = new Color[]
+        {
+            new Color(252, 253, 255),
+            new Color(223, 222, 224),
+            new Color(223, 223, 221),
+            new Color(202, 207, 211),
+            new Color(223, 220, 221),
+            new Color(221, 222, 220),
+            new Color(222, 223, 223),
+            new Color(222, 220, 221),
+            new Color(220, 221, 224),
+            new Color(182, 188, 169),
+            new Color(223, 223, 224),
+            new Color(212, 217, 220)
+        };
 
-        public static Texture LoadPngNoBackground(string filename)
+        public static Texture LoadImgNoBackground(string filename)
         { 
             Image image = new Image(ImgsPath + filename);
             Color[] colorFilter;
+            byte range = 255;
             switch (filename)
             {
                 case "Camera.png":
                     colorFilter = CameraBackgroundColors;
+                    range = 215;
+                    break;
+                case "HC-SR04.jpg":
+                    colorFilter = null;
+                    range = 254;
+                    break;
+                case "DHT11.png":
+                    colorFilter = DHT11BackgroundColors;
+                    range = 200;
+                    break;
+                case "FlameSensor.png":
+                    colorFilter = FlameSensorBackgroundColors;
+                    range = 200;
                     break;
                 default:
                     colorFilter = null; 
@@ -45,7 +87,7 @@ namespace MicroController.SFMLHelper
                 }
             }
 
-            for (byte i = 255; i > 215; i--)
+            for (byte i = 255; i > range; i--)
             {
                 image.CreateMaskFromColor(new Color(i, i, i));
             }

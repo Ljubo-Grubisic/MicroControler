@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MicroController.Game.Entities;
-using MicroController.Game.Maping;
 using System.Runtime.CompilerServices;
 using SFML.System;
 

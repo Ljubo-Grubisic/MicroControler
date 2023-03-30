@@ -3,7 +3,6 @@ using MicroController.Shapes;
 using SFML.Graphics;
 using SFML.System;
 using System;
-using MicroController.Game.Maping;
 using MicroController.Game.Entities;
 using System.Linq.Expressions;
 

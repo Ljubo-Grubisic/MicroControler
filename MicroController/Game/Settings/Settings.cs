@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 using MicroController.Game.Entities;
-using MicroController.Game.Maping;
 using MicroController.Game.RayCasting;
 using System.Diagnostics;
 using SFML.Graphics;

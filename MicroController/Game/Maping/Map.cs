@@ -7,7 +7,7 @@ using MicroController.SFMLHelper;
 using MicroController.MainLooping;
 using SFML.Window;
 
-namespace MicroController.Game.Maping
+namespace MicroController.Game
 {
     public class Map
     {
@@ -22,7 +22,7 @@ namespace MicroController.Game.Maping
         public Color Image0FillColor = Color.White;
         public Color Image1FillColor = new Color(15, 15, 15, 255);
         public Color OutlineColor = Color.Black;
-        
+
         public Vector2i SquareStarting;
         #endregion
 
@@ -40,45 +40,45 @@ namespace MicroController.Game.Maping
             set
             {
                 data = value;
-                this.DataSize = new Vector2i(Data.GetLength(0), Data.GetLength(1));
+                DataSize = new Vector2i(Data.GetLength(0), Data.GetLength(1));
             }
         }
         #endregion
 
         public Map(byte[,] data, int squareSize, Window window, Game game)
         {
-            this.Data = data;
-            this.Window = window;
-            this.SquareSize = squareSize;
+            Data = data;
+            Window = window;
+            SquareSize = squareSize;
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
             game.Window.MouseWheelMoved += OnMouseWheelScroll;
 
-            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
-            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
+            Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor);
+            Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor);
 
-            this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
-            this.Sprite = new Sprite(Texture);
+            Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
+            Sprite = new Sprite(Texture);
         }
         public Map(byte[,] data, int squareSize, Vector2i windowPosition, Game game)
         {
-            this.Data = data;
-            this.SquareSize = squareSize;
-            this.Window = new Window { Position = windowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
+            Data = data;
+            SquareSize = squareSize;
+            Window = new Window { Position = windowPosition, Size = new Vector2i(DataSize.Y * SquareSize, DataSize.X * SquareSize) };
             CheckIfMapWindowLarger();
             RoundMapWindowSize();
             game.Window.MouseWheelMoved += OnMouseWheelScroll;
 
-            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
-            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
+            Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
+            Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
 
-            this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
-            this.Sprite = new Sprite(Texture);
+            Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
+            Sprite = new Sprite(Texture);
         }
 
         public void SquareFillWindow()
         {
-            this.SquareSize = Window.Size.X / DataSize.Y;
+            SquareSize = Window.Size.X / DataSize.Y;
         }
 
         public void Update(Entity entity, GameTime time)
@@ -141,28 +141,28 @@ namespace MicroController.Game.Maping
 
         private void UpdateSquareImages()
         {
-            if (this.Image0.Size.X != SquareSize || this.Image0.Size.Y != SquareSize)
+            if (Image0.Size.X != SquareSize || Image0.Size.Y != SquareSize)
             {
-                this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
+                Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
             }
-            if (this.Image1.Size.X != SquareSize || this.Image1.Size.Y != SquareSize)
+            if (Image1.Size.X != SquareSize || Image1.Size.Y != SquareSize)
             {
-                this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
+                Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
             }
         }
         public void UpdateSquareImagesForce()
         {
-            this.Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
-            this.Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
+            Image0 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image0FillColor, OutlineColor);
+            Image1 = ImageHelper.CreateImage(new Vector2u((uint)SquareSize, (uint)SquareSize), Image1FillColor, OutlineColor);
         }
 
         private void UpdateTextureSize()
         {
             if (Texture.Size != (Vector2u)Window.Size)
             {
-                this.Texture.Dispose();
-                this.Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
-                this.Sprite = new Sprite(this.Texture);
+                Texture.Dispose();
+                Texture = new Texture((uint)Window.Size.X, (uint)Window.Size.Y);
+                Sprite = new Sprite(Texture);
             }
         }
         #endregion
@@ -185,9 +185,9 @@ namespace MicroController.Game.Maping
 
         private void RoundMapWindowSize()
         {
-            if (Window.Size != (Window.Size / SquareSize) * SquareSize)
+            if (Window.Size != Window.Size / SquareSize * SquareSize)
             {
-                Window.Size = (Window.Size / SquareSize) * SquareSize;
+                Window.Size = Window.Size / SquareSize * SquareSize;
             }
         }
         #endregion
@@ -198,22 +198,22 @@ namespace MicroController.Game.Maping
             // Checking the left border
             if (entity.DrawingPosition.X - Window.Position.X < 0)
             {
-                SquareStarting.Y -= (Window.Size.X / SquareSize) / 2;
+                SquareStarting.Y -= Window.Size.X / SquareSize / 2;
             }
             // Checking the right border
             if (entity.DrawingPosition.X - Window.Position.X > Window.Size.X)
             {
-                SquareStarting.Y += (Window.Size.X / SquareSize) / 2;
+                SquareStarting.Y += Window.Size.X / SquareSize / 2;
             }
             // Checking the top border
             if (entity.DrawingPosition.Y - Window.Position.Y < 0)
             {
-                SquareStarting.X -= (Window.Size.Y / SquareSize) / 2;
+                SquareStarting.X -= Window.Size.Y / SquareSize / 2;
             }
             // Checking the bottom border
             if (entity.DrawingPosition.Y - Window.Position.Y > Window.Size.Y)
             {
-                SquareStarting.X += (Window.Size.Y / SquareSize) / 2;
+                SquareStarting.X += Window.Size.Y / SquareSize / 2;
             }
         }
         private void CheckSquareStarting()
@@ -237,37 +237,37 @@ namespace MicroController.Game.Maping
         }
         private void KeyBoardInput(GameTime time)
         {
-            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Left, 1))
+            if (KeyboardManager.OnKeyPress(Keyboard.Key.Left, 1))
             {
                 SquareStarting.Y--;
             }
-            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Right, 2))
+            if (KeyboardManager.OnKeyPress(Keyboard.Key.Right, 2))
             {
                 SquareStarting.Y++;
             }
-            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Up, 3))
+            if (KeyboardManager.OnKeyPress(Keyboard.Key.Up, 3))
             {
                 SquareStarting.X--;
             }
-            if (KeyboardManager.OnKeyPress(SFML.Window.Keyboard.Key.Down, 4))
+            if (KeyboardManager.OnKeyPress(Keyboard.Key.Down, 4))
             {
                 SquareStarting.X++;
             }
 
 
-            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Left, time, 0, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Left, time, 0, 1))
             {
                 SquareStarting.Y--;
             }
-            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Right, time, 1, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Right, time, 1, 1))
             {
                 SquareStarting.Y++;
             }
-            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Up, time, 2, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Up, time, 2, 1))
             {
                 SquareStarting.X--;
             }
-            if (KeyboardManager.OnKeyDownForTime(SFML.Window.Keyboard.Key.Down, time, 3, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Down, time, 3, 1))
             {
                 SquareStarting.X++;
             }
