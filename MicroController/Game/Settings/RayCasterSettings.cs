@@ -586,7 +586,7 @@ namespace MicroController.Game
         {
             try
             {
-                Fov = Convert.ToSingle(FovTextBox.TextString);
+                Fov = Convert.ToSingle(FovTextBox.DisplayedString);
                 FovSlider.SetCircleToValue(Fov);
             }
             catch { }
@@ -595,7 +595,7 @@ namespace MicroController.Game
         {
             try
             {
-                AngleSpacingRay = Convert.ToSingle(AngleSpacingRayTextBox.TextString);
+                AngleSpacingRay = Convert.ToSingle(AngleSpacingRayTextBox.DisplayedString);
                 AngleSpacingRaySlider.SetCircleToValue(AngleSpacingRay);
             }
             catch { }
@@ -604,7 +604,7 @@ namespace MicroController.Game
         {
             try
             {
-                DepthOffFeild = Convert.ToInt32(DepthOffFeildTextBox.TextString);
+                DepthOffFeild = Convert.ToInt32(DepthOffFeildTextBox.DisplayedString);
                 DepthOffFeildSlider.SetCircleToValue(DepthOffFeild);
             }
             catch { }
@@ -614,7 +614,7 @@ namespace MicroController.Game
         {
             try
             {
-                RayMapColor.R = Convert.ToByte(RayMapColorTextBoxR.TextString);
+                RayMapColor.R = Convert.ToByte(RayMapColorTextBoxR.DisplayedString);
                 RayMapColorSliderR.SetCircleToValue(RayMapColor.R);
             }
             catch { }
@@ -623,7 +623,7 @@ namespace MicroController.Game
         {
             try
             {
-                RayMapColor.G = Convert.ToByte(RayMapColorTextBoxG.TextString);
+                RayMapColor.G = Convert.ToByte(RayMapColorTextBoxG.DisplayedString);
                 RayMapColorSliderG.SetCircleToValue(RayMapColor.G);
             }
             catch { }
@@ -632,7 +632,7 @@ namespace MicroController.Game
         {
             try
             {
-                RayMapColor.B = Convert.ToByte(RayMapColorTextBoxB.TextString);
+                RayMapColor.B = Convert.ToByte(RayMapColorTextBoxB.DisplayedString);
                 RayMapColorSliderB.SetCircleToValue(RayMapColor.B);
             }
             catch { }
@@ -642,7 +642,7 @@ namespace MicroController.Game
         {
             try
             {
-                HorizontalColor.R = Convert.ToByte(HorizontalColorTextBoxR.TextString);
+                HorizontalColor.R = Convert.ToByte(HorizontalColorTextBoxR.DisplayedString);
                 HorizontalColorSliderR.SetCircleToValue(HorizontalColor.R);
             }
             catch { }
@@ -651,7 +651,7 @@ namespace MicroController.Game
         {
             try
             {
-                HorizontalColor.G = Convert.ToByte(HorizontalColorTextBoxG.TextString);
+                HorizontalColor.G = Convert.ToByte(HorizontalColorTextBoxG.DisplayedString);
                 HorizontalColorSliderG.SetCircleToValue(HorizontalColor.G);
             }
             catch { }
@@ -660,7 +660,7 @@ namespace MicroController.Game
         {
             try
             {
-                HorizontalColor.B = Convert.ToByte(HorizontalColorTextBoxB.TextString);
+                HorizontalColor.B = Convert.ToByte(HorizontalColorTextBoxB.DisplayedString);
                 HorizontalColorSliderB.SetCircleToValue(HorizontalColor.B);
             }
             catch { }
@@ -670,7 +670,7 @@ namespace MicroController.Game
         {
             try
             {
-                VerticalColor.R = Convert.ToByte(VerticalColorTextBoxR.TextString);
+                VerticalColor.R = Convert.ToByte(VerticalColorTextBoxR.DisplayedString);
                 VerticalColorSliderR.SetCircleToValue(VerticalColor.R);
             }
             catch { }
@@ -679,7 +679,7 @@ namespace MicroController.Game
         {
             try
             {
-                VerticalColor.G = Convert.ToByte(VerticalColorTextBoxG.TextString);
+                VerticalColor.G = Convert.ToByte(VerticalColorTextBoxG.DisplayedString);
                 VerticalColorSliderG.SetCircleToValue(VerticalColor.G);
             }
             catch { }
@@ -688,7 +688,7 @@ namespace MicroController.Game
         {
             try
             {
-                VerticalColor.B = Convert.ToByte(VerticalColorTextBoxB.TextString);
+                VerticalColor.B = Convert.ToByte(VerticalColorTextBoxB.DisplayedString);
                 VerticalColorSliderB.SetCircleToValue(VerticalColor.B);
             }
             catch { }

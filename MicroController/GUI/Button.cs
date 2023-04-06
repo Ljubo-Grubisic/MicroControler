@@ -5,13 +5,25 @@ using SFML.System;
 using System;
 using System.Runtime.InteropServices;
 using MicroController.Mathematics;
+using SFML.Window;
 
 namespace MicroController.GUI
 {
     public class Button : Rectangle
     {
-        public string TextStr;
+        public string DisplayedString { get => Text.DisplayedString; set => Text.DisplayedString = value; }
         public Text Text;
+
+        #region Getters and Setters
+        /// <summary>
+        /// Character size of the text
+        /// </summary>
+        public uint CharacterSize { get => Text.CharacterSize; set => Text.CharacterSize = value; }
+        /// <summary>
+        /// Font of the text
+        /// </summary>
+        public Font TextFont { get => Text.Font; set => Text.Font = value; }
+        #endregion
 
         public Color TextColor;
         public Color BaseTextColor = new Color(Color.Black);
@@ -36,7 +48,6 @@ namespace MicroController.GUI
         {
             this.OutlineColor = Color.Black;
             this.OutlineThickness = 2f;
-            this.TextStr = text;
             this.TextColor = BaseTextColor;
             this.Text = new Text(text, MessegeManager.Courier, 14);
         }
@@ -44,7 +55,6 @@ namespace MicroController.GUI
         {
             this.OutlineColor = Color.Black;
             this.OutlineThickness = 2f;
-            this.TextStr = text;
             this.TextColor = BaseTextColor;
             this.Text = new Text(text, font, fontSize);
         }
@@ -55,17 +65,43 @@ namespace MicroController.GUI
             window.Draw(Text);
         }
 
-        public void Update(Vector2i mousePos, bool mouseState)
+        public void Update(Vector2i mousePos)
         {
-            Text.Position = MathHelper.CenterTextInRectangle(Position, Size, MessegeManager.GetTextRect(TextStr, MessegeManager.Courier, Text.CharacterSize));
+            bool mouseState = MouseManager.IsMouseButtonPressed(Mouse.Button.Left);
+            Text.Position = MathHelper.CenterTextInRectangle(Position, Size, MessegeManager.GetTextRect(DisplayedString, MessegeManager.Courier, Text.CharacterSize));
             Text.Color = TextColor;
             OnButtonDefalutAnimation();
-            if (IsMouseInBtn(mousePos))
+            if (MathHelper.IsMouseInRectangle(this, mousePos))
             {
                 OnButtonHoveringAnimation();
                 OnButtonHovering();
             }
-            if (IsMouseInBtn(mousePos) && mouseState)
+            if (MathHelper.IsMouseInRectangle(this, mousePos) && mouseState)
+            {
+                OnButtonPressedAnimation();
+                OnButtonPressed();
+                if (Lock)
+                {
+                    Lock = false;
+                    OnButtonClicked();
+                }
+            }
+            else
+            {
+                Lock = true;
+            }
+        }
+        public void Update(Vector2i mousePos, bool mouseState)
+        {
+            Text.Position = MathHelper.CenterTextInRectangle(Position, Size, MessegeManager.GetTextRect(DisplayedString, MessegeManager.Courier, Text.CharacterSize));
+            Text.Color = TextColor;
+            OnButtonDefalutAnimation();
+            if (MathHelper.IsMouseInRectangle(this, mousePos))
+            {
+                OnButtonHoveringAnimation();
+                OnButtonHovering();
+            }
+            if (MathHelper.IsMouseInRectangle(this, mousePos) && mouseState)
             {
                 OnButtonPressedAnimation();
                 OnButtonPressed();
@@ -142,18 +178,5 @@ namespace MicroController.GUI
             this.TextColor = Color.Black;
         }
         #endregion
-        
-        private bool IsMouseInBtn(Vector2i mousePosition)
-        {
-            if (mousePosition.X > this.PositionX && mousePosition.X < this.PositionX + this.SizeX &&
-                mousePosition.Y > this.PositionY && mousePosition.Y < this.PositionY + this.SizeY)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
     }
 }

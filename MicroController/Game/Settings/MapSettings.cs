@@ -12,7 +12,7 @@ using SFML.Window;
 
 namespace MicroController.Game
 {
-    public partial class Settings
+    public static partial class Settings
     {
         // SquareSize
         private static Text SquareSizeText;
@@ -490,7 +490,7 @@ namespace MicroController.Game
         {
             try
             {
-                SquareSize = Convert.ToInt32(SquareSizeTextBox.TextString);
+                SquareSize = Convert.ToInt32(SquareSizeTextBox.DisplayedString);
                 SquareSizeSlider.SetCircleToValue(SquareSize);
             }
             catch { }
@@ -500,7 +500,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image0FillColor.R = Convert.ToByte(Image0FillColorTextBoxR.TextString);
+                Image0FillColor.R = Convert.ToByte(Image0FillColorTextBoxR.DisplayedString);
                 Image0FillColorSliderR.SetCircleToValue(Image0FillColor.R);
             }
             catch { }
@@ -509,7 +509,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image0FillColor.G = Convert.ToByte(Image0FillColorTextBoxG.TextString);
+                Image0FillColor.G = Convert.ToByte(Image0FillColorTextBoxG.DisplayedString);
                 Image0FillColorSliderG.SetCircleToValue(Image0FillColor.G);
             }
             catch { }
@@ -518,7 +518,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image0FillColor.B = Convert.ToByte(Image0FillColorTextBoxB.TextString);
+                Image0FillColor.B = Convert.ToByte(Image0FillColorTextBoxB.DisplayedString);
                 Image0FillColorSliderB.SetCircleToValue(Image0FillColor.B);
             }
             catch { }
@@ -528,7 +528,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image1FillColor.R = Convert.ToByte(Image1FillColorTextBoxR.TextString);
+                Image1FillColor.R = Convert.ToByte(Image1FillColorTextBoxR.DisplayedString);
                 Image1FillColorSliderR.SetCircleToValue(Image1FillColor.R);
             }
             catch { }
@@ -537,7 +537,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image1FillColor.G = Convert.ToByte(Image1FillColorTextBoxG.TextString);
+                Image1FillColor.G = Convert.ToByte(Image1FillColorTextBoxG.DisplayedString);
                 Image1FillColorSliderG.SetCircleToValue(Image1FillColor.G);
             }
             catch { }
@@ -546,7 +546,7 @@ namespace MicroController.Game
         {
             try
             {
-                Image1FillColor.B = Convert.ToByte(Image1FillColorTextBoxB.TextString);
+                Image1FillColor.B = Convert.ToByte(Image1FillColorTextBoxB.DisplayedString);
                 Image1FillColorSliderB.SetCircleToValue(Image1FillColor.B);
             }
             catch { }
@@ -556,7 +556,7 @@ namespace MicroController.Game
         {
             try
             {
-                OutlineColor.R = Convert.ToByte(OutlineColorTextBoxR.TextString);
+                OutlineColor.R = Convert.ToByte(OutlineColorTextBoxR.DisplayedString);
                 OutlineColorSliderR.SetCircleToValue(OutlineColor.R);
             }
             catch { }
@@ -565,7 +565,7 @@ namespace MicroController.Game
         {
             try
             {
-                OutlineColor.G = Convert.ToByte(OutlineColorTextBoxG.TextString);
+                OutlineColor.G = Convert.ToByte(OutlineColorTextBoxG.DisplayedString);
                 OutlineColorSliderG.SetCircleToValue(OutlineColor.G);
             }
             catch { }
@@ -574,7 +574,7 @@ namespace MicroController.Game
         {
             try
             {
-                OutlineColor.B = Convert.ToByte(OutlineColorTextBoxB.TextString);
+                OutlineColor.B = Convert.ToByte(OutlineColorTextBoxB.DisplayedString);
                 OutlineColorSliderB.SetCircleToValue(OutlineColor.B);
             }
             catch { }

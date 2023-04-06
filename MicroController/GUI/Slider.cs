@@ -4,6 +4,8 @@ using SFML.Graphics;
 using SFML.System;
 using MicroController.Mathematics;
 using MicroController.Game;
+using MicroController.InputOutput;
+using SFML.Window;
 
 namespace MicroController.GUI
 {
@@ -74,6 +76,45 @@ namespace MicroController.GUI
 
         private bool StartUp = true;
         private Vector2f Buffer = new Vector2f();
+        public void Update(Vector2i mousePos)
+        {
+            if (StartUp)
+            {
+                this.SetCircleToValue(Value);
+                StartUp = false;
+            }
+            bool mouseState = MouseManager.IsMouseButtonPressed(Mouse.Button.Left);
+            this.Rectangle.Position = this.Position;
+            this.Rectangle.Size = this.Size;
+            this.Circle.PositionY = this.PositionY + Size.Y / 2 - Circle.Radius;
+            this.Value = MathHelper.Map(new Vector2f(0, Size.X), Scale, Circle.Position.X + Circle.Radius - PositionX);
+            CircleOutOfBounds();
+            if (MathHelper.IsMouseInCircle(this.Circle, mousePos) && mouseState)
+            {
+                Clicked = true;
+            }
+            if (!mouseState)
+            {
+                Clicked = false;
+            }
+
+            if (MathHelper.IsMouseInCircle(this.Circle, mousePos))
+            {
+                OnSliderHoveringAnimation();
+            }
+            else
+            {
+                OnSliderDefaultAnimation();
+            }
+            if (Clicked)
+            {
+                Buffer.X = mousePos.X - Circle.Radius;
+                Buffer.Y = Circle.Position.Y;
+                this.Circle.Position = Buffer;
+                OnSliderPressedAnimation();
+            }
+            CircleOutOfBounds();
+        }
         public void Update(Vector2i mousePos, bool mouseState)
         {
             if (StartUp)
@@ -86,7 +127,7 @@ namespace MicroController.GUI
             this.Circle.PositionY = this.PositionY + Size.Y / 2 - Circle.Radius;
             this.Value = MathHelper.Map(new Vector2f(0, Size.X), Scale, Circle.Position.X + Circle.Radius - PositionX);
             CircleOutOfBounds();
-            if (IsMouseInCircle(mousePos) && mouseState)
+            if (MathHelper.IsMouseInCircle(this.Circle, mousePos) && mouseState)
             {
                 Clicked = true;
             }
@@ -95,7 +136,7 @@ namespace MicroController.GUI
                 Clicked = false;
             }
 
-            if (IsMouseInCircle(mousePos))
+            if (MathHelper.IsMouseInCircle(this.Circle, mousePos))
             {
                 OnSliderHoveringAnimation();
             }
@@ -113,6 +154,12 @@ namespace MicroController.GUI
             CircleOutOfBounds();
         }
 
+        public void Draw(RenderWindow window)
+        {
+            Rectangle.Draw(window);
+            Circle.Draw(window);
+        }
+
         public void SetCircleToValue(float value)
         {
             if (value < Scale.X || value > Scale.Y)
@@ -120,18 +167,6 @@ namespace MicroController.GUI
                 return;
             }
             Circle.PositionX = MathHelper.Map(this.Scale, new Vector2f(0, this.Size.X), value) + PositionX - this.Circle.Radius;
-        }
-
-        public void Draw(RenderWindow window)
-        {
-            Rectangle.Draw(window);
-            Circle.Draw(window);
-        }
-
-        private bool IsMouseInCircle(Vector2i mousePos)
-        {
-            double distance = Math.Sqrt(Math.Pow(((Circle.Position.X + Circle.Radius) - mousePos.X), 2) + Math.Pow(((Circle.Position.Y + Circle.Radius) - mousePos.Y), 2));
-            return distance <= Circle.Radius;
         }
 
         private void CircleOutOfBounds()

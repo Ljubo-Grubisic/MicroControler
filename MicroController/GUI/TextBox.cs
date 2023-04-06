@@ -17,15 +17,26 @@ namespace MicroController.GUI
 {
     public class TextBox : Rectangle
     {
-        public string TextString
+        public string DisplayedString
         {
             get { return Text.DisplayedString; }
             set { Text.DisplayedString = value; }
         }
         public Text Text;
 
+        #region Getters and Setters
+        /// <summary>
+        /// Character size of the text
+        /// </summary>
+        public uint CharacterSize { get => Text.CharacterSize; set => Text.CharacterSize = value; }
+        /// <summary>
+        /// Font of the text
+        /// </summary>
+        public Font TextFont { get => Text.Font; set => Text.Font = value; }
+        #endregion
+
         private int Index = 0;
-        private Cursor Cursor;
+        private Cursor EditTextCursor;
 
         public delegate void TextBoxEventHandler(object source, EventArgs args);
 
@@ -35,6 +46,21 @@ namespace MicroController.GUI
         private uint id;
         private static uint counter = 0;
 
+        public TextBox(Vector2f position, Vector2f size) : base(position, size)
+        {
+            this.OutlineThickness = 2f;
+            this.OutlineColor = Color.Black;
+            this.Text = new Text("", MessegeManager.Courier, 14);
+
+            this.Text.Color = Color.Black;
+            this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", MessegeManager.Courier, 14).Height) / 2));
+            this.EditTextCursor = new Cursor(position, Color.Black, 0.5f, 14 + 2f, 12f);
+
+            this.id = counter;
+            counter += 3;
+            if (counter == 99)
+                counter = 0;
+        }
         public TextBox(Vector2f position, Vector2f size, Font font, uint fontSize) : base(position, size)
         {
             this.OutlineThickness = 2f;
@@ -42,8 +68,8 @@ namespace MicroController.GUI
             this.Text = new Text("", font, fontSize);
             this.Text.Color = Color.Black;
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", font, fontSize).Height) / 2));
-            this.Cursor = new Cursor(position, Color.Black, 0.5f, fontSize + 2f, 12f);
-            
+            this.EditTextCursor = new Cursor(position, Color.Black, 0.5f, fontSize + 2f, 12f);
+
             this.id = counter;
             counter += 3;
             if (counter == 99)
@@ -56,29 +82,29 @@ namespace MicroController.GUI
             window.Draw(Text);
             if (Clicked)
             {
-                Cursor.Draw(window);
+                EditTextCursor.Draw(window);
             }
         }
 
-        public void Update(Vector2i mousePos )
+        public void Update(Vector2i mousePos)
         {
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - Text.GetLocalBounds().Height) / 2) - Text.GetLocalBounds().Top);
-            this.Cursor.SizeCenter = Text.CharacterSize + 2f;
-            this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
+            this.EditTextCursor.SizeCenter = Text.CharacterSize + 2f;
+            this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
 
             UpdateIndexBounds();
 
-            if (Index == TextString.Length && TextString.Length != 0)
+            if (Index == DisplayedString.Length && DisplayedString.Length != 0)
             {
-                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect(TextString, Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
+                this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect(DisplayedString, Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
             }
-            else if (TextString != "")
+            else if (DisplayedString != "")
             {
-                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect(TextString.Remove(Index), Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
+                this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect(DisplayedString.Remove(Index), Text.Font, Text.CharacterSize).Width + PositionX + 1, SizeY / 2 + PositionY));
             }
             else if(Index == 0)
             {
-                this.Cursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
+                this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
             }
 
             bool mouseState = MouseManager.OnMouseDown(Mouse.Button.Left, id);
@@ -87,7 +113,7 @@ namespace MicroController.GUI
             {
                 this.Clicked = false;
             }
-            if (IsMouseInBtn(mousePos) && mouseState)
+            if (MathHelper.IsMouseInRectangle(this, mousePos) && mouseState)
             {
                 this.Clicked = true;
             }
@@ -106,7 +132,7 @@ namespace MicroController.GUI
                         input = input.Replace("BackSpace", "");
                         try
                         {
-                            this.TextString = this.TextString.Remove(Index - 1, 1);
+                            this.DisplayedString = this.DisplayedString.Remove(Index - 1, 1);
                             Index--;
                         }
                         catch { }
@@ -121,7 +147,7 @@ namespace MicroController.GUI
                         OnTextBoxEnterPressed();
                     }
 
-                    this.TextString = this.TextString.Insert(Index, input);
+                    this.DisplayedString = this.DisplayedString.Insert(Index, input);
                     Index += input.Length;
                 }
             }
@@ -144,9 +170,9 @@ namespace MicroController.GUI
             {
                 Index = 0;
             }
-            if (Index > TextString.Length && TextString.Length != 0)
+            if (Index > DisplayedString.Length && DisplayedString.Length != 0)
             {
-                Index = TextString.Length;
+                Index = DisplayedString.Length;
             }
         }
 
@@ -156,16 +182,61 @@ namespace MicroController.GUI
                 TextBoxEnterPressed(this, EventArgs.Empty);
         }
 
-        private bool IsMouseInBtn(Vector2i mousePosition)
+        private class Cursor
         {
-            if (mousePosition.X > this.PositionX && mousePosition.X < this.PositionX + this.SizeX &&
-                mousePosition.Y > this.PositionY && mousePosition.Y < this.PositionY + this.SizeY)
+            public Vector2f Position;
+
+            private Line[] Lines = new Line[3];
+            public float SizeCenter;
+            public float SizeSides;
+
+            public Cursor(Vector2f position, Color color, float outlineThickness, float sizeCenter, float sizeSides)
             {
-                return true;
+                this.Position = position;
+                this.SizeCenter = sizeCenter;
+                this.SizeSides = sizeSides;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Lines[i] = new Line();
+                    Lines[i].OutlineColor = color;
+                    Lines[i].OutlineThickness = outlineThickness;
+                }
+                Lines[0].Position0 = new Vector2f(Position.X, Position.Y - (SizeCenter / 2));
+                Lines[0].Position1 = new Vector2f(Position.X, Position.Y + (SizeCenter / 2));
+
+                Lines[1].Position0 = new Vector2f(Position.X - (SizeSides / 2), Position.Y + (SizeCenter / 2));
+                Lines[1].Position1 = new Vector2f(Position.X + (SizeSides / 2), Position.Y + (SizeCenter / 2));
+
+                Lines[2].Position0 = new Vector2f(Position.X - (SizeSides / 2), Position.Y - (SizeCenter / 2));
+                Lines[2].Position1 = new Vector2f(Position.X + (SizeSides / 2), Position.Y - (SizeCenter / 2));
             }
-            else
+
+            public void Update(Vector2f positon)
             {
-                return false;
+                Position = positon;
+                Lines[0].Position0X = Position.X;
+                Lines[0].Position0Y = Position.Y - (SizeCenter / 2);
+                Lines[0].Position1X = Position.X;
+                Lines[0].Position1Y = Position.Y + (SizeCenter / 2);
+
+                Lines[1].Position0X = Position.X - (SizeSides / 2);
+                Lines[1].Position0Y = Position.Y + (SizeCenter / 2);
+                Lines[1].Position1X = Position.X + (SizeSides / 2);
+                Lines[1].Position1Y = Position.Y + (SizeCenter / 2);
+
+                Lines[2].Position0X = Position.X - (SizeSides / 2);
+                Lines[2].Position0Y = Position.Y - (SizeCenter / 2);
+                Lines[2].Position1X = Position.X + (SizeSides / 2);
+                Lines[2].Position1Y = Position.Y - (SizeCenter / 2);
+            }
+
+            public void Draw(RenderWindow window)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Lines[i].Draw(window);
+                }
             }
         }
     }

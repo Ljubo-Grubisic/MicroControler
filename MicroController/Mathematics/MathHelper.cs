@@ -206,5 +206,40 @@ namespace MicroController.Mathematics
 
             return Buffer;
         }
+
+        public static bool IsMouseInRectangle(Vector2f Position, Vector2f Size, Vector2i mousePosition)
+        {
+            if (mousePosition.X > Position.X && mousePosition.X < Position.X + Size.X &&
+                mousePosition.Y > Position.Y && mousePosition.Y < Position.Y + Size.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool IsMouseInRectangle(Rectangle rectangle, Vector2i mousePosition)
+        {
+            if (mousePosition.X > rectangle.Position.X && mousePosition.X < rectangle.Position.X + rectangle.Size.X &&
+                mousePosition.Y > rectangle.Position.Y && mousePosition.Y < rectangle.Position.Y + rectangle.Size.Y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool IsMouseInCircle(Vector2f position, float radius, Vector2i mousePos)
+        {
+            double distance = Math.Sqrt(Math.Pow(((position.X + radius) - mousePos.X), 2) + Math.Pow(((position.Y + radius) - mousePos.Y), 2));
+            return distance <= radius;
+        }
+        public static bool IsMouseInCircle(Circle circle, Vector2i mousePos)
+        {
+            double distance = Math.Sqrt(Math.Pow(((circle.Position.X + circle.Radius) - mousePos.X), 2) + Math.Pow(((circle.Position.Y + circle.Radius) - mousePos.Y), 2));
+            return distance <= circle.Radius;
+        }
     }
 }

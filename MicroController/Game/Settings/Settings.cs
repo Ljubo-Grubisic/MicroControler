@@ -21,7 +21,7 @@ namespace MicroController.Game
     {
         private static Game Game;
 
-        private static readonly string[] Windows = new string[] { "RayCaster", "Map", "Camera" };
+        private static readonly string[] Windows = new string[] { "RayCaster", "Map", "Camera", "Bluetooth" };
         private static string WindowSelected = "RayCaster";
 
         private static Rectangle Rectangle;
@@ -30,6 +30,7 @@ namespace MicroController.Game
         private static Button RayCasterButton;
         private static Button MapButton;
         private static Button CameraButton;
+        private static Button BluetoothButton;
         private static Button CloseSettingsButton;
 
         private static Button ApplySettingsButton;
@@ -50,12 +51,15 @@ namespace MicroController.Game
             RayCasterButton = new Button(new Vector2f(), new Vector2f(), "RayCaster", MessegeManager.Courier, 0);
             MapButton = new Button(new Vector2f(), new Vector2f(), "Map", MessegeManager.Courier, 0);
             CameraButton = new Button(new Vector2f(), new Vector2f(), "Camera", MessegeManager.Courier, 0);
+            BluetoothButton = new Button(new Vector2f(), new Vector2f(), "Bluetooth", MessegeManager.Courier, 0);
+
             CloseSettingsButton = new Button(new Vector2f(), new Vector2f(), "X", MessegeManager.Courier, 0);
             ApplySettingsButton = new Button(new Vector2f(), new Vector2f(), "Apply", MessegeManager.Courier, 0);
 
             RayCasterButton.ButtonClicked += RayCasterButton_ButtonClicked;
             MapButton.ButtonClicked += MapButton_ButtonClicked;
             CameraButton.ButtonClicked += CameraButton_ButtonClicked;
+            BluetoothButton.ButtonClicked += BluetoothButton_ButtonClicked;
             CloseSettingsButton.ButtonClicked += CloseSettingsButton_ButtonClicked;
             ApplySettingsButton.ButtonClicked += ApplySettingsButton_ButtonClicked;
             game.Window.Resized += Window_Resized;
@@ -63,6 +67,7 @@ namespace MicroController.Game
             RayCasterSettingsInit(game);
             MapSettingsInit(game);
             CameraSettingsInit(game);
+            BluetoothSettingsInit(game);
         }
 
 
@@ -93,7 +98,13 @@ namespace MicroController.Game
             CameraButton.Text.CharacterSize = (uint)ButtonSize.Y / 3;
             CameraButton.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
 
-            
+            BluetoothButton.PositionX = ButtonSize.X * 3 + buttonSpacing * 4 + 1;
+            BluetoothButton.PositionY = 2;
+            BluetoothButton.Size = ButtonSize;
+            BluetoothButton.Text.CharacterSize = (uint)ButtonSize.Y / 3;
+            BluetoothButton.Update(Mouse.GetPosition() - game.Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
+
+
             CloseSettingsButton.PositionX = game.Window.Size.X - ButtonSize.Y - 2;
             CloseSettingsButton.PositionY = 2;
             CloseSettingsButton.SizeX = ButtonSize.Y;
@@ -114,6 +125,8 @@ namespace MicroController.Game
             RayCasterButton.Draw(window);
             MapButton.Draw(window);
             CameraButton.Draw(window);
+            BluetoothButton.Draw(window);
+
             CloseSettingsButton.Draw(window);
             ApplySettingsButton.Draw(window);
         }
@@ -134,6 +147,10 @@ namespace MicroController.Game
             {
                 CameraSettingsUpdate(game);
             }
+            if (WindowSelected == Windows[3])
+            {
+                BluetoothSettingsUpdate(game);
+            }
         }
 
         public static void Draw(RenderWindow window)
@@ -152,6 +169,10 @@ namespace MicroController.Game
             {
                 CameraSettingsDraw(window);
             }
+            if (WindowSelected == Windows[3])
+            {
+                BluetoothSettingsDraw(window);
+            }
         }
 
         private static void RayCasterButton_ButtonClicked(object source, EventArgs args)
@@ -167,6 +188,11 @@ namespace MicroController.Game
         private static void CameraButton_ButtonClicked(object source, EventArgs args)
         {
             WindowSelected = Windows[2];
+        }
+
+        private static void BluetoothButton_ButtonClicked(object source, EventArgs args)
+        {
+            WindowSelected = Windows[3];
         }
 
         private static void CloseSettingsButton_ButtonClicked(object source, EventArgs args)

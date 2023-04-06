@@ -77,6 +77,12 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleTables, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ConsoleTables.2.4.2\lib\net40\ConsoleTables.dll</HintPath>
+    </Reference>
+    <Reference Include="Network, Version=6.2.5.23, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Network.6.2.5.23\lib\netstandard2.0\Network.dll</HintPath>
+    </Reference>
     <Reference Include="sfmlnet-audio-2">
       <HintPath>D:\SFML\SFML.Net-2.2-32-bit\SFML.Net-2.2\lib\sfmlnet-audio-2.dll</HintPath>
     </Reference>
@@ -91,12 +97,30 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Entities\Firetruck.cs" />
@@ -105,16 +129,17 @@
     <Compile Include="Game\Entities\Sensors\HC_SR04.cs" />
     <Compile Include="Game\Game\PauseMenu.cs" />
     <Compile Include="Game\Scale.cs" />
+    <Compile Include="Game\Settings\BluetoothSettings.cs" />
     <Compile Include="Game\Settings\CameraSettings.cs" />
     <Compile Include="Game\Settings\MapSettings.cs" />
     <Compile Include="Game\Settings\RayCasterSettings.cs" />
     <Compile Include="Game\Settings\Settings.cs" />
+    <Compile Include="GUI\DropBox.cs" />
     <Compile Include="MainLoop\MainLoop.cs" />
     <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
     <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="GUI\Button.cs" />
-    <Compile Include="GUI\Cursor.cs" />
     <Compile Include="GUI\Slider.cs" />
     <Compile Include="GUI\TextBox.cs" />
     <Compile Include="InputOutput\MouseManager.cs" />
@@ -183,7 +208,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="InputOutput\PortComunication\Wireless\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /y /f "$(ProjectDir)Resources/DLL-s/*.dll" "$(TargetDir)"</PreBuildEvent>

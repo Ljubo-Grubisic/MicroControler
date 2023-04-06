@@ -29,7 +29,7 @@ namespace MicroController.InputOutput.PortComunication
             catch(IOException Exception) 
             {
                 Console.WriteLine(Exception);
-                Console.WriteLine("Failed to open the serial port.");
+                Console.WriteLine("Failed to open the serial port." + Port.PortName);
                 return;
             }
             if (!Started)

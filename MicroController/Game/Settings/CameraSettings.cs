@@ -15,7 +15,7 @@ using SFML.Window;
 
 namespace MicroController.Game
 {
-    public partial class Settings
+    public static partial class Settings
     {
         // Scale
         private static Text ScaleText;
@@ -143,7 +143,7 @@ namespace MicroController.Game
         {
             try
             {
-                Scale = Convert.ToSingle(ScaleTextBox.TextString);
+                Scale = Convert.ToSingle(ScaleTextBox.DisplayedString);
                 ScaleSlider.SetCircleToValue(Scale);
             }
             catch { }
@@ -152,7 +152,7 @@ namespace MicroController.Game
         {
             try
             {
-                Speed = Convert.ToSingle(SpeedTextBox.TextString);
+                Speed = Convert.ToSingle(SpeedTextBox.DisplayedString);
                 SpeedSlider.SetCircleToValue(Speed);
             }
             catch { }
