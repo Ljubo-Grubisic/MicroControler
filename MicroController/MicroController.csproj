@@ -80,6 +80,9 @@
     <Reference Include="ConsoleTables, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ConsoleTables.2.4.2\lib\net40\ConsoleTables.dll</HintPath>
     </Reference>
+    <Reference Include="InTheHand.Net.Bluetooth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ea38caa273134499, processorArchitecture=MSIL">
+      <HintPath>..\packages\InTheHand.Net.Bluetooth.4.0.34.1\lib\net461\InTheHand.Net.Bluetooth.dll</HintPath>
+    </Reference>
     <Reference Include="Network, Version=6.2.5.23, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Network.6.2.5.23\lib\netstandard2.0\Network.dll</HintPath>
     </Reference>
@@ -135,6 +138,9 @@
     <Compile Include="Game\Settings\RayCasterSettings.cs" />
     <Compile Include="Game\Settings\Settings.cs" />
     <Compile Include="GUI\DropBox.cs" />
+    <Compile Include="InputOutput\KeyboardManager.cs" />
+    <Compile Include="InputOutput\PortComunication\Wireless\BluetoothEventArgs.cs" />
+    <Compile Include="InputOutput\PortComunication\Wireless\Bluetooth.cs" />
     <Compile Include="MainLoop\MainLoop.cs" />
     <Compile Include="MainLoop\GameTime.cs" />
     <Compile Include="Game\Entities\Camera.cs" />
@@ -144,7 +150,7 @@
     <Compile Include="GUI\TextBox.cs" />
     <Compile Include="InputOutput\MouseManager.cs" />
     <Compile Include="SFML Helper\ImageHelper.cs" />
-    <Compile Include="InputOutput\KeyboardManager.cs" />
+    <Compile Include="InputOutput\KeyboardManagerOLD.cs" />
     <Compile Include="Game\Maping\Map.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />
@@ -208,9 +214,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="InputOutput\PortComunication\Wireless\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /y /f "$(ProjectDir)Resources/DLL-s/*.dll" "$(TargetDir)"</PreBuildEvent>

@@ -23,7 +23,7 @@ namespace MicroController.GUI
         public Rectangle Rectangle;
         public Circle Circle;
 
-        public delegate void SliderEventHandler(object sender, EventArgs args);
+        public delegate void SliderEventHandler(Slider sender, EventArgs args);
 
         // Animation events
         public event SliderEventHandler SliderDefaultAnimation;
@@ -83,7 +83,7 @@ namespace MicroController.GUI
                 this.SetCircleToValue(Value);
                 StartUp = false;
             }
-            bool mouseState = MouseManager.IsMouseButtonPressed(Mouse.Button.Left);
+            bool mouseState = MouseManager.IsButtonDown(Mouse.Button.Left);
             this.Rectangle.Position = this.Position;
             this.Rectangle.Size = this.Size;
             this.Circle.PositionY = this.PositionY + Size.Y / 2 - Circle.Radius;

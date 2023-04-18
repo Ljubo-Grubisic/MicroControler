@@ -237,37 +237,37 @@ namespace MicroController.Game
         }
         private void KeyBoardInput(GameTime time)
         {
-            if (KeyboardManager.OnKeyPress(Keyboard.Key.Left, 1))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Left))
             {
                 SquareStarting.Y--;
             }
-            if (KeyboardManager.OnKeyPress(Keyboard.Key.Right, 2))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Right))
             {
                 SquareStarting.Y++;
             }
-            if (KeyboardManager.OnKeyPress(Keyboard.Key.Up, 3))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Up))
             {
                 SquareStarting.X--;
             }
-            if (KeyboardManager.OnKeyPress(Keyboard.Key.Down, 4))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Down))
             {
                 SquareStarting.X++;
             }
 
 
-            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Left, time, 0, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Left, 1))
             {
                 SquareStarting.Y--;
             }
-            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Right, time, 1, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Right, 1))
             {
                 SquareStarting.Y++;
             }
-            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Up, time, 2, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Up, 1))
             {
                 SquareStarting.X--;
             }
-            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Down, time, 3, 1))
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.Down, 1))
             {
                 SquareStarting.X++;
             }

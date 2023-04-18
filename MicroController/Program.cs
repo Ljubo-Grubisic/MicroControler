@@ -9,10 +9,12 @@ namespace MicroController
 {
     internal class Program
     {
+        public static Game.Game Game;
+
         static void Main(string[] args)
         {
-            Game.Game game = new Game.Game(1024, 512, "MicroControler");
-            game.Run();
+            Game = new Game.Game(1024, 512, "MicroControler");
+            Game.Run();
         }
     }
 }

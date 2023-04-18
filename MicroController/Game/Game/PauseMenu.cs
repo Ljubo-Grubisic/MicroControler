@@ -121,7 +121,7 @@ namespace MicroController.Game
 
         public static void OpenClosePauseMenu(Game game)
         {
-            if (KeyboardManager.OnKeyPress(Keyboard.Key.Escape, 5))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Escape))
             {
                 if (!IsSettingsOpen)
                 {

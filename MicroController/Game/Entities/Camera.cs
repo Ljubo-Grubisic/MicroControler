@@ -82,7 +82,7 @@ namespace MicroController.Game.Entities
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 180;
 
-            if (KeyboardManager.IsKeyPressed(Keyboard.Key.A))
+            if (KeyboardManager.IsKeyDown(Keyboard.Key.A))
             {
                 this.Rotation -= 0.05f * gameTime.DeltaTime * 75;
                 if (this.Rotation < 0)
@@ -92,7 +92,7 @@ namespace MicroController.Game.Entities
                 this.DeltaPosition.X = (float)(Math.Cos(this.Rotation));
                 this.DeltaPosition.Y = (float)(Math.Sin(this.Rotation));
             }
-            if (KeyboardManager.IsKeyPressed(Keyboard.Key.D))
+            if (KeyboardManager.IsKeyDown(Keyboard.Key.D))
             {
                 this.Rotation += 0.05f * gameTime.DeltaTime * 75;
                 if (this.Rotation > 2f * (float)Math.PI)
@@ -102,12 +102,12 @@ namespace MicroController.Game.Entities
                 this.DeltaPosition.X = (float)(Math.Cos(this.Rotation));
                 this.DeltaPosition.Y = (float)(Math.Sin(this.Rotation));
             }
-            if (KeyboardManager.IsKeyPressed(Keyboard.Key.W))
+            if (KeyboardManager.IsKeyDown(Keyboard.Key.W))
             {
                 this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
                 this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
             }
-            if (KeyboardManager.IsKeyPressed(Keyboard.Key.S))
+            if (KeyboardManager.IsKeyDown(Keyboard.Key.S))
             {
                 this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
                 this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;

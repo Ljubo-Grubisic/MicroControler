@@ -1,96 +1,128 @@
-﻿using MicroController.MainLooping;
-using SFML.Graphics;
-using SFML.Window;
-using System.IO;
+﻿using SFML.Window;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using static SFML.Window.Keyboard;
 
 namespace MicroController.InputOutput
 {
     public static class KeyboardManager
     {
-        public static string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpaceReturn";
+        private static bool[] KeysPressed = new bool[(int)Key.KeyCount];
+        private static bool[] KeysReleased = new bool[(int)Key.KeyCount];
 
-        private static bool[] KeyHandlersPress = new bool[100];
-        private static float[] StartTime = new float[32];
-        private static bool[] KeyHandlersTime = new bool[32];
+        private static bool[] KeysHandler = new bool[(int)Key.KeyCount];
+        private static bool[] KeysHandlerDown = new bool[(int)Key.KeyCount];
+        private static bool[] KeysHandlerUp = new bool[(int)Key.KeyCount];
 
-        /// <summary>
-        /// Returns true only on key press and not if you hold it
-        /// </summary>
-        /// <param name="key">The key you want to check</param>
-        /// <param name="id">Index of the KeyHandler can range from 0 to 31 always give a unique id</param>
-        /// <returns></returns>
-        public static bool OnKeyPress(Keyboard.Key key, int id)
+        private static bool[] UpHandler = new bool[(int)Key.KeyCount];
+        private static float[] TimeHandler = new float[(int)Key.KeyCount];
+
+        private static void UpdateKeyPressed()
         {
-            if (!Keyboard.IsKeyPressed(key))
+            for (int i = 0; i < (int)Key.KeyCount; i++)
             {
-                KeyHandlersPress[id] = true;
-                return false;
-            }
-            else if (Keyboard.IsKeyPressed(key))
-            {
-                if (KeyHandlersPress[id])
+                if (!IsKeyPressed((Key)i))
                 {
-                    KeyHandlersPress[id] = false;
-                    return true;
+                    KeysHandlerDown[i] = true;
+                    KeysPressed[i] = false;
                 }
                 else
                 {
-                    return false;
+                    if (KeysHandlerDown[i])
+                    {
+                        KeysHandlerDown[i] = false;
+                        KeysPressed[i] = true;
+                    }
+                    else
+                    {
+                        KeysPressed[i] = false;
+                    }
                 }
             }
-            else
+        }
+        private static void UpdateKeyReleased()
+        {
+            for (int i = 0; i < (int)Key.KeyCount; i++)
             {
-                return false;
+                // Key Relased
+                if (!IsKeyDown((Key)i))
+                {
+                    KeysHandlerUp[i] = true;
+                }
+                else
+                {
+                    if (KeysHandlerUp[i])
+                    {
+                        KeysHandlerUp[i] = false;
+                        UpHandler[i] = true;
+                    }
+                }
+
+                if (UpHandler[i] && !IsKeyDown((Key)i))
+                {
+                    UpHandler[i] = false;
+                    KeysReleased[i] = true;
+                }
+                else
+                {
+                    KeysReleased[i] = false;
+                }
             }
         }
 
-        private static bool[] KeyHandlersPressTextBox = new bool[300];
-        public static bool OnKeyPressTextBoxOnly(Keyboard.Key key, int id)
+        /// <summary>
+        /// Returns true only when the key is pressed
+        /// </summary>
+        /// <param name="key">The key you want to check</param>
+        /// <returns></returns>
+        public static bool OnKeyPressed(Key key)
         {
-            if (!Keyboard.IsKeyPressed(key))
-            {
-                KeyHandlersPressTextBox[id] = true;
-                return false;
-            }
-            else if (Keyboard.IsKeyPressed(key))
-            {
-                if (KeyHandlersPressTextBox[id])
-                {
-                    KeyHandlersPressTextBox[id] = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            UpdateKeyPressed();
+            return KeysPressed[(int)key];
+        }
+
+        /// <summary>
+        /// Returns true only when the key is released
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool OnKeyReleased(Key key)
+        {
+            UpdateKeyReleased();
+            return KeysReleased[(int)key];
+        }
+
+        /// <summary>
+        /// Returns true if the key is down
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool IsKeyDown(Key key)
+        {
+            return Keyboard.IsKeyPressed(key);
         }
 
         /// <summary>
         /// Returns true after you have pressed the button for 1 s
         /// </summary>
         /// <param name="key">The key you want to check</param>
-        /// <param name="id">Index of the KeyHandler can range from 0 to 31 always give a unique id the id only needs to be unique for this function</param>
+        /// <param name="timeTillTrue">The time it will take until the function will return true</param>
         /// <returns></returns>
-        public static bool OnKeyDownForTime(Keyboard.Key key, GameTime time, int id, float timeTillTrue)
+        public static bool OnKeyDownForTime(Key key, float timeTillTrue)
         {
-            if (!IsKeyPressed(key))
+            UpdateKeyPressed();
+            if (OnKeyPressed(key))
             {
-                StartTime[id] = 0;
-                KeyHandlersTime[id] = false;
+                TimeHandler[(int)key] = Program.Game.GameTime.TotalTimeElapsed;
             }
-            if (IsKeyPressed(key) && !KeyHandlersTime[id])
+            if (!IsKeyDown(key))
             {
-                StartTime[id] = time.TotalTimeElapsed;
-                KeyHandlersTime[id] = true;
-                return false;
+                TimeHandler[(int)key] = 0;
             }
-            if (IsKeyPressed(key) && time.TotalTimeElapsed - StartTime[id] > timeTillTrue)
+            if (IsKeyDown(key) && Program.Game.GameTime.TotalTimeElapsed - TimeHandler[(int)key] > timeTillTrue)
             {
                 return true;
             }
@@ -100,36 +132,31 @@ namespace MicroController.InputOutput
             }
         }
 
-        public static bool IsKeyPressed(Keyboard.Key key)
-        {
-            return Keyboard.IsKeyPressed(key);
-        }
-
-        public static string ReadInput(string input)
+        public static string ReadInput(string input, string acceptableCharacters)
         {
             string output;
 
-            output = Keys(input);
+            output = Keys(acceptableCharacters);
 
             return output;
         }
 
-        private static bool[] LockKeys = new bool[256];
-        private static string Keys(string input)
+
+        private static string Keys(string acceptableCharacters)
         {
-            string output = input;
+            string output = "";
             string buffer;
 
             // Increment LockKeys for each key
-            for (int i = 0; i < 256; i++)
+            for (int i = 0; i < (int)Key.KeyCount; i++)
             {
-                if (!IsKeyPressed((Key)i))
+                if (!IsKeyDown((Key)i))
                 {
-                    LockKeys[i] = true;
+                    KeysHandler[i] = true;
                 }
-                if (IsKeyPressed((Key)i))
+                if (IsKeyDown((Key)i))
                 {
-                    if (LockKeys[i])
+                    if (KeysHandler[i])
                     {
                         buffer = ((Key)i).ToString();
                         if (buffer.Contains("Num"))
@@ -140,12 +167,12 @@ namespace MicroController.InputOutput
                         {
                             buffer = buffer.Replace("Period", ".");
                         }
-                        if (Alphabet.Contains(buffer))
+                        if (acceptableCharacters.Contains(buffer))
                         {
                             output += buffer;
                         }
                     }
-                    LockKeys[i] = false;
+                    KeysHandler[i] = false;
                 }
             }
             return output;
