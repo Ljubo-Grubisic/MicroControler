@@ -150,7 +150,6 @@
     <Compile Include="GUI\TextBox.cs" />
     <Compile Include="InputOutput\MouseManager.cs" />
     <Compile Include="SFML Helper\ImageHelper.cs" />
-    <Compile Include="InputOutput\KeyboardManagerOLD.cs" />
     <Compile Include="Game\Maping\Map.cs" />
     <Compile Include="Game\RayCasting\RayCaster.cs" />
     <Compile Include="Mathematics\MathHelper.cs" />

@@ -36,9 +36,9 @@ namespace MicroController.GUI
         public Font TextFont { get => Text.Font; set => Text.Font = value; }
         #endregion
 
-        private float index = 0;
-        public int Index { get => (int)index; set => index = value; }
-        
+        public int Index { get; set; }
+        private float DeleteDelay { get; set; } = 1;
+
         private Cursor EditTextCursor;
 
         public delegate void TextBoxEventHandler(TextBox source, EventArgs args);
@@ -46,7 +46,7 @@ namespace MicroController.GUI
 
         private bool Clicked = false;
 
-        public static string AcceptableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpaceReturn";
+        public string AcceptableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpaceReturn";
 
         public TextBox(Vector2f position, Vector2f size) : base(position, size)
         {
@@ -98,20 +98,17 @@ namespace MicroController.GUI
                 this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
             }
 
-
-            if (MathHelper.IsMouseInRectangle(this, mousePos))
+            if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                if (MouseManager.OnButtonPressed(Mouse.Button.Left))
+                if (MathHelper.IsMouseInRectangle(this, mousePos))
                 {
-                    this.Clicked = true;
+                    Clicked = true;
+                }
+                else
+                {
+                    Clicked = false;
                 }
             }
-            else
-            {
-
-            }
-            
-                
 
             if (Clicked)
             {
@@ -157,6 +154,20 @@ namespace MicroController.GUI
             if (KeyboardManager.OnKeyPressed(Keyboard.Key.Right))
             {
                 Index++;
+            }
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.BackSpace, 0.7f))
+            {
+                DeleteDelay -= 0.02f * Program.Game.GameTime.TotalTimeElapsed;
+                if (DeleteDelay < 0)
+                {
+                    try
+                    {
+                        this.DisplayedString = this.DisplayedString.Remove(Index - 1, 1);
+                        this.Index--;
+                    }
+                    catch { }
+                    DeleteDelay = 1;
+                }
             }
         }
         private void UpdateIndexBounds()

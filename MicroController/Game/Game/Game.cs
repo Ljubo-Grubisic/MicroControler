@@ -55,8 +55,6 @@ namespace MicroController.Game
 
         private Bluetooth Bluetooth;
 
-        private TextBox TextBox;
-
         private int WindowState = 0;
         public bool IsGamePaused = false;
 
@@ -69,7 +67,9 @@ namespace MicroController.Game
 
         protected override void LoadContent()
         {
+            Window.SetKeyRepeatEnabled(false);
             MessegeManager.LoadContent();
+            KeyboardManager.Init();
             Window.Resized += Window_Resized;
         }
 
@@ -107,10 +107,6 @@ namespace MicroController.Game
 
             InBluetoothText = new Text("OUTTEXT: ", MessegeManager.Arial, 15) { Position = new Vector2f(10, 285), Color = Color.Black };
             ButtonRead = new Button(new Vector2f(10, 220), new Vector2f(200, 50), "READ");
-
-
-            TextBox = new TextBox(new Vector2f(300, 100), new Vector2f(200, 50));
-
 
             SelectButton.ButtonClicked += SelectButton_ButtonClicked;
 
@@ -215,7 +211,6 @@ namespace MicroController.Game
 
 
             SelectTextBox.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet);
-            TextBox.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet);
 
             //SelectButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
 
@@ -226,6 +221,8 @@ namespace MicroController.Game
             //OffButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
 
             //ButtonRead.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
+
+            KeyboardManager.Update();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -248,13 +245,6 @@ namespace MicroController.Game
             {
                 PauseMenu.Draw(this.Window);
             }
-
-            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Escape))
-            {
-                Console.WriteLine("LINE");
-            }
-
-            TextBox.Draw(Window);
 
             //Window.Draw(PortText);
             SelectTextBox.Draw(Window);

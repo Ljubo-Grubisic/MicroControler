@@ -1,9 +1,4 @@
 ﻿using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SFML.Window.Keyboard;
 
 namespace MicroController.InputOutput
@@ -20,57 +15,29 @@ namespace MicroController.InputOutput
         private static bool[] UpHandler = new bool[(int)Key.KeyCount];
         private static float[] TimeHandler = new float[(int)Key.KeyCount];
 
-        private static void UpdateKeyPressed()
+        public static void Init()
+        {
+            Program.Game.Window.KeyPressed += Window_KeyPressed;
+            Program.Game.Window.KeyReleased += Window_KeyReleased;
+        }
+
+        public static void Update()
         {
             for (int i = 0; i < (int)Key.KeyCount; i++)
             {
-                if (!IsKeyPressed((Key)i))
-                {
-                    KeysHandlerDown[i] = true;
-                    KeysPressed[i] = false;
-                }
-                else
-                {
-                    if (KeysHandlerDown[i])
-                    {
-                        KeysHandlerDown[i] = false;
-                        KeysPressed[i] = true;
-                    }
-                    else
-                    {
-                        KeysPressed[i] = false;
-                    }
-                }
+                KeysPressed[i] = false;
+                KeysReleased[i] = false;
             }
         }
-        private static void UpdateKeyReleased()
-        {
-            for (int i = 0; i < (int)Key.KeyCount; i++)
-            {
-                // Key Relased
-                if (!IsKeyDown((Key)i))
-                {
-                    KeysHandlerUp[i] = true;
-                }
-                else
-                {
-                    if (KeysHandlerUp[i])
-                    {
-                        KeysHandlerUp[i] = false;
-                        UpHandler[i] = true;
-                    }
-                }
 
-                if (UpHandler[i] && !IsKeyDown((Key)i))
-                {
-                    UpHandler[i] = false;
-                    KeysReleased[i] = true;
-                }
-                else
-                {
-                    KeysReleased[i] = false;
-                }
-            }
+        private static void Window_KeyPressed(object sender, KeyEventArgs e)
+        {
+            KeysPressed[(int)e.Code] = true;
+        }
+
+        private static void Window_KeyReleased(object sender, KeyEventArgs e)
+        {
+            KeysReleased[(int)e.Code] = true;
         }
 
         /// <summary>
@@ -80,7 +47,6 @@ namespace MicroController.InputOutput
         /// <returns></returns>
         public static bool OnKeyPressed(Key key)
         {
-            UpdateKeyPressed();
             return KeysPressed[(int)key];
         }
 
@@ -91,7 +57,6 @@ namespace MicroController.InputOutput
         /// <returns></returns>
         public static bool OnKeyReleased(Key key)
         {
-            UpdateKeyReleased();
             return KeysReleased[(int)key];
         }
 
@@ -113,7 +78,6 @@ namespace MicroController.InputOutput
         /// <returns></returns>
         public static bool OnKeyDownForTime(Key key, float timeTillTrue)
         {
-            UpdateKeyPressed();
             if (OnKeyPressed(key))
             {
                 TimeHandler[(int)key] = Program.Game.GameTime.TotalTimeElapsed;
