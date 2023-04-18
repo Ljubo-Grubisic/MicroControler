@@ -12,6 +12,7 @@ using MicroController.Mathematics;
 using SFML.Window;
 using System.Runtime.InteropServices;
 using System.Net;
+using MicroController.MainLooping;
 
 namespace MicroController.GUI
 {
@@ -35,31 +36,26 @@ namespace MicroController.GUI
         public Font TextFont { get => Text.Font; set => Text.Font = value; }
         #endregion
 
-        private int Index = 0;
+        public int Index { get; set; }
+        private float DeleteDelay { get; set; } = 1;
+
         private Cursor EditTextCursor;
 
-        public delegate void TextBoxEventHandler(object source, EventArgs args);
-
+        public delegate void TextBoxEventHandler(TextBox source, EventArgs args);
         public event TextBoxEventHandler TextBoxEnterPressed;
 
         private bool Clicked = false;
-        private uint id;
-        private static uint counter = 0;
+
+        public string AcceptableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.BackSpaceReturn";
 
         public TextBox(Vector2f position, Vector2f size) : base(position, size)
         {
             this.OutlineThickness = 2f;
             this.OutlineColor = Color.Black;
             this.Text = new Text("", MessegeManager.Courier, 14);
-
             this.Text.Color = Color.Black;
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", MessegeManager.Courier, 14).Height) / 2));
             this.EditTextCursor = new Cursor(position, Color.Black, 0.5f, 14 + 2f, 12f);
-
-            this.id = counter;
-            counter += 3;
-            if (counter == 99)
-                counter = 0;
         }
         public TextBox(Vector2f position, Vector2f size, Font font, uint fontSize) : base(position, size)
         {
@@ -69,11 +65,6 @@ namespace MicroController.GUI
             this.Text.Color = Color.Black;
             this.Text.Position = new Vector2f(PositionX, PositionY + ((SizeY - MessegeManager.GetTextRect("A", font, fontSize).Height) / 2));
             this.EditTextCursor = new Cursor(position, Color.Black, 0.5f, fontSize + 2f, 12f);
-
-            this.id = counter;
-            counter += 3;
-            if (counter == 99)
-                counter = 0;
         }
 
         public new void Draw(RenderWindow window)
@@ -107,15 +98,16 @@ namespace MicroController.GUI
                 this.EditTextCursor.Update(new Vector2f(MessegeManager.GetTextRect("", Text.Font, Text.CharacterSize).Width + PositionX + 3, SizeY / 2 + PositionY));
             }
 
-            bool mouseState = MouseManager.OnMouseDown(Mouse.Button.Left, id);
-
-            if (mouseState && Clicked)
+            if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                this.Clicked = false;
-            }
-            if (MathHelper.IsMouseInRectangle(this, mousePos) && mouseState)
-            {
-                this.Clicked = true;
+                if (MathHelper.IsMouseInRectangle(this, mousePos))
+                {
+                    Clicked = true;
+                }
+                else
+                {
+                    Clicked = false;
+                }
             }
 
             if (Clicked)
@@ -123,7 +115,7 @@ namespace MicroController.GUI
                 UpdateIndexKeys();
                 UpdateIndexBounds();
 
-                string input = KeyboardManager.ReadInput("");
+                string input = KeyboardManager.ReadInput("", AcceptableCharacters);
 
                 if (input != "")
                 {
@@ -148,20 +140,34 @@ namespace MicroController.GUI
                     }
 
                     this.DisplayedString = this.DisplayedString.Insert(Index, input);
-                    Index += input.Length;
+                    this.Index += input.Length;
                 }
             }
         }
 
         private void UpdateIndexKeys()
         {
-            if (KeyboardManager.OnKeyPressTextBoxOnly(Keyboard.Key.Left, (int)id + 1))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Left))
             {
                 Index--;
             }
-            if (KeyboardManager.OnKeyPressTextBoxOnly(Keyboard.Key.Right, (int)id + 2))
+            if (KeyboardManager.OnKeyPressed(Keyboard.Key.Right))
             {
                 Index++;
+            }
+            if (KeyboardManager.OnKeyDownForTime(Keyboard.Key.BackSpace, 0.7f))
+            {
+                DeleteDelay -= 0.02f * Program.Game.GameTime.TotalTimeElapsed;
+                if (DeleteDelay < 0)
+                {
+                    try
+                    {
+                        this.DisplayedString = this.DisplayedString.Remove(Index - 1, 1);
+                        this.Index--;
+                    }
+                    catch { }
+                    DeleteDelay = 1;
+                }
             }
         }
         private void UpdateIndexBounds()

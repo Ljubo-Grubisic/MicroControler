@@ -12,20 +12,20 @@ namespace MicroController.InputOutput
     public static class MouseManager
     {
         public static Vector2i MouseOffSet = new Vector2i(8, 30);
-        private static bool[] KeyHandlersPress = new bool[100];
+        private static bool[] KeyHandlers = new bool[(int)Mouse.Button.ButtonCount];
 
-        public static bool OnMouseDown(Mouse.Button button, uint id)
+        public static bool OnButtonPressed(Mouse.Button button)
         {
-            if (!Mouse.IsButtonPressed(button))
+            if (!IsButtonDown(button))
             {
-                KeyHandlersPress[id] = true;
+                KeyHandlers[(int)button] = true;
                 return false;
             }
-            else if (Mouse.IsButtonPressed(button))
+            else if (IsButtonDown(button))
             {
-                if (KeyHandlersPress[id])
+                if (KeyHandlers[(int)button])
                 {
-                    KeyHandlersPress[id] = false;
+                    KeyHandlers[(int)button] = false;
                     return true;
                 }
                 else
@@ -37,9 +37,10 @@ namespace MicroController.InputOutput
             {
                 return false;
             }
+           
         }
 
-        public static bool IsMouseButtonPressed(Mouse.Button button)
+        public static bool IsButtonDown(Mouse.Button button)
         {
             return Mouse.IsButtonPressed(button);
         }

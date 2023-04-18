@@ -11,8 +11,6 @@ namespace MicroController.InputOutput.PortComunication
         public SerialPort Port;
         public string Info = "";
 
-        private bool Started = false;
-
         public Serial(string portName, int baudRate) 
         { 
             Port = new SerialPort(portName, baudRate);
@@ -32,10 +30,9 @@ namespace MicroController.InputOutput.PortComunication
                 Console.WriteLine("Failed to open the serial port." + Port.PortName);
                 return;
             }
-            if (!Started)
+            if (ReadThread.ThreadState == (ThreadState.Unstarted | ThreadState.Background))
             {
                 ReadThread.Start();
-                Started = true;
             }
             else
             {

@@ -30,7 +30,7 @@ namespace MicroController.GUI
         public Color TextColorOnHover = new Color(Color.White);
         public Color TextColorOnClick = new Color(Color.Blue);
 
-        public delegate void ButtonEventHandler(object source, EventArgs args);
+        public delegate void ButtonEventHandler(Button source, EventArgs args);
 
         // Logic events
         public event ButtonEventHandler ButtonClicked;
@@ -67,7 +67,7 @@ namespace MicroController.GUI
 
         public void Update(Vector2i mousePos)
         {
-            bool mouseState = MouseManager.IsMouseButtonPressed(Mouse.Button.Left);
+            bool mouseState = MouseManager.IsButtonDown(Mouse.Button.Left);
             Text.Position = MathHelper.CenterTextInRectangle(Position, Size, MessegeManager.GetTextRect(DisplayedString, MessegeManager.Courier, Text.CharacterSize));
             Text.Color = TextColor;
             OnButtonDefalutAnimation();

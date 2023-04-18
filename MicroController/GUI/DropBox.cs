@@ -129,6 +129,9 @@ namespace MicroController.GUI
                 UpdateDropBoxItemsButtonsPosition();
             }
         }
+        /// <summary>
+        /// The displayed strings for each option
+        /// </summary>
         public List<string> DisplayedStrings
         {
             get => displayedStrings;
@@ -151,7 +154,6 @@ namespace MicroController.GUI
         /// <param name="position"></param>
         /// <param name="size"></param>
         /// <param name="displayedStrings"></param>
-        /// <param name="displayedStringDefault">The default string showed when no options are selected</param>
         public DropBox(Vector2f position, Vector2f size, List<string> displayedStrings)
         {
             this.position = position;
@@ -178,7 +180,7 @@ namespace MicroController.GUI
 
         public void Update(Vector2i mousePos)
         {
-            bool mouseState = MouseManager.IsMouseButtonPressed(Mouse.Button.Left);
+            bool mouseState = MouseManager.IsButtonDown(Mouse.Button.Left);
 
             DropBoxButton.Update(mousePos);
             if (MathHelper.IsMouseInRectangle(this.DropBoxButton, mousePos) && mouseState)
@@ -281,6 +283,7 @@ namespace MicroController.GUI
             for (int i = 0; i < DropBoxItemsButton.Count; i++)
             {
                 DropBoxItemsButton[i].Position = this.Position + new Vector2f(0, this.Size.Y * (i + 1));
+                DropBoxItemsButton[i].Size = this.Size;
             }
         }
 
