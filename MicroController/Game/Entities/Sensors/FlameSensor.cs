@@ -1,13 +1,11 @@
-﻿using MicroController.Mathematics;
-using System.Threading.Tasks;
-using MicroController.Game.Entities;
-using MicroController.Shapes;
+﻿using MicroController.Helpers;
+using MicroController.System;
+using MicroController.Graphics;
 using SFML.Graphics;
-using MicroController.SFMLHelper;
 using SFML.Window;
 using SFML.System;
 
-namespace MicroController.Game.Entities.Sensors
+namespace MicroController.Game.Entities
 {
     public class FlameSensor : Entity
     {
@@ -26,15 +24,13 @@ namespace MicroController.Game.Entities.Sensors
             this.Rectangle = new Rectangle(Position, Size, SensorTexture);
         }
 
-        public void Draw(RenderWindow window)
+        public override void Draw(RenderWindow window)
         {
             this.Rectangle.Draw(window);
         }
 
-        public new void Update(Map map)
+        protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            base.Update(map);
-
             this.Size = SizeInCm * Scale.NumPixelPerCm;
             this.Rectangle.Size = this.Size;
             this.Rectangle.Position = this.DrawingPosition;

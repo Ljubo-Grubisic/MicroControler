@@ -1,12 +1,12 @@
-﻿using MicroController.Mathematics;
-using MicroController.Shapes;
+﻿using MicroController.Helpers;
+using MicroController.Graphics;
 using SFML.System;
 using SFML.Graphics;
 using System;
-using MicroController.MainLooping;
-using MicroController.InputOutput;
+using MicroController.System;
+using MicroController.Helpers;
 using SFML.Window;
-using MicroController.SFMLHelper;
+using MicroController.Helpers;
 using System.Management.Instrumentation;
 using Microsoft.Win32;
 
@@ -67,15 +67,13 @@ namespace MicroController.Game.Entities
             this.Rectangle = new Rectangle(Position, Size, CameraTexture);
         }
 
-        public void Draw(RenderWindow window)
+        public override void Draw(RenderWindow window)
         {
             this.Rectangle.Draw(window);
         }
 
-        public void Update(GameTime gameTime, Map map)
+        protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            base.Update(map);
-
             this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * MicroController.Game.Scale.NumPixelPerCm;
             this.Size = this.Rectangle.Size;
             this.Rectangle.Position = this.DrawingPosition;

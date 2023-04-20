@@ -1,13 +1,8 @@
-﻿using MicroController.Mathematics;
-using MicroController.SFMLHelper;
-using MicroController.Shapes;
+﻿using MicroController.Helpers;
+using MicroController.Graphics;
+using MicroController.System;
 using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicroController.Game.Entities
 {
@@ -33,15 +28,13 @@ namespace MicroController.Game.Entities
             this.Rectangle = new Rectangle(Position, Size) { FillColor = Color.Red };
         }
 
-        public void Draw(RenderWindow window)
+        public override void Draw(RenderWindow window)
         {
             this.Rectangle.Draw(window);
         }
 
-        public new void Update(Map map)
+        protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            base.Update(map);
-
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 180;
