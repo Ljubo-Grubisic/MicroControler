@@ -2,10 +2,11 @@
 using SFML.System;
 using System;
 using SFML.Window;
+using MicroController.System;
 
 namespace MicroController.Game.Entities
 {
-    public class Entity
+    public abstract class Entity
     {
         private Vector2f position;
         private Vector2f size;
@@ -61,10 +62,16 @@ namespace MicroController.Game.Entities
         protected virtual void OnRotationChange() { }
         protected virtual void OnSizeChange() { }
 
-        protected void Update(Map map)
+        public void Update(Map map, GameTime gameTime)
         {
             UpdateDrawingPosition(map);
+
+            OnUpdate(map, gameTime);
         }
+
+        public abstract void Draw(RenderWindow window);
+
+        protected abstract void OnUpdate(Map map, GameTime gameTime);
 
         private void UpdateDrawingPosition(Map map)
         {

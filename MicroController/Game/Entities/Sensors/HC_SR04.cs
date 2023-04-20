@@ -1,11 +1,11 @@
-﻿using MicroController.Shapes;
+﻿using MicroController.Graphics;
 using SFML.Graphics;
-using MicroController.SFMLHelper;
+using MicroController.Helpers;
 using SFML.Window;
 using SFML.System;
-using MicroController.Mathematics;
+using MicroController.System;
 
-namespace MicroController.Game.Entities.Sensors
+namespace MicroController.Game.Entities
 {
     public class HC_SR04 : Entity
     {
@@ -30,15 +30,13 @@ namespace MicroController.Game.Entities.Sensors
             this.Rectangle = new Rectangle(Position, Size, SensorTexture);
         }
 
-        public void Draw(RenderWindow window)
+        public override void Draw(RenderWindow window)
         {
             this.Rectangle.Draw(window);
         }
 
-        public new void Update(Map map)
+        protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            base.Update(map);
-
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 180;
