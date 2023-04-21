@@ -1,13 +1,12 @@
-﻿using MicroController.Game.Entities;
+﻿using microController.game.entities;
 using SFML.Graphics;
 using SFML.System;
 using System;
-using MicroController.Helpers;
-using MicroController.Helpers;
-using MicroController.System;
+using microController.helpers;
+using microController.system;
 using SFML.Window;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public class Map
     {

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MicroController.Game.Entities;
+using microController.game.entities;
 using System.Runtime.CompilerServices;
 using SFML.System;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public static class Scale
     {

@@ -1,11 +1,11 @@
-﻿using MicroController.Helpers;
-using MicroController.System;
-using MicroController.Graphics;
+﻿using microController.helpers;
+using microController.system;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public class FlameSensor : Entity
     {

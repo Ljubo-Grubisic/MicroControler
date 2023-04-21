@@ -6,12 +6,12 @@ using System.Reflection.Emit;
 using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
-using MicroController.System;
+using microController.system;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using MicroController.Helpers;
-using MicroController.Graphics;
+using microController.helpers;
+using microController.graphics;
 
-namespace MicroController.Helpers
+namespace microController.helpers
 {
     public static class MessegeManager
     {

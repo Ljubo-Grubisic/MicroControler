@@ -3,7 +3,7 @@ using System.IO.Ports;
 using System.IO;
 using System.Threading;
 
-namespace MicroController.System
+namespace microController.system
 {
     public class Serial
     {

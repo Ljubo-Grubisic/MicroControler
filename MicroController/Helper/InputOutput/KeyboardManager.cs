@@ -1,7 +1,7 @@
 ﻿using SFML.Window;
 using static SFML.Window.Keyboard;
 
-namespace MicroController.Helpers
+namespace microController.helpers
 {
     public static class KeyboardManager
     {

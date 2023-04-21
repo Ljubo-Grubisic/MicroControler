@@ -2,9 +2,9 @@
 using SFML.System;
 using System;
 using SFML.Window;
-using MicroController.System;
+using microController.system;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public abstract class Entity
     {

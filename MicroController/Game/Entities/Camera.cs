@@ -1,16 +1,14 @@
-﻿using MicroController.Helpers;
-using MicroController.Graphics;
+﻿using microController.helpers;
+using microController.graphics;
 using SFML.System;
 using SFML.Graphics;
 using System;
-using MicroController.System;
-using MicroController.Helpers;
+using microController.system;
 using SFML.Window;
-using MicroController.Helpers;
 using System.Management.Instrumentation;
 using Microsoft.Win32;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public class Camera : Entity
     {
@@ -74,7 +72,7 @@ namespace MicroController.Game.Entities
 
         protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * MicroController.Game.Scale.NumPixelPerCm;
+            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * microController.game.Scale.NumPixelPerCm;
             this.Size = this.Rectangle.Size;
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
@@ -102,13 +100,13 @@ namespace MicroController.Game.Entities
             }
             if (KeyboardManager.IsKeyDown(Keyboard.Key.W))
             {
-                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
-                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
             }
             if (KeyboardManager.IsKeyDown(Keyboard.Key.S))
             {
-                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
-                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * MicroController.Game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
             }
         }
     }

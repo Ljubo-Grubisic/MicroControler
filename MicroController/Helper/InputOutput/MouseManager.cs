@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static SFML.Window.Keyboard;
 
-namespace MicroController.Helpers
+namespace microController.helpers
 {
     public static class MouseManager
     {

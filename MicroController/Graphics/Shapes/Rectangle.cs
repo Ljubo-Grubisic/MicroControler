@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Rectangle : RectangleShape
     {

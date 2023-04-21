@@ -1,12 +1,12 @@
-﻿using MicroController.Helpers;
-using MicroController.Graphics;
+﻿using microController.helpers;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.System;
 using System;
 using System.Runtime.InteropServices;
 using SFML.Window;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Button : Rectangle
     {

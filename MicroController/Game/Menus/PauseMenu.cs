@@ -1,12 +1,11 @@
-﻿using MicroController.Graphics;
-using MicroController.Helpers;
-using MicroController.Graphics;
+﻿using microController.graphics;
+using microController.helpers;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public static class PauseMenu
     {

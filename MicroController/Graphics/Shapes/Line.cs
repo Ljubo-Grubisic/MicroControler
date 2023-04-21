@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Line : ConvexShape
     {

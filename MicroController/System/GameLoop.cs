@@ -8,7 +8,7 @@ using SFML.Window;
 using SFML.System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace MicroController.System
+namespace microController.system
 {
     public abstract class GameLoop
     {

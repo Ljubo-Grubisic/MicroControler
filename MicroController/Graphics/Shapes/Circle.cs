@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Circle : CircleShape
     {

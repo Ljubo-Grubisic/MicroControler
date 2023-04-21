@@ -1,12 +1,12 @@
-﻿using MicroController.Graphics;
+﻿using microController.graphics;
 using System;
 using SFML.Graphics;
 using SFML.System;
-using MicroController.Helpers;
-using MicroController.Game;
+using microController.helpers;
+using microController.game;
 using SFML.Window;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Slider
     {

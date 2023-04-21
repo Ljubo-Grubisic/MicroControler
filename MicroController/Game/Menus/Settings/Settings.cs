@@ -1,4 +1,4 @@
-﻿using MicroController.Graphics;
+﻿using microController.graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +7,13 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
-using MicroController.Game.Entities;
-using MicroController.Game.RayCasting;
+using microController.game.entities;
 using System.Diagnostics;
 using SFML.Graphics;
 using SFML.Window;
-using MicroController.Graphics;
-using MicroController.Helpers;
+using microController.helpers;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public static partial class Settings
     {

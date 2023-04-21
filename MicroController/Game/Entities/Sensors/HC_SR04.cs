@@ -1,11 +1,11 @@
-﻿using MicroController.Graphics;
+﻿using microController.graphics;
 using SFML.Graphics;
-using MicroController.Helpers;
+using microController.helpers;
 using SFML.Window;
 using SFML.System;
-using MicroController.System;
+using microController.system;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public class HC_SR04 : Entity
     {

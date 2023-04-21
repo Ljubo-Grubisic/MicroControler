@@ -1,4 +1,4 @@
-﻿using MicroController.Graphics;
+﻿using microController.graphics;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroController.Helpers
+namespace microController.helpers
 {
     static public class MathHelper
     { 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace MicroController.System
+namespace microController.system
 {
     public class BluetoothEventArgs : EventArgs
     {

@@ -1,5 +1,5 @@
-﻿using MicroController.Helpers;
-using MicroController.Graphics;
+﻿using microController.helpers;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Remoting.Messaging;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class DropBox
     {

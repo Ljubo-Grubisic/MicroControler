@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3EE3CCE0-2062-442C-90AF-B774B85DCCD3}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MicroController</RootNamespace>
-    <AssemblyName>MicroController</AssemblyName>
+    <RootNamespace>microController</RootNamespace>
+    <AssemblyName>microController</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MicroController.Program</StartupObject>
+    <StartupObject>microController.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -212,6 +212,7 @@
     <Content Include="Resources\Imgs\HC-SR04.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="System\PortComunication\settings.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,10 +1,10 @@
-﻿using MicroController.Helpers;
-using MicroController.Graphics;
-using MicroController.System;
+﻿using microController.helpers;
+using microController.graphics;
+using microController.system;
 using SFML.Graphics;
 using SFML.System;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public class Firetruck : Entity
     {

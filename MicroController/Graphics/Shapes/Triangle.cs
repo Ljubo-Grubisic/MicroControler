@@ -1,14 +1,14 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using MicroController.Game;
+using microController.game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MicroController.Helpers;
+using microController.helpers;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class Triangle : ConvexShape
     {

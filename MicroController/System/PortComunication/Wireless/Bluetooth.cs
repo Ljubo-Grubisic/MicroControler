@@ -5,14 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
-namespace MicroController.System
+namespace microController.system
 {
     public partial class Bluetooth
     {
-        public bool Connected { get => TargetedDevice.Connected; }
+        public bool Connected { get => Client.Connected; }
 
         public List<BluetoothDeviceInfo> Devices { get; set; } = new List<BluetoothDeviceInfo>();
         private BluetoothClient Client { get; set; }
@@ -22,6 +21,9 @@ namespace MicroController.System
         public string TargetedDevicePin { get; set; } = "1234";
 
         private char[] IncomingDataBuffer { get; set; }
+
+        private Queue<string> OutgoingDataQueue { get; set; }
+        private bool IsStreamOpen = true;
 
         private Thread BluetoothThread { get; set; }
 
@@ -34,6 +36,7 @@ namespace MicroController.System
             this.Client = new BluetoothClient() { };
             this.BluetoothThread = new Thread(Loop) { IsBackground = true, Name = "Bluetooth" };
             this.TargetedDevice = new BluetoothDeviceInfo(new BluetoothAddress(new ulong()));
+            this.OutgoingDataQueue = new Queue<string>();
         }
 
         public void Start()
@@ -55,20 +58,7 @@ namespace MicroController.System
 
         public void Write(string text)
         {
-            if (Client.Connected)
-            {
-                Stream stream = Client.GetStream();
-                using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8))
-                {
-                    streamWriter.Write(text);
-                    streamWriter.Flush();
-                    streamWriter.Close();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Failed to write to device: client is not connected!");
-            }
+            OutgoingDataQueue.Enqueue(text);
         }
 
         private void Loop()
@@ -77,15 +67,17 @@ namespace MicroController.System
             {
                 TargetedDevice.Refresh();
 
-                if (!Devices.Contains(TargetedDevice) || !TargetedDevice.Connected)
+                if (!Devices.Contains(TargetedDevice) || !TargetedDevice.Connected || !Client.Connected)
                 {
                     Scan();
                 }
 
-                if (!TargetedDevice.Connected || !Client.Connected)
+                if (!Client.Connected || !TargetedDevice.Connected)
                 {
                     Connect();
                 }
+
+                InitStreams();
 
                 Read();
             }
@@ -93,15 +85,19 @@ namespace MicroController.System
 
         private void Read()
         {
+            if (Client.Connected) 
+            { 
+                OnDataRecived();
+                while(this.OutgoingDataQueue.Count > 0)
+                {
+                }
+            }
+        }
+
+        private void InitStreams()
+        {
             if (Client.Connected)
             {
-                Stream stream = Client.GetStream();
-                using (StreamReader streamReader = new StreamReader(stream, Encoding.UTF8))
-                {
-                    IncomingDataBuffer = streamReader.ReadLine().ToCharArray();
-                    OnDataRecived();
-                    streamReader.Close();
-                }
             }
         }
 
@@ -136,6 +132,7 @@ namespace MicroController.System
         private void Scan()
         {
             BluetoothDeviceInfo[] devices = Client.DiscoverDevices().ToArray();
+            Devices.Clear();
             if (devices.Length == 0)
             {
                 Console.WriteLine("No device found");
@@ -143,10 +140,7 @@ namespace MicroController.System
             foreach (BluetoothDeviceInfo d in devices)
             {
                 Console.WriteLine("Device name: {0}, Device address: {1}", d.DeviceName, d.DeviceAddress);
-                if (!Devices.Contains(d))
-                {
-                    Devices.Add(d);
-                }
+                Devices.Add(d);
             }
         }
 

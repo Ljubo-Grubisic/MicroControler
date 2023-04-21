@@ -1,13 +1,13 @@
-﻿using MicroController.Helpers;
+﻿using microController.helpers;
 using System.Threading.Tasks;
-using MicroController.Game.Entities;
-using MicroController.Graphics;
+using microController.game.entities;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
-using MicroController.System;
+using microController.system;
 
-namespace MicroController.Game.Entities
+namespace microController.game.entities
 {
     public class DHT11 : Entity
     {

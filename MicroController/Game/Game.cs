@@ -1,17 +1,13 @@
-﻿using MicroController.Game.Entities;
-using MicroController.Game.RayCasting;
-using MicroController.Helpers;
-using MicroController.System;
-using MicroController.Graphics;
-
-
+﻿using microController.game.entities;
+using microController.helpers;
+using microController.system;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
-using System.IO.Ports;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public class Game : GameLoop
     {
@@ -24,21 +20,6 @@ namespace MicroController.Game
         
         public Map map;
         public Camera camera;
-
-        private SerialPort SerialPort;
-
-        private Text PortText;
-        private TextBox SelectTextBox;
-        private Button SelectButton;
-
-        private Button StartButton;
-        private Button StopButton;
-
-        private Button OnButton;
-        private Button OffButton;
-
-        private Text InBluetoothText;
-        private Button ButtonRead;
 
         private Bluetooth Bluetooth;
 
@@ -76,108 +57,9 @@ namespace MicroController.Game
             PauseMenu.Init(this);
             Scale.Create(1, map.SquareSize);
 
-            SerialPort = new SerialPort();
-
             Bluetooth = new Bluetooth();
             Bluetooth.Start();
             Bluetooth.DataRecived += Bluetooth_DataRecived;
-
-            PortText = new Text("PORT", MessegeManager.Arial, 15) { Position = new Vector2f(10, 25), Color = Color.Black };
-            SelectTextBox = new TextBox(new Vector2f(60, 25), new Vector2f(200, 50), MessegeManager.Arial, 15);
-            SelectButton = new Button(new Vector2f(285, 25), new Vector2f(100, 50), "SELECT");
-
-            StartButton = new Button(new Vector2f(10, 90), new Vector2f(150, 50), "START");
-            StopButton = new Button(new Vector2f(175, 90), new Vector2f(150, 50), "STOP");
-
-            OnButton = new Button(new Vector2f(10, 155), new Vector2f(150, 50), "ON");
-            OffButton = new Button(new Vector2f(175, 155), new Vector2f(150, 50), "OFF");
-
-            InBluetoothText = new Text("OUTTEXT: ", MessegeManager.Arial, 15) { Position = new Vector2f(10, 285), Color = Color.Black };
-            ButtonRead = new Button(new Vector2f(10, 220), new Vector2f(200, 50), "READ");
-
-            SelectButton.ButtonClicked += SelectButton_ButtonClicked;
-
-            StartButton.ButtonClicked += StartButton_ButtonClicked;
-            StopButton.ButtonClicked += StopButton_ButtonClicked;
-
-            OnButton.ButtonClicked += OnButton_ButtonClicked;
-            OffButton.ButtonClicked += OffButton_ButtonClicked;
-
-            ButtonRead.ButtonClicked += ButtonRead_ButtonClicked;
-        }
-
-        private void Bluetooth_DataRecived(Bluetooth sender, BluetoothEventArgs args)
-        {
-            Console.WriteLine(args.IncomingDataString);
-        }
-
-        private void ButtonRead_ButtonClicked(object source, EventArgs args)
-        {
-            try
-            {
-                byte[] buffer = new byte[10];
-                string text = "";
-                SerialPort.Read(buffer, 0, 10);
-
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    text += char.ConvertFromUtf32(buffer[i]);
-                }
-
-                InBluetoothText.DisplayedString += text;
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        private void OffButton_ButtonClicked(object source, EventArgs args)
-        {
-            if (SerialPort.IsOpen)
-            {
-                SerialPort.WriteLine("OFF");
-            }
-        }
-
-        private void OnButton_ButtonClicked(object source, EventArgs args)
-        {
-            if (SerialPort.IsOpen)
-            {
-                SerialPort.WriteLine("ON");
-            }
-        }
-
-        private void StopButton_ButtonClicked(object source, EventArgs args)
-        {
-            SerialPort.Close();
-        }
-
-        private void StartButton_ButtonClicked(object source, EventArgs args)
-        {
-            try
-            {
-                if (!SerialPort.IsOpen)
-                    SerialPort.Open();
-            }
-            catch
-            {
-                Console.WriteLine("FAILED TO OPEN PORT");
-            }
-        }
-
-        private void SelectButton_ButtonClicked(object source, EventArgs args)
-        {
-            try
-            {
-                SerialPort.PortName = SelectTextBox.DisplayedString;
-                SerialPort.BaudRate = 9600;
-                SerialPort.Open();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -196,19 +78,11 @@ namespace MicroController.Game
             }
             PauseMenu.OpenClosePauseMenu(this);
 
-
-            //SelectTextBox.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet);
-
-            //SelectButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-
-            //StartButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            //StopButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-
-            //OnButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-            //OffButton.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-
-            //ButtonRead.Update(Mouse.GetPosition() - Window.Position - MouseManager.MouseOffSet, Mouse.IsButtonPressed(Mouse.Button.Left));
-
+            if (KeyboardManager.IsKeyDown(Keyboard.Key.P))
+            {
+                Bluetooth.Write("DATA\n");
+            }
+            
             KeyboardManager.Update();
         }
 
@@ -232,26 +106,6 @@ namespace MicroController.Game
             {
                 PauseMenu.Draw(this.Window);
             }
-
-            //Window.Draw(PortText);
-            //SelectTextBox.Draw(Window);
-            //SelectButton.Draw(Window);
-
-            //StartButton.Draw(Window);
-            //StopButton.Draw(Window);
-
-            //OnButton.Draw(Window);
-            //OffButton.Draw(Window);
-
-            //Window.Draw(InBluetoothText);
-            //ButtonRead.Draw(Window);
-
-            //string[] ports = SerialPort.GetPortNames();
-
-            //for (int i = 0; i < ports.Length; i++)
-            //{
-            //    MessegeManager.Message(this.Window, ports[i], new Vector2f(Window.Size.X - 40, 5 + 25f * i));
-            //}
 
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }
@@ -293,6 +147,11 @@ namespace MicroController.Game
                     rayCaster.Draw3D = true;
                 }
             }
+        }
+
+        private void Bluetooth_DataRecived(Bluetooth bluetooth, BluetoothEventArgs args)
+        {
+            Console.WriteLine(args.IncomingDataString);
         }
     }
 }

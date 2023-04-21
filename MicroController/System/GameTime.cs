@@ -1,4 +1,4 @@
-﻿namespace MicroController.System
+﻿namespace microController.system
 {
     public class GameTime
     {

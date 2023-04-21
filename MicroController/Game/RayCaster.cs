@@ -1,12 +1,12 @@
-﻿using MicroController.Helpers;
-using MicroController.Graphics;
+﻿using microController.helpers;
+using microController.graphics;
 using SFML.Graphics;
 using SFML.System;
 using System;
-using MicroController.Game.Entities;
+using microController.game.entities;
 using System.Linq.Expressions;
 
-namespace MicroController.Game.RayCasting
+namespace microController.game
 {
     public class RayCaster
     {

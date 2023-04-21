@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 using SFML.Graphics;
-using MicroController.Graphics;
-using MicroController.Helpers;
+using microController.graphics;
+using microController.helpers;
 using System.Threading;
 using SFML.Window;
 using System.Runtime.InteropServices;
 using System.Net;
-using MicroController.System;
+using microController.system;
 
-namespace MicroController.Graphics
+namespace microController.graphics
 {
     public class TextBox : Rectangle
     {

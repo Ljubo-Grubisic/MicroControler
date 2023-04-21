@@ -1,6 +1,5 @@
-﻿using MicroController.Graphics;
-using MicroController.Graphics;
-using MicroController.Helpers;
+﻿using microController.graphics;
+using microController.helpers;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using SFML.Window;
 
-namespace MicroController.Game
+namespace microController.game
 {
     public static partial class Settings
     {
