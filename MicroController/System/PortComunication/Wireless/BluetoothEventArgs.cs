@@ -8,10 +8,11 @@ namespace microController.system
         public char[] IncomingDataBuffer { get; private set; }
         public string IncomingDataString { get; private set; }
 
-        public BluetoothEventArgs(char[] incomingDataBuffer)
+        public BluetoothEventArgs(char[] incomingDataBuffer, int lastIndex)
         {
             this.IncomingDataBuffer = incomingDataBuffer;
-            for (int i = 0; i < IncomingDataBuffer.Length; i++)
+            this.IncomingDataBuffer[lastIndex] = (char)0;
+            for (int i = 0; i < lastIndex; i++)
             {
                 this.IncomingDataString += char.ConvertFromUtf32(IncomingDataBuffer[i]);
             }

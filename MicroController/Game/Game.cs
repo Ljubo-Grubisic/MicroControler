@@ -148,10 +148,5 @@ namespace microController.game
                 }
             }
         }
-
-        private void Bluetooth_DataRecived(Bluetooth bluetooth, BluetoothEventArgs args)
-        {
-            Console.WriteLine(args.IncomingDataString);
-        }
     }
 }
