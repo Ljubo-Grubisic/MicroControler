@@ -394,6 +394,7 @@ namespace microController.game
             }
 
             Data[row, column] = value;
+            UpdateMapTextureForce();
         }
         #endregion
     }

@@ -132,13 +132,16 @@
     <Compile Include="Game\Entities\Sensors\HC_SR04.cs" />
     <Compile Include="Game\Menus\PauseMenu.cs" />
     <Compile Include="Game\Map\Scale.cs" />
+    <Compile Include="Game\Menus\RightClickMenu.cs" />
     <Compile Include="Game\Menus\Settings\BluetoothSettings.cs" />
     <Compile Include="Game\Menus\Settings\CameraSettings.cs" />
     <Compile Include="Game\Menus\Settings\MapSettings.cs" />
     <Compile Include="Game\Menus\Settings\RayCasterSettings.cs" />
     <Compile Include="Game\Menus\Settings\Settings.cs" />
     <Compile Include="Graphics\GUI\DropBox.cs" />
+    <Compile Include="Helper\InputOutput\BluetoothPacketManager.cs" />
     <Compile Include="Helper\InputOutput\KeyboardManager.cs" />
+    <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="System\PortComunication\Wireless\BluetoothEventArgs.cs" />
     <Compile Include="System\PortComunication\Wireless\Bluetooth.cs" />
     <Compile Include="System\GameLoop.cs" />

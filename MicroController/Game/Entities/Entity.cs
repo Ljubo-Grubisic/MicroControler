@@ -48,7 +48,14 @@ namespace microController.game.entities
         public virtual float Rotation
         {
             get { return rotation; }
-            set { rotation = value; OnRotationChange(); }
+            set 
+            {
+                if (value < 0)
+                    value += 2f * (float)Math.PI;
+                if (value > 2f * (float)Math.PI)
+                    value -= 2f * (float)Math.PI;
+                rotation = value; OnRotationChange();
+            }
         }
 
         private bool MouseWheelScrolled;

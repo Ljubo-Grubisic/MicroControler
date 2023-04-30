@@ -72,7 +72,7 @@ namespace microController.game.entities
 
         protected override void OnUpdate(Map map, GameTime gameTime)
         {
-            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * microController.game.Scale.NumPixelPerCm;
+            this.Rectangle.Size = (Vector2f)this.CameraTexture.Size * Scale * game.Scale.NumPixelPerCm;
             this.Size = this.Rectangle.Size;
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
@@ -100,13 +100,13 @@ namespace microController.game.entities
             }
             if (KeyboardManager.IsKeyDown(Keyboard.Key.W))
             {
-                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
-                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionX += this.DeltaPosition.X * gameTime.DeltaTime * game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY += this.DeltaPosition.Y * gameTime.DeltaTime * game.Scale.NumPixelPerCm * this.Speed;
             }
             if (KeyboardManager.IsKeyDown(Keyboard.Key.S))
             {
-                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
-                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * microController.game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionX -= this.DeltaPosition.X * gameTime.DeltaTime * game.Scale.NumPixelPerCm * this.Speed;
+                this.PositionY -= this.DeltaPosition.Y * gameTime.DeltaTime * game.Scale.NumPixelPerCm * this.Speed;
             }
         }
     }

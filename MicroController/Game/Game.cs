@@ -20,8 +20,7 @@ namespace microController.game
         
         public Map map;
         public Camera camera;
-
-        private Bluetooth Bluetooth;
+        private Firetruck firetruck;
 
         private int WindowState = 0;
         public bool IsGamePaused = false;
@@ -43,23 +42,22 @@ namespace microController.game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWallRandom(1000, 1000), 20, new Window
+            map = new Map(Map.GenerateMapWithWall(1000, 1000), 20, new Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
             }, this);
+            Scale.Create(3, map.SquareSize);
 
             rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 100, windowPosition: new Vector2i(0, 0),
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f), this);
 
-            PauseMenu.Init(this);
-            Scale.Create(1, map.SquareSize);
+            firetruck = new Firetruck(new Vector2f(100f, 100f), this);
 
-            Bluetooth = new Bluetooth();
-            Bluetooth.Start();
-            Bluetooth.DataRecived += Bluetooth_DataRecived;
+            PauseMenu.Init(this);
+            RightClickMenu.Init(this);
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,9 +65,11 @@ namespace microController.game
             if (!IsGamePaused)
             {
                 camera.Update(map, gameTime);
+                firetruck.Update(map, gameTime);
                 map.Window.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
                 map.Update(camera, GameTime);
                 OpenCloseMap();
+                RightClickMenu.Update(this);
                 Scale.Update(map);
             }
             else
@@ -78,11 +78,11 @@ namespace microController.game
             }
             PauseMenu.OpenClosePauseMenu(this);
 
-            if (KeyboardManager.IsKeyDown(Keyboard.Key.P))
-            {
-                Bluetooth.Write("DATA\n");
-            }
-            
+            if (RightClickMenu.IsCameraPositionTracking)
+                camera.Position = firetruck.Position;
+            if (RightClickMenu.IsCameraRotationTracking)
+                camera.Rotation = firetruck.Rotation;
+
             KeyboardManager.Update();
         }
 
@@ -98,6 +98,7 @@ namespace microController.game
                     case 1:
                         map.DrawMap(this.Window);
                         rayCaster.Draw(this.Window, ref this.map, camera);
+                        firetruck.Draw(this.Window);
                         camera.Draw(this.Window);
                         break;
                 }
@@ -106,6 +107,7 @@ namespace microController.game
             {
                 PauseMenu.Draw(this.Window);
             }
+            RightClickMenu.Draw(this.Window);
 
             MessegeManager.DrawPerformanceData(this, Color.Red);
         }

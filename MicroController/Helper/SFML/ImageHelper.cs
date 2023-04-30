@@ -137,6 +137,24 @@ namespace microController.helpers
             return new Image(pixelData2DColor);
         }
 
+        public static Color[,] Convert2dArrayRGBToColor(byte[,] byteArray)
+        {
+            int height = byteArray.GetLength(0);
+            int width = byteArray.GetLength(1);
+
+            Color[,] PixelData = new Color[height, width];
+
+            for (int i = 0; i < width; i += 3)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    PixelData[i, j] = new Color(byteArray[i, j], byteArray[i + 1, j], byteArray[i + 2, j]);
+                }
+            }
+
+            return PixelData;
+        }
+
         public static byte[] FlattenByteArray(byte[,] byteArray)
         {
             int height = byteArray.GetLength(0);

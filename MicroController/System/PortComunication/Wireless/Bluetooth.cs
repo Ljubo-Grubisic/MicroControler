@@ -141,7 +141,6 @@ namespace microController.system
                 index++;
             }
         }
-
         private void Connect()
         {
             foreach (BluetoothDeviceInfo device in Devices)
@@ -190,7 +189,6 @@ namespace microController.system
                 }
             }
         }
-
         private void Scan()
         {
             BluetoothDeviceInfo[] devices = ClientWrite.DiscoverDevices().ToArray();

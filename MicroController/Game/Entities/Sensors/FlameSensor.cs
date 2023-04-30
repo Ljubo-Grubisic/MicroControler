@@ -9,6 +9,11 @@ namespace microController.game.entities
 {
     public class FlameSensor : Entity
     {
+        /// <summary>
+        /// From 0 to 1024
+        /// </summary>
+        public double FlameStrenght { get; set; }
+
         private Rectangle Rectangle;
         private Texture SensorTexture;
 

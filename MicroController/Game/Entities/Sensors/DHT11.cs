@@ -11,6 +11,15 @@ namespace microController.game.entities
 {
     public class DHT11 : Entity
     {
+        /// <summary>
+        /// In Celsius
+        /// </summary>
+        public double Temperature { get; set; }
+        /// <summary>
+        /// In percent
+        /// </summary>
+        public double Humidity { get; set; }    
+
         private Rectangle Rectangle;
         private Texture SensorTexture;
 
