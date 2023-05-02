@@ -12,8 +12,8 @@ namespace microController.game.entities
 {
     public class Camera : Entity
     {
-        public float Speed { get; set; } = 10;
-        private float scale = 0.02f;
+        public float Speed { get; set; } = 13;
+        private float scale = 0.06f;
 
         private Vector2f DeltaPosition;
         private Rectangle Rectangle { get; set; } = new Rectangle(new Vector2f(), new Vector2f());

@@ -6,6 +6,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using System;
+using System.Security.Permissions;
 
 namespace microController.game
 {
@@ -20,9 +21,9 @@ namespace microController.game
         
         public Map map;
         public Camera camera;
-        private Firetruck firetruck;
+        public Firetruck firetruck;
 
-        private int WindowState = 0;
+        public int WindowState = 0;
         public bool IsGamePaused = false;
 
         public Game(uint windowWidth, uint windowHeight, string title) : base(windowWidth, windowHeight, title, WindowFillColor)
@@ -37,12 +38,13 @@ namespace microController.game
             Window.SetKeyRepeatEnabled(false);
             MessegeManager.LoadContent();
             KeyboardManager.Init();
+            BluetoothPacketManager.Init();
             Window.Resized += Window_Resized;
         }
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWall(1000, 1000), 20, new Window
+            map = new Map(Map.GenerateMapWithWallRandom(100, 100), 20, new Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
@@ -55,10 +57,11 @@ namespace microController.game
             camera = new Camera(new Vector2f(100f, 100f), this);
 
             firetruck = new Firetruck(new Vector2f(100f, 100f), this);
+            firetruck.VehicleDrivingMode = Firetruck.DrivingMode.Keyboard;
 
             PauseMenu.Init(this);
             RightClickMenu.Init(this);
-        }
+        } 
 
         protected override void Update(GameTime gameTime)
         {
@@ -66,7 +69,20 @@ namespace microController.game
             {
                 camera.Update(map, gameTime);
                 firetruck.Update(map, gameTime);
-                map.Window.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
+                if (WindowState == 0 || WindowState == 1)
+                {
+                    map.Window.Position = new Vector2i(50, 50);
+                    rayCaster.WindowPosition = new Vector2i(0, 0);
+                    rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
+                    map.Window.Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100);
+                }
+                else if (WindowState == 2)
+                {
+                    map.Window.Position = new Vector2i(0, 0);
+                    rayCaster.WindowPosition.X = (int)WindowWidth / 2;
+                    rayCaster.WindowSize = new Vector2i((int)WindowWidth / 2, (int)WindowHeight);
+                    map.Window.Size = new Vector2i((int)WindowWidth / 2, (int)WindowHeight);
+                }
                 map.Update(camera, GameTime);
                 OpenCloseMap();
                 RightClickMenu.Update(this);
@@ -97,8 +113,15 @@ namespace microController.game
                         break;
                     case 1:
                         map.DrawMap(this.Window);
-                        rayCaster.Draw(this.Window, ref this.map, camera);
                         firetruck.Draw(this.Window);
+                        rayCaster.Draw(this.Window, ref this.map, camera);
+                        camera.Draw(this.Window);
+                        break;
+                    case 2:
+                        rayCaster.Draw(this.Window, ref this.map, camera);
+                        map.DrawMap(this.Window);
+                        firetruck.Draw(this.Window);
+                        rayCaster.Draw(this.Window, ref this.map, camera);
                         camera.Draw(this.Window);
                         break;
                 }
@@ -127,7 +150,6 @@ namespace microController.game
                 WindowHeight = Window.Size.Y;
                 WindowWidth = Window.Size.X;
                 View view = new View(new FloatRect(0, 0, WindowWidth, WindowHeight));
-                rayCaster.WindowSize = new Vector2i((int)WindowWidth, (int)WindowHeight);
                 Window.SetView(view);
             }
         }
@@ -139,14 +161,18 @@ namespace microController.game
                 if (WindowState == 0)
                 {
                     WindowState++;
-                    rayCaster.DrawMapRays = true;
+                    rayCaster.DrawMapRays = false;
                     rayCaster.Draw3D = false;
                 }
                 else if (WindowState == 1)
                 {
-                    WindowState--;
+                    WindowState++;
                     rayCaster.DrawMapRays = false;
                     rayCaster.Draw3D = true;
+                }
+                else if( WindowState == 2)
+                {
+                    WindowState = 0;
                 }
             }
         }

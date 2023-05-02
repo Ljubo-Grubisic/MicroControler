@@ -33,10 +33,10 @@ namespace microController.game
         #endregion
 
         #region Getters and Setters
-        private byte[,] Data
+        public byte[,] Data
         {
             get { return data; }
-            set
+            private set
             {
                 data = value;
                 DataSize = new Vector2i(Data.GetLength(0), Data.GetLength(1));
@@ -347,14 +347,14 @@ namespace microController.game
                     }
                     else
                     {
-                        randomNumber = random.Next(3);
+                        randomNumber = random.Next(8);
                         if (randomNumber == 0 || randomNumber == 1)
                         {
-                            map[Row, Column] = 0;
+                            map[Row, Column] = 1;
                         }
                         else
                         {
-                            map[Row, Column] = 1;
+                            map[Row, Column] = 0;
                         }
                     }
                 }

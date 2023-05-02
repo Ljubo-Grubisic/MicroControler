@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace microController.Helper
+namespace microController.helpers
 {
     public static class StringHelper
     {

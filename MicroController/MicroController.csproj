@@ -130,17 +130,19 @@
     <Compile Include="Game\Entities\Sensors\DHT11.cs" />
     <Compile Include="Game\Entities\Sensors\FlameSensor.cs" />
     <Compile Include="Game\Entities\Sensors\HC_SR04.cs" />
+    <Compile Include="Game\Map\PathFinder.cs" />
     <Compile Include="Game\Menus\PauseMenu.cs" />
     <Compile Include="Game\Map\Scale.cs" />
     <Compile Include="Game\Menus\RightClickMenu.cs" />
-    <Compile Include="Game\Menus\Settings\BluetoothSettings.cs" />
     <Compile Include="Game\Menus\Settings\CameraSettings.cs" />
     <Compile Include="Game\Menus\Settings\MapSettings.cs" />
     <Compile Include="Game\Menus\Settings\RayCasterSettings.cs" />
     <Compile Include="Game\Menus\Settings\Settings.cs" />
     <Compile Include="Graphics\GUI\DropBox.cs" />
-    <Compile Include="Helper\InputOutput\BluetoothPacketManager.cs" />
+    <Compile Include="Helper\InputOutput\Packages Manager\BluetoothPacketManager.cs" />
     <Compile Include="Helper\InputOutput\KeyboardManager.cs" />
+    <Compile Include="Helper\InputOutput\Packages Manager\BluetoothPacketManagerIncoming.cs" />
+    <Compile Include="Helper\InputOutput\Packages Manager\BluetoothPacketManagerOutcoming.cs" />
     <Compile Include="Helper\StringHelper.cs" />
     <Compile Include="System\PortComunication\Wireless\BluetoothEventArgs.cs" />
     <Compile Include="System\PortComunication\Wireless\Bluetooth.cs" />
@@ -189,6 +191,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Imgs\Arrow.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Imgs\Camera.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
