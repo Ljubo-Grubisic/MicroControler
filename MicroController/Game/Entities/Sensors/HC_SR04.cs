@@ -16,7 +16,6 @@ namespace microController.game.entities
         private Texture SensorTexture;
         private Line RayLine;
 
-        private int RayCounter = 100;
         private Vector2f SizeInCm = new Vector2f(5, 2);
 
         public HC_SR04(Vector2f position, Game game) : base(game)
@@ -33,8 +32,6 @@ namespace microController.game.entities
         public override void Draw(RenderWindow window)
         {
             this.Rectangle.Draw(window);
-            if (RayCounter < 50)
-                this.RayLine.Draw(window);
         }
 
         protected override void OnUpdate(Map map, GameTime gameTime)
@@ -44,22 +41,22 @@ namespace microController.game.entities
             this.Rectangle.Position = this.DrawingPosition;
             this.Rectangle.Origin = new Vector2f(Rectangle.SizeX / 2, Rectangle.SizeY / 2);
             this.Rectangle.Rotation = MathHelper.RadiansToDegrees(this.Rotation) + 90;
-            if (RayCounter < 50)
-            {
-                this.RayLine.Position0 = this.DrawingPosition;
-                this.RayLine.Position1 = this.DrawingPosition + this.DeltaPosition;
-                RayCounter++;
-            }
+
+            this.RayLine.Position0 = this.DrawingPosition;
+            this.RayLine.Position1 = this.DrawingPosition + this.DeltaPosition;
         }
 
         public void CastRay(double distance, Map map)
         {
-            this.DeltaPosition.X = (float)distance * (float)(Math.Cos(this.Rotation));
-            this.DeltaPosition.Y = (float)distance * (float)(Math.Sin(this.Rotation));
+            this.DeltaPosition.X = (float)distance * Scale.NumPixelPerCm * (float)(Math.Cos(this.Rotation));
+            this.DeltaPosition.Y = (float)distance * Scale.NumPixelPerCm * (float)(Math.Sin(this.Rotation));
 
-            Vector2f DotPosition = new Vector2f(this.Position.X + DeltaPosition.X, this.Position.Y + DeltaPosition.Y);
-            map.SetValueToData((int)DotPosition.Y / map.SquareSize, (int)DotPosition.X / map.SquareSize, 1);
-            RayCounter = 0;
+            Vector2f DotPosition = new Vector2f(this.Position.X * Scale.NumPixelPerCm + DeltaPosition.X, this.Position.Y * Scale.NumPixelPerCm + DeltaPosition.Y);
+            if ((int)DotPosition.Y / map.SquareSize > 0 && (int)DotPosition.Y / map.SquareSize < map.DataSize.X &&
+                 (int)DotPosition.X / map.SquareSize > 0 && (int)DotPosition.X / map.SquareSize < map.DataSize.Y)
+            {
+                map.SetValueToData((int)DotPosition.Y / map.SquareSize, (int)DotPosition.X / map.SquareSize, 1);
+            }
         }
     }
 }

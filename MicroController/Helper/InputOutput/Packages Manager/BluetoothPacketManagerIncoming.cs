@@ -46,7 +46,7 @@ namespace microController.helpers
         }
         private static void DecodeDht11Data(string data)
         {
-            int indentifier = Convert.ToInt32(data[1]);
+            int indentifier = Convert.ToInt32(data[1] - 48);
             double temperature = Convert.ToDouble(StringHelper.GetDataBetweenChars(data, 'T', 'H'));
             double humidity = Convert.ToDouble(StringHelper.GetDataBetweenChars(data, 'H'));
 
@@ -54,15 +54,15 @@ namespace microController.helpers
         }
         private static void DecodeSonarData(string data)
         {
-            int indentifier = Convert.ToInt32(data[1]);
+            int indentifier = Convert.ToInt32(data[1] - 48);
             double distance = Convert.ToDouble(StringHelper.GetDataBetweenChars(data, 'D', 'R'));
             double rotation = Convert.ToDouble(StringHelper.GetDataBetweenChars(data, 'R'));
 
-            Dht11DataRecived?.Invoke(Bluetooth, new Dht11EventArgs(distance, rotation, indentifier));
+            SonarDataRecived?.Invoke(Bluetooth, new SonarEventArgs(distance, rotation, indentifier));
         }
         private static void DecodeFlameData(string data)
         {
-            int indentifier = Convert.ToInt32(data[1]);
+            int indentifier = Convert.ToInt32(data[1] - 48);
             double flame = Convert.ToDouble(StringHelper.GetDataAfterChar(data, '&'));
 
             FlameDataRecived?.Invoke(Bluetooth, new FlameEventArgs(flame, indentifier));

@@ -91,6 +91,16 @@ namespace microController.game.entities
             this.DrawingPosition.Y = this.position.Y + map.Window.Position.Y - map.SquareStarting.X * map.SquareSize;
         }
 
+        public static Vector2f ChangePositionToDrawingPosition(Vector2f position, Map map)
+        {
+            Vector2f DrawingPosition = new Vector2f();
+
+            DrawingPosition.X = position.X + map.Window.Position.X - map.SquareStarting.Y * map.SquareSize;
+            DrawingPosition.Y = position.Y + map.Window.Position.Y - map.SquareStarting.X * map.SquareSize;
+
+            return DrawingPosition;
+        }
+
         private void OnMouseWheelScroll(object sender, MouseWheelEventArgs e)
         {
             this.MouseWheelScrolled = true;

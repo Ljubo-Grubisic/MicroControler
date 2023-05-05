@@ -132,7 +132,7 @@ namespace microController.game
         private static void PlacePathFinderEndPoint_ButtonClicked(Button source, EventArgs args)
         {
             Vector2i Starting = new Vector2i((int)Game.firetruck.Position.Y / Game.map.SquareSize, (int)Game.firetruck.Position.X / Game.map.SquareSize);
-            Vector2i Ending = new Vector2i((MousePos.Y - Game.map.Window.Position.Y) / Game.map.SquareSize, (MousePos.X - Game.map.Window.Position.X) / Game.map.SquareSize);
+            Vector2i Ending = new Vector2i((MousePos.Y - Game.map.Window.Position.Y) / Game.map.SquareSize + Game.map.SquareStarting.X, (MousePos.X - Game.map.Window.Position.X) / Game.map.SquareSize + Game.map.SquareStarting.Y);
             if (Game.map.Data[Starting.X, Starting.Y] != 1 && Game.map.Data[Ending.X, Ending.Y] != 1)
             {
                 Game.firetruck.PathFinder.FindPath(new Node { Id = { I = Starting.X, J = Starting.Y } }, new Node { Id = { I = Ending.X, J = Ending.Y } }, Game.map);

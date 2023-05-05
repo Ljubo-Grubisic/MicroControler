@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace microController.system
@@ -27,7 +28,7 @@ namespace microController.system
         public string TargetedDeviceReadPin { get; set; } = "1234";
 
         private StreamReader StreamReader { get; set; }
-        private char[] IncomingDataBuffer { get; set; } = new char[150];
+        private char[] IncomingDataBuffer { get; set; } = new char[500];
         private int LastByteRead;
 
         private StreamWriter StreamWriter { get; set; }
@@ -111,12 +112,12 @@ namespace microController.system
                     if (ClientWrite.Connected && StreamWriter != null)
                     {
                         StreamWriter.Write(OutcomingDataBuffer.Dequeue());
-                        StreamWriter.Flush();
                     }
                 }
             }
         }
 
+        private bool Startup = true;
         private void Read()
         {
             int index = 0;
@@ -130,15 +131,28 @@ namespace microController.system
 
                 if (LastByteRead == -1 || LastByteRead == 0)
                 {
+                    StreamReader.Close();
+                    StreamReader = null;
                     break;
                 }
                 this.IncomingDataBuffer[index] = (char)LastByteRead;
                 if (LastByteRead == 59)
                 {
-                    OnDataRecived(IncomingDataBuffer, index);
+                    if (Startup)
+                    { 
+                        Startup = false; 
+                    }
+                    else
+                    {
+                        OnDataRecived(IncomingDataBuffer, index);
+                    }
                     break;
                 }
                 index++;
+                if (index > this.IncomingDataBuffer.Length - 1)
+                {
+                    break;
+                }
             }
         }
         private void Connect()
@@ -208,6 +222,6 @@ namespace microController.system
         {
             if (DataRecived != null)
                 DataRecived(this, new BluetoothEventArgs(data, lastIndex));
-        }
+          }
     }
 }

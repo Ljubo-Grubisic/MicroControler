@@ -10,6 +10,7 @@ using SFML.Graphics;
 using System.Xml.Linq;
 using microController.helpers;
 using System.Runtime.CompilerServices;
+using microController.game.entities;
 
 namespace microController.game
 {
@@ -93,21 +94,21 @@ namespace microController.game
         {
             if (node.Id.I == LastNode.Id.I && node.Id.J == LastNode.Id.J)
             {
-                ColorRectangle.Position = new Vector2f(node.Id.J * map.SquareSize, node.Id.I * map.SquareSize) + (Vector2f)map.Window.Position;
+                ColorRectangle.Position = Entity.ChangePositionToDrawingPosition(new Vector2f(node.Id.J * map.SquareSize, node.Id.I * map.SquareSize), map);
                 ColorRectangle.Size = new Vector2f(map.SquareSize, map.SquareSize);
                 ColorRectangle.FillColor = Color.Green;
                 ColorRectangle.Draw(window);
             }
             else if (node.Id.I == FirstNode.Id.I && node.Id.J == FirstNode.Id.J)
             {
-                ColorRectangle.Position = new Vector2f(node.Id.J * map.SquareSize, node.Id.I * map.SquareSize) + (Vector2f)map.Window.Position;
+                ColorRectangle.Position = Entity.ChangePositionToDrawingPosition(new Vector2f(node.Id.J * map.SquareSize, node.Id.I * map.SquareSize), map);
                 ColorRectangle.Size = new Vector2f(map.SquareSize, map.SquareSize);
                 ColorRectangle.FillColor = Color.Blue;
                 ColorRectangle.Draw(window);
             }
             else
             {
-                ArrowRectangle.Position = new Vector2f(node.Id.J * map.SquareSize + (map.SquareSize / 2), node.Id.I * map.SquareSize + (map.SquareSize / 2)) + (Vector2f)map.Window.Position;
+                ArrowRectangle.Position = Entity.ChangePositionToDrawingPosition(new Vector2f(node.Id.J * map.SquareSize + (map.SquareSize / 2), node.Id.I * map.SquareSize + (map.SquareSize / 2)), map);
                 ArrowRectangle.Size = new Vector2f(map.SquareSize, map.SquareSize);
                 ArrowRectangle.Origin = new Vector2f(map.SquareSize / 2, map.SquareSize / 2);
                 if (LastId.I > node.Id.I)

@@ -22,6 +22,7 @@ namespace microController.game
         public Map map;
         public Camera camera;
         public Firetruck firetruck;
+        public HC_SR04 Sonar;
 
         public int WindowState = 0;
         public bool IsGamePaused = false;
@@ -44,19 +45,19 @@ namespace microController.game
 
         protected override void Initialize()
         {
-            map = new Map(Map.GenerateMapWithWallRandom(100, 100), 20, new Window
+            map = new Map(Map.GenerateMapWithWall(200, 200), 20, new Window
             {
                 Position = new Vector2i(50, 50),
                 Size = new Vector2i((int)Window.Size.X - 100, (int)Window.Size.Y - 100)
             }, this);
-            Scale.Create(3, map.SquareSize);
+            Scale.Create(5, map.SquareSize);
 
-            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 100, windowPosition: new Vector2i(0, 0),
+            rayCaster = new RayCaster(fov: 60, angleSpacingRay: 0.5f, depthOffFeild: 30, windowPosition: new Vector2i(0, 0),
                 windowSize: new Vector2i((int)WindowWidth, (int)WindowHeight), rayMapColor: Color.Red, horizontalColor: new Color(150, 0, 0),
                 verticalColor: new Color(255, 10, 10), drawMapRays: false);
             camera = new Camera(new Vector2f(100f, 100f), this);
 
-            firetruck = new Firetruck(new Vector2f(100f, 100f), this);
+            firetruck = new Firetruck(new Vector2f((map.SquareSize * map.DataSize.X) / 2, (map.SquareSize * map.DataSize.X) / 2), this);
             firetruck.VehicleDrivingMode = Firetruck.DrivingMode.Keyboard;
 
             PauseMenu.Init(this);
@@ -98,6 +99,7 @@ namespace microController.game
                 camera.Position = firetruck.Position;
             if (RightClickMenu.IsCameraRotationTracking)
                 camera.Rotation = firetruck.Rotation;
+
 
             KeyboardManager.Update();
         }

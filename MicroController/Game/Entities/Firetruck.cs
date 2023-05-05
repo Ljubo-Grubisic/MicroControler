@@ -33,7 +33,7 @@ namespace microController.game.entities
         /// The strenght the dc motors will use to move the vehicle
         /// 255 - max, 0 - none
         /// </summary>
-        public byte MotorSpeed { get; set; } = 100;
+        public byte MotorSpeed { get; set; } = 245;
 
         public DrivingMode VehicleDrivingMode { get; set; } = DrivingMode.None;
         private BluetoothPacketManager.PumpState PumpState { get; set; } = BluetoothPacketManager.PumpState.Off;
@@ -121,8 +121,10 @@ namespace microController.game.entities
             this.Size = SizeInCm * Scale.NumPixelPerCm;
 
             this.Rectangle = new Rectangle(Position, Size) { FillColor = Color.Red };
-            this.Sonars[0] = new HC_SR04(this.Position + new Vector2f(SizeInCm.X / 2 * Scale.NumPixelPerCm * (float)Math.Cos(this.Rotation), SizeInCm.Y / 2 * Scale.NumPixelPerCm * (float)Math.Sin(this.Rotation)), game);
-            this.Sonars[1] = new HC_SR04(this.Position - new Vector2f(SizeInCm.X / 2 * Scale.NumPixelPerCm * (float)Math.Cos(this.Rotation), SizeInCm.Y / 2 * Scale.NumPixelPerCm * (float)Math.Sin(this.Rotation)), game);
+            this.Sonars[0] = new HC_SR04(this.Position + new Vector2f(SizeInCm.X / 2 * Scale.NumPixelPerCm * (float)Math.Cos(this.Rotation), SizeInCm.Y / 2 * Scale.NumPixelPerCm * (float)Math.Sin(this.Rotation)), game) 
+            { Rotation = this.Rotation };
+            this.Sonars[1] = new HC_SR04(this.Position - new Vector2f(SizeInCm.X / 2 * Scale.NumPixelPerCm * (float)Math.Cos(this.Rotation), SizeInCm.Y / 2 * Scale.NumPixelPerCm * (float)Math.Sin(this.Rotation)), game)
+            { Rotation = this.Rotation + 90 };
             for (int i = 0; i < 4; i++)
             {
                 this.DHT11s[i] = new DHT11(new Vector2f(), game);
@@ -294,21 +296,32 @@ namespace microController.game.entities
             }
             this.Position = this.GpsOrigin - new Vector2f((float)e.LatitudeInMeters, (float)e.LongtitudeInMeters) + this.MapOrigin;
             this.Speed = e.Speed;
-            this.Rotation = (float)e.Rotation;
+            this.Rotation = MathHelper.DegreesToRadians((float)e.Rotation);
+            Console.WriteLine("Position: {0}, Speed: {1}, Rotation: {2}", this.Position, this.Speed, MathHelper.RadiansToDegrees(this.Rotation));
         }
         private void BluetoothManager_Dht11DataRecived(object sender, BluetoothPacketManager.Dht11EventArgs e)
         {
             this.DHT11s[e.Indentifier].Temperature = e.Temperature;
             this.DHT11s[e.Indentifier].Humidity = e.Humidity;
+            Console.WriteLine("DHT11: indentifier: {0}, temperature: {1}, humidity: {2}", e.Indentifier, e.Temperature, e.Humidity);
         }
         private void BluetoothManager_SonarDataRecived(object sender, BluetoothPacketManager.SonarEventArgs e)
         {
-            this.Sonars[e.Indentifier].Rotation = (float)e.Rotation + this.Rotation;
+            if (e.Indentifier == 1)
+            { 
+                this.Sonars[e.Indentifier].Rotation = MathHelper.DegreesToRadians((float)e.Rotation) - this.Rotation;
+            }
+            if (e.Indentifier == 0)
+            {
+                this.Sonars[e.Indentifier].Rotation = MathHelper.DegreesToRadians((float)e.Rotation) - this.Rotation;
+            }
             this.Sonars[e.Indentifier].CastRay(e.Distance, this.Map);
+            Console.WriteLine("Sonar: indentifier: {0}, distance: {1}, rotation: {2}", e.Indentifier, e.Distance, e.Rotation);
         }
         private void BluetoothManager_FlameDataRecived(object sender, BluetoothPacketManager.FlameEventArgs e)
         {
             this.FlameSensors[e.Indentifier].FlameStrenght = e.Flame;
+            Console.WriteLine("Flame: indentifier: {0}, flame: {1}", e.Indentifier, e.Flame);
         }
 
         public enum DrivingMode
